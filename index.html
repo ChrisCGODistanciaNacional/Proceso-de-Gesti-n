@@ -27,6 +27,7 @@
             --role-out: #35509c;
             --role-pos: #1f8f6f;
             --role-ing: #c9791f;
+            --col-engagement: #5b6478; /* Pizarra — transversal, no es una etapa del journey */
 
             /* Estados de nodo */
             --action-line: #2f4ea3;
@@ -365,818 +366,100 @@
             padding: 6px 0 4px;
         }
 
-        /* Notificación Toast */
-        .toast-notification {
-            position: fixed;
-            bottom: 24px;
-            right: 28px;
-            background: var(--ink);
-            color: #fdf7e3;
-            padding: 13px 22px;
-            border-radius: 8px;
-            font-family: var(--font-display);
-            font-size: 12.5px;
-            font-weight: 600;
-            display: none;
-            z-index: 2000;
-            border: 2px solid #fdf7e3;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.25);
-        }
-    </style>
-</head>
-<body>
+        /* Botón toggle de Lineamientos en la barra superior */
+        .btn-guidelines { background: #f3f0e4; color: var(--ink); }
+        .btn-guidelines[aria-expanded="true"] { background: var(--ink); color: #fdf7e3; }
 
-    <!-- AVISO DE ACTUALIZACIÓN DISPONIBLE -->
-    <div id="updateBanner" style="display:none;">
-        <span>🔄 Hay una nueva versión de este Mapa de Procesos. Lo que ves puede estar desactualizado.</span>
-        <button onclick="applyUpdate()">Actualizar ahora</button>
-    </div>
-
-    <!-- CONTROLADOR CENTRAL ENTERPRISE -->
-    <div class="enterprise-bar">
-        <div class="brand-section">
-            <div class="brand-mark">CGO</div>
-            <div>
-                <h1>Mapa de Procesos Comercial</h1>
-                <p>Guía de trabajo en Equipo.</p>
-                <p style="font-size:9.5px; opacity:0.55; margin-top:1px;">Creado por Christopher Huamán · CGO 2025</p>
-            </div>
-        </div>
-        <div class="action-group">
-            <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
-            <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer Archivo</button>
-        </div>
-    </div>
-
-    <div class="doc-wrap" id="mainDiagramCanvas">
-
-    <!-- INTRODUCCIÓN / RECORRIDO DEL CLIENTE -->
-    <div class="hero-card">
-        <div class="hero-eyebrow" contenteditable="true">PROCESO DE VENTAS — ADMISIÓN UNIVERSITARIA A DISTANCIA</div>
-        <h2 contenteditable="true">Del lead al matriculado: así se reparte la atención entre asesores</h2>
-        <p class="hero-desc" contenteditable="true">Cada lead avanza por cuatro etapas. Los asesores OUT preinscriben y cierran la venta inicial; DIV-POS y DIV-ING dan soporte especializado en cada tramo del camino hasta que el cliente paga su matrícula, el único momento en que la gestión cuenta como venta cerrada.</p>
-
-        <div class="journey-stepper">
-            <div class="journey-step" data-stage="1">
-                <div class="journey-num">ETAPA 1</div>
-                <div class="journey-title" contenteditable="true">Preinscrito</div>
-                <div class="journey-sub" contenteditable="true">El lead llega al sistema y el asesor OUT lo contacta y paga su admisión.</div>
-            </div>
-            <div class="journey-step" data-stage="2">
-                <div class="journey-num">ETAPA 2</div>
-                <div class="journey-title" contenteditable="true">Postulante</div>
-                <div class="journey-sub" contenteditable="true">Paga admisión o activa un descuento por convenio; programa y rinde su examen.</div>
-            </div>
-            <div class="journey-step" data-stage="3">
-                <div class="journey-num">ETAPA 3</div>
-                <div class="journey-title" contenteditable="true">Ingresante</div>
-                <div class="journey-sub" contenteditable="true">Elige fecha de examen, entrega documentos y se compromete a pagar matrícula.</div>
-            </div>
-            <div class="journey-step" data-stage="4">
-                <div class="journey-num">ETAPA 4</div>
-                <div class="journey-title" contenteditable="true">Matriculado</div>
-                <div class="journey-sub" contenteditable="true">Paga su matrícula. Recién aquí la gestión cuenta como venta.</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- LEYENDA: ROLES Y TIPOS DE NODO -->
-    <div class="legend-card">
-        <h3>Cómo leer el mapa</h3>
-        <div class="legend-grid">
-            <div class="legend-role" data-role="out">
-                <div class="legend-role-name">DIV-OUTBOUND (OUT)</div>
-                <div class="legend-role-desc" contenteditable="true">Preinscribe leads y cierra la venta de admisión y matrícula.</div>
-            </div>
-            <div class="legend-role" data-role="pos">
-                <div class="legend-role-name">DIV-POSTULANTE (DIV-POS)</div>
-                <div class="legend-role-desc" contenteditable="true">Soporte para documentos y programación de la evaluación de admisión.</div>
-            </div>
-            <div class="legend-role" data-role="ing">
-                <div class="legend-role-name">DIV-INGRESANTE (DIV-ING)</div>
-                <div class="legend-role-desc" contenteditable="true">Soporte para cobrar y asegurar el pago final de matrícula.</div>
-            </div>
-            <div class="legend-nodetypes">
-                <div class="legend-node-sample"><span class="legend-chip action"></span> Acción — un paso que el asesor ejecuta</div>
-                <div class="legend-node-sample"><span class="legend-chip decision"></span> Decisión — un punto donde el proceso se ramifica</div>
-                <div class="legend-node-sample"><span class="legend-chip alert"></span> Alerta / riesgo — algo que requiere atención especial</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MAPA DE PROCESOS (SWIMLANES) -->
-    <div class="swimlane-container">
-        
-        <!-- ENCABEZADOS: ETAPAS DEL CLIENTE (JOURNEY) -->
-        <div class="swimlane-headers">
-            <div class="corner-cell">Estructura Operativa</div>
-            <div class="phase-cell" style="background-color: var(--col-preinscrito);">1. PREINSCRITO</div>
-            <div class="phase-cell" style="background-color: var(--col-postulante);">2. POSTULANTE</div>
-            <div class="phase-cell" style="background-color: var(--col-ingresante);">3. INGRESANTE</div>
-            <div class="phase-cell" style="background-color: var(--col-matriculado);">4. MATRICULADO</div>
-        </div>
-
-        <!-- CARRIL 1: DIV-OUTBOUND -->
-        <div class="swimlane-row">
-            <div class="role-label-pane">
-                <div class="role-name" contenteditable="true">DIV-OUTBOUND</div>
-                <div class="role-metrics">
-                    <div class="metric-field" contenteditable="true"><div><b>Estructura de Llamada:</b></div><div><b><br></b></div><div><div>🔰 1. Saludo</div></div><div>🔰 2. Sondeo / Perfilamiento</div><div>🔰 3. Beneficios: Universidad / Modalidad / Carrera</div><div>🔰 4. Proceso Admsión</div><div>🔰 5. Inversión</div><div>🔰 6. Cierre (Preinscripción)</div><div>🔰 7. Despedida</div><div>🔰 8. Envío a Encuesta</div><div><br></div><div><b>🧑🏻‍💻</b><strong> Funciones:</strong></div><div><br></div><div>✅ Asegurar una buena PROSPECCIÓN para entregar PROPUESTA coherente.</div><div>* Beneficios Universidad<br>* Beneficios Carrera<br>* Beneficios Modalidad</div><div><br></div><div>✅ Comunicar correctamente requisitos, inversión y admisión.</div><div><br></div><div>✅ Resolver OBJECIONES en base a las MOTIVACIONES o DOLORES.</div><div><br></div><div>✅ Impulsar venta con GANCHOS o DESCUENTOS en el CIERRE.<br>*No desde el inicio.<strong></strong></div><div><br></div><div>✅ RESPONDER toda LLAMADA y CHAT asignada manual o por Genesys.</div><div><br></div><div><strong>🎯 Objetivo:</strong>&nbsp;</div><div>Lograr Preinscripciones que se conviertan a Matrícula.</div><div><br></div></div>
-                    <div class="metric-field" contenteditable="true"><strong>📊&nbsp;</strong><strong>&nbsp;KPI:</strong><div><b>🟢 Atención</b></div><div>* Calidad &gt; 90%</div><div><br></div><div><b>🔵 Gestión</b></div><div>* Fuera de Cola &lt; 20%<b></b></div><div>* Time Out &lt; 5%</div><div>* Tiempo Tipificación (AWS) &lt; 35seg</div><div>* Cantidad de Llamadas &gt; 160</div><div>* Conversión a Postulante &lt; 79%</div><div>* Conversión a Ingresante &lt; 74%</div><div>* Conversión a Matriculado &lt; 76%</div><div>* Conversión Global</div><div><br></div><div><b>🟠 Seguimiento</b></div><div>* Seguimiento &lt; 02 días</div></div>
-                </div>
-            </div>
-            
-            <!-- Preinscrito -->
-            <div class="flow-work-cell">
-                <div class="bpmn-event-badge">🏁 Inicio: Lead Registrado</div>
-                
-                <div class="dynamic-step-container">
-                    <div class="flow-arrow">⬇️</div>
-                    <div class="process-node node-action">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                        <div class="node-meta" contenteditable="true">Primera atención</div>
-                        <div class="node-title" contenteditable="true">Estructura de Llamada</div>
-                        <div class="node-content" contenteditable="true">Sigue ESTRUCTURA en cada LLAMADA / CHAT y realizar correcta TIPIFICACIÓN.</div>
-                    </div>
-                </div>
-
-                
-
-                <div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-decision">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">sobre la atención</div>
-                    <div class="node-title" contenteditable="true">¿Realiza inscripción?</div>
-                    <div class="node-content" contenteditable="true">🔼 No, se programa próxima comunicación.<br>🟢&nbsp;Cumpliendo Estructura de Llamada.<br><div><br></div><div>🔽 Si, realizar cobro de admisión al momento o generar compromiso de pago de admisión.</div><div><br></div><div><span style="color: rgb(100, 116, 139); font-size: 9px; font-weight: 800; text-transform: uppercase;">No dejar 2+ días sin atención</span></div></div>
-                </div>
-            </div><div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-decision">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">sobre pago de admisión</div>
-                    <div class="node-title" contenteditable="true">¿Realizó el pago?</div>
-                    <div class="node-content" contenteditable="true">🔼 No, no realiza pago en fecha acordada:<div><br><strong>Paso 1:</strong>&nbsp;Presionar (Hasta 7 días)<br>🟢 Presionar el pago en base al acuerdo tenido.<br><strong>Paso 2:</strong>&nbsp;Reprospectar (Hasta 14 días)<div>🟢 Consultar motivo de no pago para resolver dudas.<br><strong>Paso 3:</strong>&nbsp;Sincerar&nbsp; (14 días a más)<br>🟢 Ser conciso sobre si el cliente desea continuar o cerrar.</div><div><font color="#000000"><b>🟢 Ser directo sobre si el cliente desea continuar o cerrar la oportunidad para no cargar peso muerto.</b></font><br><div>---------------------------------------------------------------</div><div>🔽 Si, realiza pago admisión:</div><div>🟢 Asesor OUT da FELICITACIONES por el PAGO.</div></div><div><br></div><div><strong>Caso A - Asesor no llevará programación:</strong> <br>🟢&nbsp;Deja WSP GUÍA de Credenciales y Requisitos*.</div><div>🟢 Dejar WSP direccionando a DIV-POS.</div><div><br><strong>Caso B - Asesor ayudará con programación</strong><strong>:</strong></div><div>🟢 Deja WSP GUÍA de Credenciales y Requisitos*.</div><div>🟢 Solicitar DOCUMENTOS y pedir SOPORTE a DIV-POS por la pestaña&nbsp;📍S-POS para la programación&nbsp;</div><div>(Dejar archivos en chat de DIV-POS).<br></div><div>🟢 Dejar WSP PROGRAMACIÓN realizada al cliente y comentario con DERIVACIÓN a DIV-POS para que tenga presene se comunicará el día de la EVALUACIÓN.</div><div><br></div><div><strong>Caso C - Asesor realizará SOLO el proceso</strong><strong>:</strong></div><div>Si el asesor desea realizar solo la programación o el cliente pide solo hacerlo con el asesor.</div><div>🟢 No perder mucho tiempo en esa gestión.</div></div></div>
-                </div>
-            </div><div class="cell-add-tools">
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'action')">+ Acción</button>
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'decision')">+ Decisión</button>
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'alert')">+ Alerta</button>
-                </div>
-            </div>
-
-            <!-- Celdas vacías -->
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">➔ Transfiere Lead (SLA 12h)</div></div>
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">➔ Transfiere Pago (SLA 24h)</div></div>
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
-        </div>
-
-        <!-- CARRIL 2: DIV-POSTULANTE -->
-        <div class="swimlane-row">
-            <div class="role-label-pane">
-                <div class="role-name" contenteditable="true">DIV-POSTULANTE</div>
-                <div class="role-metrics">
-                    <div class="metric-field" contenteditable="true"><div><b>🧑🏻‍💻</b><strong> Funciones:</strong></div><div>✅ ACTUALIZAR y ASIGNARSE nuevos postulantes para atención.</div><div><br></div><div>✅ Reforzar proceso de admisión / requisitos si es necesario.</div><div><br></div><div>✅ Resolver OBJECIONES si fueran necesarias según caso.<br>* Derivar al asesor si hay error en la información brindada.</div><div><br></div><div>✅ Solicitar DOCUMENTOS y PROGRAMAR EVALUACIONES.<br>* Incluyendo CAMBIOS DE PERIODO.</div><div><br></div><div>✅ Enviar RECORDATORIOS y GUÍAR al postulante antes y durante evaluación ASEGURANDO logré ingreso.<br>* Usando GANCHOS para reforzar comunicación.<br>* Derivando a DIV-ING finalizando la evaluación.<strong></strong></div><div><br></div><div>✅ RECUPERAR postulantes que no ingresaron a evaluación.</div><div><br></div><div><strong>🎯 Objetivo:</strong>&nbsp;</div><div>Lograr que todo postulante programe admisión y conseguir ingresantes.</div><div><br></div></div>
-                    <div class="metric-field" contenteditable="true"><strong>📊&nbsp;</strong><strong>&nbsp;KPI:</strong><div><div><div><b>🟢 Conversión</b></div><div><b></b></div><div>* Postulantes Programados &gt; 80%<br>(En base a tu bolsa asignada)</div></div></div><div>* Ingresantes a Evaluación &gt; 90%<br>(En base a tu bolsa asignada)</div><div><br></div><div><div><b>🟠 Seguimiento</b></div><div>* Seguimiento &lt; 02 días</div></div></div>
-                </div>
-            </div>
-            
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
-            
-            <!-- Postulante -->
-            <div class="flow-work-cell">
-                
-
-                
-
-                
-
-                <div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-action">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true"><span style="background-color: rgb(254, 242, 242);">Abordaje de div-pos</span></div>
-                    <div class="node-title" contenteditable="true"><span style="background-color: rgb(254, 242, 242);">Sobre los postulantes</span></div>
-                    <div class="node-content" contenteditable="true"><div><div><b>Caso A - Asesor no llevará programación:</b></div><div><div>Si no comunica el Asesor sobre el cliente o no es registrado en 📍S-POS será abordado directamente con DIV-POS.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se espera que OUT haya dejado WSP de derivación.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;DIV-POS lo atenderá lo más pronto al actualizar BASE.</div></div></div><div><br></div><div><div><b>Caso B - Asesor ayudará con programación:</b></div><div><div>Si lo ve en la pestaña 📍S-POS programará evaluación notificando al asesor con CAPTURA de PORTAL.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Ambos enviarán PROGRAMACIÓN REALIZADA.</div></div><div><br></div><div><div><b>Caso C - Asesor realizará SOLO el proceso:</b></div><div><div>Si el asesor indica que lo gestionará solo solo tendrá 8 Horas para PROGRAMAR.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Caso pase el tiempo DIV-POS realizará abordaje.</div></div></div></div></div>
-                </div>
-            </div><div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-action">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">RECORDATORIO DE EVALUACIÓN</div>
-                    <div class="node-title" contenteditable="true">ASEGURAR INGRESO</div>
-                    <div class="node-content" contenteditable="true"><strong style="background-color: rgb(255, 253, 245);">Paso 1:</strong><span style="background-color: rgb(255, 253, 245);"> </span>El día de EVALUACIÓN (1 Hora antes) al postulante se le envía el RECORDATORIO por parte de DIV-POS.<br><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se espera que ASESOR tambien envie RECORDATORIO.<br><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se enviá GANCHO + RECORDATORIO (Plantilla).<br><br><span style="background-color: rgb(255, 253, 245);"><b>Paso 2:</b>&nbsp;</span>Posterior al recordatorio se inicia con LLAMADAS a los postulantes para presionar ingreso.</div>
-                </div>
-            </div><div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-alert">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">guiar ingreso a evaluación</div>
-                    <div class="node-title" contenteditable="true">SOLUCIONAR DUDAS AL INGRESAR</div>
-                    <div class="node-content" contenteditable="true">*DIV-POS realiza llamadas en el paso anterior.<br><div><strong style="background-color: rgb(255, 253, 245);">Caso A: </strong>Guiará el ingreso paso a paso en LLAMADA si lo requiere un CLIENTE para recién pasar al siguiente.<br><strong style="background-color: rgb(255, 253, 245);">Caso B:</strong><span style="background-color: rgb(255, 253, 245);">&nbsp;</span>A la par si hay respuestas de dudas por Whatsapp guiará el ingreso por ese medio.<div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se espera que en días de no conexión de DIV-POS el ASESOR se encuentré atento del ingreso.</div></div></div></div>
-                </div>
-            </div><div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-decision">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">POSTERIOR A EVALUACIÓN</div>
-                    <div class="node-title" contenteditable="true">¿Logró ingreso a UC?</div>
-                    <div class="node-content" contenteditable="true"><div>*Si un cliente responde a DIV-POS.<strong></strong></div><strong>DIV-POS:&nbsp;</strong>Enviará FELICIDADES DE INGRESO y DERIVACIÓN a DIV-ING para continuar atención.&nbsp;<div><br style="background-color: rgb(254, 242, 242);"><strong>ASESOR OUT: </strong>Enviará FELICIDADES DE INGRESO.<strong><br><br></strong><div><strong>Caso A - Asesor OUT&nbsp;</strong><strong>generará compromiso:</strong></div><div><div>🟢&nbsp;Solicitar DOCUMENTOS y pedir SOPORTE a DIV-ING por la pestaña 📍S-ING para la activación de beneficios.</div><div>(Dejar archivos en chat de DIV-ING).<br>(Considerar horario de DIV-ING si no realizarlo solo o con soporte de SUPERVISOR 24/7)</div></div><div>🟢&nbsp;Dejar WSP COMPROMISO realizada al cliente y comentario con DERIVACIÓN a DIV-ING para que tenga presene se comunicará el día de compromiso.</div><div>🟢&nbsp;Dejar COMPROMISO en pestaña 📍S-ING para no reabordarlo y se mapee el cliente.<br>(Compromiso debe ser dentro de las 48 horas excepto caso puntuales que se mediran por %)</div><div><br></div><div><strong>Caso B - Asesor OUT NO generará compromiso:</strong></div><div><div>🟢&nbsp;Solicitar DOCUMENTOS y pedir SOPORTE a DIV-ING por la pestaña 📍S-ING para la activación de beneficios.</div><div>(Dejar archivos en chat de DIV-ING).<br>(Considerar horario de DIV-ING si no realizarlo solo o con soporte de SUPERVISOR 24/7)</div></div><div>🟢Dejar WSP direccionando a DIV-ING.</div></div></div>
-                </div>
-            </div><div class="cell-add-tools">
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'action')">+ Acción</button>
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'decision')">+ Decisión</button>
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'alert')">+ Alerta</button>
-                </div>
-            </div>
-
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">➔ Pasa Evaluación Aprobada</div></div>
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
-        </div>
-
-        <!-- CARRIL 3: DIV-INGRESANTE -->
-        <div class="swimlane-row">
-            <div class="role-label-pane">
-                <div class="role-name" contenteditable="true">DIV-INGRESANTE</div>
-                <div class="role-metrics">
-                    <div class="metric-field" contenteditable="true"><div><b>🧑🏻‍💻</b><strong> Funciones:</strong></div><div>✅ ACTUALIZAR y ASIGNARSE nuevos ingresantes para atención.</div><div><br></div><div>✅ Reforzar proceso de matrícula o&nbsp; requisitos si es necesario.<br>* Inicio de Clases<br>* Convalidación<br>* Otros relacionadas a Académico</div><div><br></div><div>✅ Resolver OBJECIONES si fueran necesarias según caso.<br>* Derivar al asesor si hay error en la información brindada.</div><div><br></div><div>✅ Solicitar DOCUMENTOS y ACTIVAR BENEFICIOS ECONÓMICOS</div><div>* Escala, Convenios, Seguros.<br><br></div><div>✅ Enviar RECORDATORIOS y GUÍAR al PAGO de matrícula.<br>* Usando GANCHOS para asegurar pago de matrícula.<strong></strong></div><div><br></div><div>✅ RECUPERAR ingresanes que no cumplieron con compromisos.</div><div><br></div><div><strong>🎯 Objetivo:</strong>&nbsp;</div><div>Lograr que matrículados.</div><div><br></div></div>
-                    <div class="metric-field" contenteditable="true"><div><div><strong>📊&nbsp;</strong><strong>&nbsp;KPI:</strong><div><b><br></b><div><div><b>🟢 Conversión</b></div><div><b></b></div><div>* % Matrículados &gt; 85%<br><br></div></div></div></div><div><div><b>🟠 Seguimiento</b></div><div>* Seguimiento &lt; 02 días</div></div></div></div>
-                </div>
-            </div>
-            
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
-            <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
-            
-            <!-- Ingresante -->
-            <div class="flow-work-cell">
-                <div class="dynamic-step-container">
-                    <div class="process-node node-action">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                        <div class="node-meta" contenteditable="true">abordaje de div-ing</div>
-                        <div class="node-title" contenteditable="true">Revisión de Ingresantes</div>
-                        <div class="node-content" contenteditable="true"><div><font color="#000000"><b>Caso A - Asesor OUT generará compromiso:</b></font></div><div>🟢 DIV-ING el día del COMPROMISO revisará si el CLIENTE REALIZO EL PAGO y si no REALIZARÁ LLAMADAS para asegurar el cobro del cliente.</div><div>🟢 Primero intenta llamarlo y en caso no conteste dejará WSP de recordatorio con PLANTILLA usando GANCHO en almenos 03 cortes al día.</div><div><br></div><div><b style="color: rgb(0, 0, 0);">Caso B - Asesor OUT NO generará compromiso:</b></div><div>🟢DIV-ING el día de ingreso del cliente le realizará llamadas lo más pronto posible bajo ESTRUCTURA DE LLAMADA y generando compromiso dentro 48 horas.</div></div>
-                    </div>
-                </div>
-
-                <div class="dynamic-step-container">
-                    <div class="flow-arrow">⬇️</div>
-                    <div class="process-node node-decision">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                        <div class="node-meta" contenteditable="true">recordatorio de pago</div>
-                        <div class="node-title" contenteditable="true">¿Pago Completado?</div>
-                        <div class="node-content" contenteditable="true"><b>Caso A - Asesor OUT generará compromiso:</b><br><div>🟢 Si el cliente no realiza el pago en el primer momento DIV-ING realizará el seguimiento en adelante.<br>(Si el cliente desea solo contactarse con el asesor es responsabilidad de este convertirse para no afectar el avance general y DIV-ING)<span style="background-color: rgb(255, 255, 255);"></span></div><div><b><br></b></div><div><b>Caso B - Asesor OUT NO generará compromiso:</b></div><div>🟢 Cada día tiene que asegurar las llamadas necesarias para contactar y convertir al cliente.</div></div>
-                    </div>
-                </div>
-
-                <div class="dynamic-step-container">
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-alert">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">Alerta / Riesgo</div>
-                    <div class="node-title" contenteditable="true">OBJECIONES O QUEJAS DE CLIENTES</div>
-                    <div class="node-content" contenteditable="true"><div>🟢&nbsp; En caso el CLIENTE escriba a DIV-ING sobre alguna objeción para su pago o generar compromiso es responsabilidad de resolverlo por por parte de DIV.ING en caso pueda conseguir la solución.</div><div>🟢&nbsp; Solo si el caso escala a uno complicado dejar en STAND BY para que el asesor pueda resolver con soporte de SUPERVISOR.</div><div>🟢&nbsp; Registrar errores de gestión dentro del DRIVE.</div></div>
-                </div>
-            </div><div class="cell-add-tools">
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'action')">+ Acción</button>
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'decision')">+ Decisión</button>
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'alert')">+ Alerta</button>
-                </div>
-            </div>
-
-            <!-- Matriculado -->
-            <div class="flow-work-cell">
-                <div class="dynamic-step-container">
-                    <div class="process-node node-action" style="background-color: #f0fdf4;">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                        <div class="node-meta" contenteditable="true">Onboarding Académico</div>
-                        <div class="node-title" contenteditable="true">Mensaje WSP Final</div>
-                        <div class="node-content" contenteditable="true">1. Agradecimiento por el proceso.<br>2. Instrucciones de Convalidantes si es necesario.<br></div>
-                    </div>
-                </div>
-                <div class="flow-arrow">⬇️</div>
-                <div class="bpmn-event-badge" style="background: #bbf7d0;">🏆 Éxito: Matriculado Activo</div>
-                <div class="cell-add-tools">
-                    <button class="btn-tool-add" onclick="addNewNode(this, 'action')">+ Acción</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- CARRIL 4: COORDINACIÓN OUT -->
-        <div class="swimlane-row" style="min-height: 160px;">
-            <div class="role-label-pane" style="background-color: #f1f5f9;">
-                <div class="role-name" contenteditable="true">ESTRUCTURA DE&nbsp; LLAMADA</div>
-                <div style="font-size: 9px; font-weight: bold; color: #475569;">Tráfico Transversal</div>
-            </div>
-            <div class="flow-work-cell" style="grid-column: span 4; background: #fff; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="process-node node-action" style="border-left-color: #10b981; margin: auto 0;">
-                    <div class="node-title" contenteditable="true">DIV-POS</div>
-                    <div class="node-content" contenteditable="true">🔰 1. Felicitaciones por el pago admisión realizado.<div>🔰 *. Si cliente lo necesita recordar requisitos.<br>🔰 2. Solicitar documentos / Acordar fecha de entrega.<br>🔰 * En caso cliente se sienta proactivo o tenga OBJECIONES reforzar con PROPUESTA DE VALOR y GANCHO creando sentido de urgencia con las herramientas que tenemos.</div><div>🔰 3. Registrar compromiso o próxima comunicación.</div><div>🔰 4. Despedida agradeciendo el tiempo y con tu nombre.</div></div>
-                </div>
-                <div class="process-node node-action" style="border-left-color: #f59e0b; margin: auto 0;">
-                    <div class="node-title" contenteditable="true">DIV-ING</div>
-                    <div class="node-content" contenteditable="true">🔰 1. Felicitaciones por el ingreso de admisión logrado.<div>🔰 *. Breve introducción viendo cómo se sintió para reforzar el logró.<br>🔰 2. Generar Compromiso de Pago.<br>🔰 * En caso el cliente esté proactivo a generar compromiso o tenga objeciones reforzar PROPUESTA DE VALOR&nbsp; o GANCHOS pero empujar venta con herramientas creando sentido de URGENCIA.<br>🔰 3. Registrar compromiso / Acordar próxima comunicación.</div><div>🔰 4. Despedida agradeciendo el tiempo y con tu nombre.</div></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <p class="doc-footer">Herramienta desarrollada por Christopher Huamán — CGO 2025.</p>
-
-    </div>
-
-    <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast"></div>
-
-    <script id="appScript">
-        // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
-        // aplicar cualquier respaldo guardado en el navegador. Sirve para poder
-        // "Restablecer base" sin perder lo que trae oficialmente el archivo.
-        let freshEmbeddedHTML = null;
-
-        /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-22T12-00-00";
-        /*==DATA_VERSION_END==*/
-
-        // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
-        // hacia abajo la barra superior flotante y el contenido para que no se tapen.
-        function adjustLayoutForBanner() {
-            const banner = document.getElementById('updateBanner');
-            const bar = document.querySelector('.enterprise-bar');
-            const wrap = document.querySelector('.doc-wrap');
-            if (!banner || !bar || !wrap) return;
-            if (getComputedStyle(banner).display !== 'none') {
-                const h = banner.offsetHeight;
-                bar.style.top = (16 + h) + 'px';
-                wrap.style.marginTop = (108 + h) + 'px';
-            } else {
-                bar.style.top = '16px';
-                wrap.style.marginTop = '108px';
-            }
-        }
-        window.addEventListener('resize', adjustLayoutForBanner);
-
-        // Carga de datos automatizada
-        window.onload = function() {
-            freshEmbeddedHTML = document.getElementById('mainDiagramCanvas').innerHTML;
-
-            const cacheDiagram = localStorage.getItem('cgo_mapa_procesos_v1');
-            const storedVersion = localStorage.getItem('cgo_mapa_procesos_v1_version');
-
-            if (!cacheDiagram) {
-                // Primera vez que se abre este archivo en este navegador.
-                localStorage.setItem('cgo_mapa_procesos_v1', freshEmbeddedHTML);
-                localStorage.setItem('cgo_mapa_procesos_v1_version', DATA_VERSION);
-            } else {
-                document.getElementById('mainDiagramCanvas').innerHTML = cacheDiagram;
-                if (storedVersion !== DATA_VERSION) {
-                    // Este navegador tenía guardada una versión anterior del archivo:
-                    // seguimos mostrando lo que tenía guardado, pero avisamos que hay
-                    // una versión más reciente disponible.
-                    const banner = document.getElementById('updateBanner');
-                    if (banner) banner.style.display = 'flex';
-                }
-            }
-            adjustLayoutForBanner();
-        };
-
-        // Guardado automático silencioso: se llama cada vez que se edita, agrega o
-        // borra un paso del mapa, para que los cambios persistan en este navegador.
-        function persistDiagram() {
-            const mapHtml = document.getElementById('mainDiagramCanvas').innerHTML;
-            localStorage.setItem('cgo_mapa_procesos_v1', mapHtml);
-            localStorage.setItem('cgo_mapa_procesos_v1_version', DATA_VERSION);
-        }
-        // Cualquier edición de texto sobre el diagrama (contenteditable) se guarda sola.
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('mainDiagramCanvas').addEventListener('blur', persistDiagram, true);
-        });
-
-        // Adición avanzada y limpia de nodos
-        function addNewNode(button, nodeType) {
-            const cell = button.parentElement.parentElement;
-            const toolsArea = button.parentElement;
-            
-            // Creamos un contenedor único para este paso
-            const stepContainer = document.createElement('div');
-            stepContainer.className = 'dynamic-step-container';
-
-            let metaText = nodeType === 'action' ? 'Nueva Acción' : nodeType === 'decision' ? 'Punto de Decisión' : 'Alerta / Riesgo';
-            
-            // El contenedor incluye su propia flecha y su propia tarjeta
-            stepContainer.innerHTML = `
-                <div class="flow-arrow">⬇️</div>
-                <div class="process-node node-${nodeType}">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="node-meta" contenteditable="true">${metaText}</div>
-                    <div class="node-title" contenteditable="true">Título del Lineamiento</div>
-                    <div class="node-content" contenteditable="true">Escribe aquí los pasos claros del proceso para tus asesores comerciales.</div>
-                </div>
-            `;
-            
-            // Insertamos todo el bloque junto antes de la botonera
-            cell.insertBefore(stepContainer, toolsArea);
-            persistDiagram();
-        }
-
-        // Exportador a archivo físico HTML (incluye TODOS los cambios hechos en pantalla)
-        function downloadDiagram() {
-            persistDiagram();
-
-            // Asegura que el toast quede oculto en el archivo exportado, sin importar
-            // si estaba visible en este momento por una acción previa en esta sesión.
-            const toastEl = document.getElementById('saveToast');
-            if (toastEl) toastEl.style.display = 'none';
-
-            // Marca esta exportación con una versión NUEVA y única: así, cualquier
-            // navegador que tenga guardada una versión anterior detectará el cambio
-            // apenas abra este archivo y mostrará el aviso de actualización.
-            const newVersion = new Date().toISOString();
-            const scriptEl = document.getElementById('appScript');
-            let scriptSrc = scriptEl.textContent;
-            scriptSrc = scriptSrc.replace(
-                /\/\*==DATA_VERSION_START==\*\/[\s\S]*?\/\*==DATA_VERSION_END==\*\//,
-                "/*==DATA_VERSION_START==*/\n        const DATA_VERSION = \"" + newVersion + "\";\n        /*==DATA_VERSION_END==*/"
-            );
-            scriptEl.textContent = scriptSrc;
-
-            const banner = document.getElementById('updateBanner');
-            const bannerWasVisible = banner ? banner.style.display : '';
-            if (banner) banner.style.display = 'none';
-
-            const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
-            const downloader = document.createElement('a');
-            downloader.href = URL.createObjectURL(blobFile);
-            const fecha = new Date().toISOString().slice(0,10);
-            downloader.download = `mapa_procesos_CGO_${fecha}.html`;
-            document.body.appendChild(downloader);
-            downloader.click();
-            document.body.removeChild(downloader);
-
-            if (banner) banner.style.display = bannerWasVisible;
-            adjustLayoutForBanner();
-
-            const toast = document.getElementById('saveToast');
-            toast.textContent = '📥 Archivo descargado con tus últimos cambios';
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2500);
-        }
-
-        // Fuerza la actualización a la versión más reciente incluida en este archivo,
-        // descartando lo que este navegador tenía guardado localmente.
-        function applyUpdate() {
-            try {
-                localStorage.setItem('cgo_mapa_procesos_v1', freshEmbeddedHTML);
-                localStorage.setItem('cgo_mapa_procesos_v1_version', DATA_VERSION);
-            } catch (e) {}
-            location.reload();
-        }
-
-        // "🔄 Restablecer base": deshace ediciones o borrados accidentales de un asesor,
-        // y también sirve para forzar la verificación de una actualización reciente —
-        // en ambos casos el resultado es el mismo: volver a la versión oficial del archivo.
-        function resetDiagram() {
-            const ok = confirm(
-                '¿Restablecer este Mapa de Procesos?\n\n' +
-                'Esto descartará cualquier cambio hecho en ESTE navegador (ediciones, pasos borrados, etc.) ' +
-                'y mostrará la versión oficial publicada en este archivo.\n\nEsta acción no se puede deshacer.'
-            );
-            if (!ok) return;
-            applyUpdate();
-        }
-    </script>
-
-</body></html>
-            --radius: 10px;
-            --font-display: 'Space Grotesk', system-ui, sans-serif;
-            --font-body: 'IBM Plex Sans', system-ui, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        /* AVISO DE ACTUALIZACIÓN DISPONIBLE */
-        #updateBanner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 1001; background-color: #f5a623; color: #3a2a00; padding: 10px 20px; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 13px; font-weight: 700; text-align: center; }
-        #updateBanner button { background-color: #3a2a00; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
-        #updateBanner button:hover { background-color: #55400a; }
-
-        body {
-            font-family: var(--font-body);
-            background-color: var(--paper);
-            background-image:
-                linear-gradient(var(--line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--line) 1px, transparent 1px);
-            background-size: 34px 34px;
-            background-position: -1px -1px;
-            padding: 28px;
-            min-width: 1800px;
-            color: var(--ink);
-            line-height: 1.5;
-        }
-
-        /* ============ BARRA SUPERIOR ============ */
-        .enterprise-bar {
-            position: fixed;
-            top: 16px;
-            left: 28px;
-            right: 28px;
-            background: var(--panel);
-            padding: 14px 26px;
-            border-radius: var(--radius);
-            border: 2px solid var(--line-strong);
-            box-shadow: 0 4px 0px rgba(28, 37, 65, 0.12);
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand-section { display: flex; align-items: center; gap: 12px; }
-        .brand-mark {
-            width: 38px; height: 38px;
-            border-radius: 9px;
-            background: var(--ink);
-            color: var(--col-matriculado);
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 15px;
-            flex-shrink: 0;
-        }
-        .brand-section h1 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: 0.1px; }
-        .brand-section p { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-        .action-group { display: flex; gap: 10px; }
-
-        .btn {
-            padding: 9px 16px;
-            font-family: var(--font-display);
-            font-size: 12px;
-            font-weight: 600;
-            border: 2px solid var(--line-strong);
-            border-radius: 7px;
-            cursor: pointer;
-            background: white;
-            color: var(--ink);
-            transition: transform 0.12s ease, box-shadow 0.12s ease;
-            box-shadow: 3px 3px 0px rgba(28, 37, 65, 0.15);
-        }
-        .btn-save { background: #eef7f2; color: #16694a; border-color: #16694a; }
-        .btn-download { background: var(--ink); color: #fdf7e3; border-color: var(--ink); }
-        .btn-reset { background: #fdf0ee; color: #a33327; border-color: #a33327; }
-        .btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0px rgba(28, 37, 65, 0.18); }
-        .btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px rgba(28, 37, 65, 0.15); }
-
-        /* ============ ENVOLTORIO EDITABLE GENERAL ============ */
-        .doc-wrap { margin-top: 108px; display: flex; flex-direction: column; gap: 22px; }
-
-        /* ============ HERO / INTRODUCCIÓN ============ */
-        .hero-card {
+        /* ============ PANEL DE LINEAMIENTOS Y REGLAS DE GESTIÓN ============ */
+        /* Trato visual algo más serio/formal que el resto: cabecera oscura,
+           marcadores cuadrados en vez de emojis, menos color, más estructura. */
+        .guidelines-panel {
             background: var(--panel);
             border: 2px solid var(--line-strong);
             border-radius: 14px;
             box-shadow: 7px 7px 0px rgba(28, 37, 65, 0.08);
-            padding: 32px 36px;
-        }
-        .hero-eyebrow { font-family: var(--font-display); font-size: 12px; font-weight: 600; color: var(--role-pos); margin-bottom: 10px; outline: none; }
-        .hero-card h2 { font-family: var(--font-display); font-size: 28px; font-weight: 700; letter-spacing: -0.3px; max-width: 720px; outline: none; }
-        .hero-card p.hero-desc { font-size: 14.5px; color: var(--ink-soft); max-width: 760px; margin-top: 12px; outline: none; }
-
-        /* Stepper del recorrido (journey) — 4 etapas, es una secuencia real */
-        .journey-stepper {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            margin-top: 26px;
-        }
-        .journey-step {
-            border: 2px solid var(--line-strong);
-            border-radius: 10px;
-            padding: 14px 16px;
-            position: relative;
-            background: var(--panel);
-        }
-        .journey-step::after {
-            content: "→";
-            position: absolute;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            color: var(--muted);
-        }
-        .journey-step:last-child::after { content: ""; }
-        .journey-num { font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--muted); }
-        .journey-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-top: 4px; outline: none; }
-        .journey-sub { font-size: 12px; color: var(--muted); margin-top: 4px; outline: none; }
-        .journey-step[data-stage="1"] { background: color-mix(in srgb, var(--col-preinscrito) 35%, white); }
-        .journey-step[data-stage="2"] { background: color-mix(in srgb, var(--col-postulante) 35%, white); }
-        .journey-step[data-stage="3"] { background: color-mix(in srgb, var(--col-ingresante) 35%, white); }
-        .journey-step[data-stage="4"] { background: color-mix(in srgb, var(--col-matriculado) 30%, white); }
-
-        /* ============ LEYENDA (roles + tipos de nodo) ============ */
-        .legend-card {
-            background: var(--panel);
-            border: 2px solid var(--line-strong);
-            border-radius: 14px;
-            box-shadow: 7px 7px 0px rgba(28, 37, 65, 0.08);
-            padding: 26px 36px;
-        }
-        .legend-card h3 { font-family: var(--font-display); font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); margin-bottom: 16px; }
-        .legend-grid { display: grid; grid-template-columns: repeat(3, 1fr) 1.4fr; gap: 20px; }
-        .legend-role {
-            border-radius: 10px;
-            padding: 14px;
-            border: 2px solid var(--line-strong);
-        }
-        .legend-role[data-role="out"] { border-left: 8px solid var(--role-out); }
-        .legend-role[data-role="pos"] { border-left: 8px solid var(--role-pos); }
-        .legend-role[data-role="ing"] { border-left: 8px solid var(--role-ing); }
-        .legend-role-name { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
-        .legend-role-desc { font-size: 12px; color: var(--ink-soft); margin-top: 6px; outline: none; }
-        .legend-nodetypes { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
-        .legend-node-sample {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 11.5px; font-weight: 600; color: var(--ink-soft);
-        }
-        .legend-chip { width: 22px; height: 14px; border-radius: 4px; flex-shrink: 0; }
-        .legend-chip.action { background: white; border: 2px solid var(--action-line); border-left-width: 5px; }
-        .legend-chip.decision { background: var(--decision-bg); border: 2px dashed var(--decision-line); border-left: 5px solid var(--decision-line); }
-        .legend-chip.alert { background: var(--alert-bg); border: 2px solid var(--alert-line); border-left-width: 5px; }
-
-        /* ============ CONTENEDOR DEL MAPA DE PROCESOS ============ */
-        .swimlane-container {
-            display: flex;
-            flex-direction: column;
-            border: 2px solid var(--line-strong);
-            background: var(--panel);
-            border-radius: 14px;
-            box-shadow: 8px 8px 0px rgba(28, 37, 65, 0.10);
             overflow: hidden;
         }
-
-        /* Cabeceras de Fases (Columnas del Journey) */
-        .swimlane-headers {
-            display: grid;
-            grid-template-columns: 250px repeat(4, 1fr);
-            border-bottom: 2px solid var(--line-strong);
-            font-family: var(--font-display);
-            font-weight: 700;
-            text-align: center;
-            font-size: 13px;
+        .guidelines-head {
+            background: var(--ink);
+            color: #fdf7e3;
+            padding: 22px 36px;
         }
-        .corner-cell { background: var(--ink); color: #fdf7e3; border-right: 2px solid var(--line-strong); display: flex; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; }
-        .phase-cell { padding: 15px; border-right: 2px solid var(--line-strong); letter-spacing: 0.2px; color: var(--ink); }
-        .phase-cell:last-child { border-right: none; }
+        .guidelines-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: #c9d2f5; text-transform: uppercase; outline: none; }
+        .guidelines-head h3 { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin-top: 6px; outline: none; }
+        .guidelines-head p { font-size: 13px; color: #d9d6c8; margin-top: 6px; max-width: 760px; outline: none; }
 
-        /* Filas Operativas (Carriles de Roles) */
-        .swimlane-row {
-            display: grid;
-            grid-template-columns: 250px repeat(4, 1fr);
-            border-bottom: 2px solid var(--line-strong);
-            min-height: 280px;
-        }
-        .swimlane-row:last-child { border-bottom: none; }
-
-        /* Acentos de color por rol en el carril (sin tocar el contenido) */
-        .swimlane-row:nth-of-type(2) .role-label-pane { border-left: 8px solid var(--role-out); }
-        .swimlane-row:nth-of-type(3) .role-label-pane { border-left: 8px solid var(--role-pos); }
-        .swimlane-row:nth-of-type(4) .role-label-pane { border-left: 8px solid var(--role-ing); }
-        .swimlane-row:nth-of-type(5) .role-label-pane { border-left: 8px solid var(--muted); }
-
-        /* Etiqueta del Rol / Área (Columna Fija Izquierda) */
-        .role-label-pane {
-            background: #faf8f2;
-            border-right: 2px solid var(--line-strong);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            color: var(--ink);
-        }
-        .role-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; border-bottom: 2px solid var(--line); padding-bottom: 8px; outline: none; }
-        .role-metrics { background: var(--panel); padding: 10px; border-radius: 8px; border: 1.5px dashed #b8b09a; font-size: 11px; margin-top: 10px; }
-        .metric-field { margin-bottom: 4px; outline: none; color: var(--ink-soft); }
-        .metric-field b, .metric-field strong { color: var(--ink); }
-
-        /* Celdas de Trabajo del Flujo */
-        .flow-work-cell {
-            border-right: 2px solid var(--line);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            background: #fbfaf6;
+        /* Meta de indicadores */
+        .goals-block { padding: 24px 36px 6px; border-bottom: 2px solid var(--line); }
+        .goals-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); margin-bottom: 14px; }
+        .goals-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+        .goal-chip {
+            background: var(--ink);
+            color: #fdf7e3;
+            border-radius: 9px;
+            padding: 10px 16px;
+            min-width: 150px;
             position: relative;
         }
-        .flow-work-cell:last-child { border-right: none; }
+        .goal-chip-label { font-size: 10.5px; color: #b9c0da; text-transform: uppercase; letter-spacing: 0.3px; outline: none; }
+        .goal-chip-value { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--col-matriculado); margin-top: 3px; outline: none; }
+        .goal-chip .btn-node-remove { top: -7px; right: -7px; }
+        .goal-chip:hover .btn-node-remove { display: block; }
 
-        /* Contenedor dinámico de Paso (Flecha + Nodo) */
-        .dynamic-step-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
+        /* Categorías de lineamientos */
+        .guideline-categories { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .guideline-category { padding: 24px 28px; border-right: 2px solid var(--line); }
+        .guideline-category:last-child { border-right: none; }
+        .guideline-cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 3px solid var(--cat-color, var(--ink)); }
+        .guideline-cat-dot { width: 12px; height: 12px; border-radius: 3px; background: var(--cat-color, var(--ink)); flex-shrink: 0; }
+        .guideline-cat-title { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; letter-spacing: 0.2px; outline: none; }
+        .guideline-category[data-cat="preinscritos"] { --cat-color: var(--role-out); }
+        .guideline-category[data-cat="postulantes"] { --cat-color: var(--role-pos); }
+        .guideline-category[data-cat="engagement"] { --cat-color: var(--col-engagement); }
+
+        .guideline-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+        .guideline-item {
             position: relative;
-        }
-
-        /* Elementos del Proceso Avanzados */
-        .process-node {
-            background: #ffffff;
-            border: 2px solid var(--line-strong);
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 12px;
-            box-shadow: 3px 3px 0px rgba(28, 37, 65, 0.08);
-            position: relative;
-            width: 100%;
-        }
-
-        .node-meta { font-family: var(--font-display); font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--muted); margin-bottom: 3px; outline: none;}
-        .node-title { font-family: var(--font-display); font-weight: 700; font-size: 12.5px; border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-bottom: 6px; outline: none; color: var(--ink);}
-        .node-content { outline: none; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
-
-        /* Variantes de Nodos */
-        .node-action { border-left: 6px solid var(--action-line); }
-        .node-decision { border-left: 6px solid var(--decision-line); background-color: var(--decision-bg); border-style: dashed; }
-        .node-alert { border-left: 6px solid var(--alert-line); background-color: var(--alert-bg); }
-
-        /* Botón de Eliminación de Nodos (Elimina todo el bloque contenedor) */
-        .btn-node-remove {
-            position: absolute;
-            top: -7px;
-            right: -7px;
-            background: var(--alert-line);
-            color: white;
-            border: 1.5px solid var(--line-strong);
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            cursor: pointer;
-            display: none;
-            line-height: 15px;
-            text-align: center;
-            z-index: 10;
-        }
-        .process-node:hover .btn-node-remove { display: block; }
-
-        /* Conectores Logísticos (Flechas) */
-        .flow-arrow { text-align: center; font-size: 14px; color: #a49c86; font-weight: bold; user-select: none; font-family: var(--font-display); }
-
-        /* Control de Adición de Elementos dentro de las Celdas */
-        .cell-add-tools {
-            margin-top: auto;
             display: flex;
-            gap: 4px;
-            border-top: 1.5px dashed var(--line);
-            padding-top: 10px;
-        }
-        .btn-tool-add {
-            background: #f2efe4;
-            border: 1.5px solid #b8b09a;
-            font-family: var(--font-display);
-            font-size: 9.5px;
-            padding: 5px 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: 700;
-            flex: 1;
-            text-align: center;
+            gap: 9px;
+            font-size: 12.5px;
+            line-height: 1.45;
             color: var(--ink-soft);
-            transition: background 0.12s ease;
+            padding: 9px 24px 9px 0;
+            border-bottom: 1px solid var(--line);
         }
-        .btn-tool-add:hover { background: var(--ink); color: #fdf7e3; border-color: var(--ink); }
+        .guideline-item:last-child { border-bottom: none; }
+        .guideline-marker { width: 7px; height: 7px; margin-top: 5px; background: var(--cat-color, var(--ink)); flex-shrink: 0; }
+        .guideline-text { outline: none; flex: 1; }
+        .guideline-item .btn-node-remove { display: none; top: 6px; right: -2px; }
+        .guideline-item:hover .btn-node-remove { display: block; }
 
-        /* Disparadores Iniciales/Finales Estilo BPMN */
-        .bpmn-event-badge {
-            background: #eeeadb;
-            color: var(--ink);
-            border: 2px solid var(--line-strong);
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-family: var(--font-display);
-            font-size: 10px;
-            font-weight: 700;
-            display: inline-block;
-            text-align: center;
-            margin: 0 auto;
-            letter-spacing: 0.3px;
-        }
-
-        /* Pie de página */
-        .doc-footer {
-            text-align: center;
-            font-size: 11.5px;
+        .btn-add-guideline {
+            width: 100%;
+            background: transparent;
+            border: 1.5px dashed #b8b09a;
             color: var(--muted);
-            padding: 6px 0 4px;
+            font-family: var(--font-display);
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 7px;
+            border-radius: 6px;
+            cursor: pointer;
         }
+        .btn-add-guideline:hover { background: var(--cat-color, var(--ink)); color: #fdf7e3; border-style: solid; border-color: var(--cat-color, var(--ink)); }
+        .btn-add-goal {
+            background: transparent;
+            border: 1.5px dashed #b8b09a;
+            color: var(--muted);
+            font-family: var(--font-display);
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+            min-width: 150px;
+        }
+        .btn-add-goal:hover { background: var(--ink); color: #fdf7e3; }
 
         /* Notificación Toast */
         .toast-notification {
@@ -1206,7 +489,7 @@
     </div>
 
     <!-- CONTROLADOR CENTRAL ENTERPRISE -->
-    <div class="enterprise-bar">
+    <div class="enterprise-bar" style="top: 16px;">
         <div class="brand-section">
             <div class="brand-mark">CGO</div>
             <div>
@@ -1216,12 +499,13 @@
             </div>
         </div>
         <div class="action-group">
+            <button class="btn btn-guidelines" id="btnGuidelines" aria-expanded="false" onclick="toggleGuidelines()">📜 Lineamientos</button>
             <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
             <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer base</button>
         </div>
     </div>
 
-    <div class="doc-wrap" id="mainDiagramCanvas">
+    <div class="doc-wrap" id="mainDiagramCanvas" style="margin-top: 108px;">
 
     <!-- INTRODUCCIÓN / RECORRIDO DEL CLIENTE -->
     <div class="hero-card">
@@ -1273,6 +557,96 @@
                 <div class="legend-node-sample"><span class="legend-chip action"></span> Acción — un paso que el asesor ejecuta</div>
                 <div class="legend-node-sample"><span class="legend-chip decision"></span> Decisión — un punto donde el proceso se ramifica</div>
                 <div class="legend-node-sample"><span class="legend-chip alert"></span> Alerta / riesgo — algo que requiere atención especial</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LINEAMIENTOS Y REGLAS DE GESTIÓN (desplegable) -->
+    <div class="guidelines-panel" id="guidelinesPanel" style="display: none;">
+        <div class="guidelines-head">
+            <div class="guidelines-eyebrow" contenteditable="true">REGLAMENTO INTERNO DE GESTIÓN</div>
+            <h3 contenteditable="true">Lineamientos y Reglas de Gestión</h3>
+            <p contenteditable="true">Criterios oficiales del equipo: cuándo se asigna, reasigna o escala un cliente, y qué se exige en cada etapa. Edita, agrega o elimina reglas con los controles de cada bloque.</p>
+        </div>
+
+        <div class="goals-block">
+            <div class="goals-title">🎯 Meta de Indicadores</div>
+            <div class="goals-grid" id="goalsGrid">
+                <div class="goal-chip">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="goal-chip-label" contenteditable="true">Conversión a Postulante</div>
+                    <div class="goal-chip-value" contenteditable="true">≥ 79%</div>
+                </div>
+                <div class="goal-chip">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="goal-chip-label" contenteditable="true">Conversión a Ingresante</div>
+                    <div class="goal-chip-value" contenteditable="true">≥ 74%</div>
+                </div>
+                <div class="goal-chip">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="goal-chip-label" contenteditable="true">Conversión a Matriculado</div>
+                    <div class="goal-chip-value" contenteditable="true">≥ 76%</div>
+                </div>
+                <div class="goal-chip">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="goal-chip-label" contenteditable="true">Calidad de Atención</div>
+                    <div class="goal-chip-value" contenteditable="true">≥ 90%</div>
+                </div>
+                <div class="goal-chip">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="goal-chip-label" contenteditable="true">sin seguimiento</div>
+                    <div class="goal-chip-value" contenteditable="true">≤ 2 días</div>
+                </div>
+                <div class="goal-chip">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="goal-chip-label" contenteditable="true">time out</div>
+                <div class="goal-chip-value" contenteditable="true">&lt; 5% o 5 Lead</div>
+            </div><div class="goal-chip">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="goal-chip-label" contenteditable="true">q. de llamadas</div>
+                <div class="goal-chip-value" contenteditable="true">120</div>
+            </div><button class="btn-add-goal" onclick="addGoal(this)">+ Agregar indicador</button>
+            </div>
+        </div>
+
+        <div class="guideline-categories">
+            <div class="guideline-category" data-cat="preinscritos">
+                <div class="guideline-cat-header">
+                    <span class="guideline-cat-dot"></span>
+                    <span class="guideline-cat-title" contenteditable="true">Preinscritos</span>
+                </div>
+                <ul class="guideline-list">
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Un lead nuevo solo puede asignarse a un asesor OUT en el momento en que ingresa al sistema; si vuelve a escribir, se asigna al asesor que lo preinscribió originalmente.</span></li>
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Si el asesor OUT no realiza el primer contacto dentro de 12 horas, el lead puede reasignarse a otro asesor OUT disponible.</span></li>
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Todo preinscrito debe quedar tipificado el mismo día de la atención; no se permite dejar preinscritos sin tipificar de un día para otro.</span></li>
+                </ul>
+                <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
+            </div>
+
+            <div class="guideline-category" data-cat="postulantes">
+                <div class="guideline-cat-header">
+                    <span class="guideline-cat-dot"></span>
+                    <span class="guideline-cat-title" contenteditable="true">Postulantes</span>
+                </div>
+                <ul class="guideline-list">
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">DIV-POS solo puede tomar la atención directa de un postulante si el asesor titular no lo registró en 📍S-POS o no responde en más de 48 horas.</span></li>
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Todo cambio de fecha de evaluación debe quedar registrado en 📍S-POS antes de las 24 horas previas al examen.</span></li>
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Un postulante no puede quedar sin seguimiento por más de 2 días consecutivos, sin importar quién lo esté atendiendo.</span></li>
+                </ul>
+                <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
+            </div>
+
+            <div class="guideline-category" data-cat="engagement">
+                <div class="guideline-cat-header">
+                    <span class="guideline-cat-dot"></span>
+                    <span class="guideline-cat-title" contenteditable="true">Engagement</span>
+                </div>
+                <ul class="guideline-list">
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Todo cliente con compromiso de pago vencido pasa a seguimiento prioritario dentro de las primeras 24 horas.</span></li>
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Las objeciones que escalen a SUPERVISOR deben quedar documentadas en el DRIVE el mismo día en que ocurren.</span></li>
+                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">El envío de recordatorios (GANCHO + plantilla) es obligatorio antes de cada fecha de compromiso o evaluación.</span></li>
+                </ul>
+                <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
             </div>
         </div>
     </div>
@@ -1499,7 +873,7 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast"></div>
+    <div class="toast-notification" id="saveToast" style="display: none;">📥 Archivo descargado con tus últimos cambios</div>
 
     <script id="appScript">
         // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
@@ -1508,7 +882,7 @@
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-22T12-00-00";
+        const DATA_VERSION = "2026-09-23T21:05:33.908Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -1565,6 +939,48 @@
             document.getElementById('mainDiagramCanvas').addEventListener('blur', persistDiagram, true);
         });
 
+        // Despliega / oculta el panel de Lineamientos y Reglas de Gestión
+        function toggleGuidelines() {
+            const panel = document.getElementById('guidelinesPanel');
+            const btn = document.getElementById('btnGuidelines');
+            if (!panel) return;
+            const isOpen = panel.style.display !== 'none';
+            panel.style.display = isOpen ? 'none' : 'block';
+            if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
+            if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            persistDiagram();
+        }
+
+        // Agrega un nuevo lineamiento editable dentro de su categoría
+        function addGuideline(button) {
+            const list = button.previousElementSibling; // el <ul class="guideline-list">
+            const li = document.createElement('li');
+            li.className = 'guideline-item';
+            li.innerHTML = `
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <span class="guideline-marker"></span>
+                <span class="guideline-text" contenteditable="true">Escribe aquí el nuevo lineamiento o regla de gestión.</span>
+            `;
+            list.appendChild(li);
+            persistDiagram();
+            li.querySelector('.guideline-text').focus();
+        }
+
+        // Agrega un nuevo indicador editable a la Meta de Indicadores
+        function addGoal(button) {
+            const grid = button.parentElement; // #goalsGrid
+            const chip = document.createElement('div');
+            chip.className = 'goal-chip';
+            chip.innerHTML = `
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="goal-chip-label" contenteditable="true">Nuevo indicador</div>
+                <div class="goal-chip-value" contenteditable="true">Meta</div>
+            `;
+            grid.insertBefore(chip, button);
+            persistDiagram();
+            chip.querySelector('.goal-chip-label').focus();
+        }
+
         // Adición avanzada y limpia de nodos
         function addNewNode(button, nodeType) {
             const cell = button.parentElement.parentElement;
@@ -1617,6 +1033,14 @@
             const bannerWasVisible = banner ? banner.style.display : '';
             if (banner) banner.style.display = 'none';
 
+            // El archivo exportado siempre sale con el panel de Lineamientos cerrado,
+            // para que quien lo reciba vea primero el mapa y abra el reglamento si lo necesita.
+            const guidelinesPanel = document.getElementById('guidelinesPanel');
+            const guidelinesWasOpen = guidelinesPanel ? guidelinesPanel.style.display !== 'none' : false;
+            const btnGuidelines = document.getElementById('btnGuidelines');
+            if (guidelinesPanel) guidelinesPanel.style.display = 'none';
+            if (btnGuidelines) btnGuidelines.setAttribute('aria-expanded', 'false');
+
             const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
             const downloader = document.createElement('a');
@@ -1628,6 +1052,10 @@
             document.body.removeChild(downloader);
 
             if (banner) banner.style.display = bannerWasVisible;
+            if (guidelinesPanel && guidelinesWasOpen) {
+                guidelinesPanel.style.display = 'block';
+                if (btnGuidelines) btnGuidelines.setAttribute('aria-expanded', 'true');
+            }
             adjustLayoutForBanner();
 
             const toast = document.getElementById('saveToast');
@@ -1659,5 +1087,6 @@
             applyUpdate();
         }
     </script>
+
 
 </body></html>
