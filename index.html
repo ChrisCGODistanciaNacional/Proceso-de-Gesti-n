@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa de Procesos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <style>
         :root {
             /* Base */
@@ -47,6 +47,11 @@
         }
 
         html { scroll-behavior: smooth; }
+
+        /* AVISO DE ACTUALIZACIÓN DISPONIBLE */
+        #updateBanner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 1001; background-color: #f5a623; color: #3a2a00; padding: 10px 20px; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 13px; font-weight: 700; text-align: center; }
+        #updateBanner button { background-color: #3a2a00; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
+        #updateBanner button:hover { background-color: #55400a; }
 
         body {
             font-family: var(--font-body);
@@ -381,17 +386,23 @@
 </head>
 <body>
 
+    <!-- AVISO DE ACTUALIZACIÓN DISPONIBLE -->
+    <div id="updateBanner" style="display:none;">
+        <span>🔄 Hay una nueva versión de este Mapa de Procesos. Lo que ves puede estar desactualizado.</span>
+        <button onclick="applyUpdate()">Actualizar ahora</button>
+    </div>
+
     <!-- CONTROLADOR CENTRAL ENTERPRISE -->
     <div class="enterprise-bar">
         <div class="brand-section">
             <div class="brand-mark">CGO</div>
             <div>
                 <h1>Mapa de Procesos Comercial</h1>
-                <p>Haz clic en cualquier texto para editarlo directamente sobre el diagrama.</p>
+                <p>Guía de trabajo en Equipo.</p>
+                <p style="font-size:9.5px; opacity:0.55; margin-top:1px;">Creado por Christopher Huamán · CGO 2025</p>
             </div>
         </div>
         <div class="action-group">
-            <button class="btn btn-save" onclick="saveDiagram()">💾 Guardar cambios</button>
             <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
             <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer base</button>
         </div>
@@ -482,7 +493,7 @@
                 <div class="dynamic-step-container">
                     <div class="flow-arrow">⬇️</div>
                     <div class="process-node node-action">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                         <div class="node-meta" contenteditable="true">Primera atención</div>
                         <div class="node-title" contenteditable="true">Estructura de Llamada</div>
                         <div class="node-content" contenteditable="true">Sigue ESTRUCTURA en cada LLAMADA / CHAT y realizar correcta TIPIFICACIÓN.</div>
@@ -494,7 +505,7 @@
                 <div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-decision">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">sobre la atención</div>
                     <div class="node-title" contenteditable="true">¿Realiza inscripción?</div>
                     <div class="node-content" contenteditable="true">🔼 No, se programa próxima comunicación.<br>🟢&nbsp;Cumpliendo Estructura de Llamada.<br><div><br></div><div>🔽 Si, realizar cobro de admisión al momento o generar compromiso de pago de admisión.</div><div><br></div><div><span style="color: rgb(100, 116, 139); font-size: 9px; font-weight: 800; text-transform: uppercase;">No dejar 2+ días sin atención</span></div></div>
@@ -502,7 +513,7 @@
             </div><div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-decision">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">sobre pago de admisión</div>
                     <div class="node-title" contenteditable="true">¿Realizó el pago?</div>
                     <div class="node-content" contenteditable="true">🔼 No, no realiza pago en fecha acordada:<div><br><strong>Paso 1:</strong>&nbsp;Presionar (Hasta 7 días)<br>🟢 Presionar el pago en base al acuerdo tenido.<br><strong>Paso 2:</strong>&nbsp;Reprospectar (Hasta 14 días)<div>🟢 Consultar motivo de no pago para resolver dudas.<br><strong>Paso 3:</strong>&nbsp;Sincerar&nbsp; (14 días a más)<br>🟢 Ser conciso sobre si el cliente desea continuar o cerrar.</div><div><font color="#000000"><b>🟢 Ser directo sobre si el cliente desea continuar o cerrar la oportunidad para no cargar peso muerto.</b></font><br><div>---------------------------------------------------------------</div><div>🔽 Si, realiza pago admisión:</div><div>🟢 Asesor OUT da FELICITACIONES por el PAGO.</div></div><div><br></div><div><strong>Caso A - Asesor no llevará programación:</strong> <br>🟢&nbsp;Deja WSP GUÍA de Credenciales y Requisitos*.</div><div>🟢 Dejar WSP direccionando a DIV-POS.</div><div><br><strong>Caso B - Asesor ayudará con programación</strong><strong>:</strong></div><div>🟢 Deja WSP GUÍA de Credenciales y Requisitos*.</div><div>🟢 Solicitar DOCUMENTOS y pedir SOPORTE a DIV-POS por la pestaña&nbsp;📍S-POS para la programación&nbsp;</div><div>(Dejar archivos en chat de DIV-POS).<br></div><div>🟢 Dejar WSP PROGRAMACIÓN realizada al cliente y comentario con DERIVACIÓN a DIV-POS para que tenga presene se comunicará el día de la EVALUACIÓN.</div><div><br></div><div><strong>Caso C - Asesor realizará SOLO el proceso</strong><strong>:</strong></div><div>Si el asesor desea realizar solo la programación o el cliente pide solo hacerlo con el asesor.</div><div>🟢 No perder mucho tiempo en esa gestión.</div></div></div>
@@ -543,7 +554,7 @@
                 <div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-action">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true"><span style="background-color: rgb(254, 242, 242);">Abordaje de div-pos</span></div>
                     <div class="node-title" contenteditable="true"><span style="background-color: rgb(254, 242, 242);">Sobre los postulantes</span></div>
                     <div class="node-content" contenteditable="true"><div><div><b>Caso A - Asesor no llevará programación:</b></div><div><div>Si no comunica el Asesor sobre el cliente o no es registrado en 📍S-POS será abordado directamente con DIV-POS.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se espera que OUT haya dejado WSP de derivación.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;DIV-POS lo atenderá lo más pronto al actualizar BASE.</div></div></div><div><br></div><div><div><b>Caso B - Asesor ayudará con programación:</b></div><div><div>Si lo ve en la pestaña 📍S-POS programará evaluación notificando al asesor con CAPTURA de PORTAL.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Ambos enviarán PROGRAMACIÓN REALIZADA.</div></div><div><br></div><div><div><b>Caso C - Asesor realizará SOLO el proceso:</b></div><div><div>Si el asesor indica que lo gestionará solo solo tendrá 8 Horas para PROGRAMAR.</div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Caso pase el tiempo DIV-POS realizará abordaje.</div></div></div></div></div>
@@ -551,7 +562,7 @@
             </div><div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-action">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">RECORDATORIO DE EVALUACIÓN</div>
                     <div class="node-title" contenteditable="true">ASEGURAR INGRESO</div>
                     <div class="node-content" contenteditable="true"><strong style="background-color: rgb(255, 253, 245);">Paso 1:</strong><span style="background-color: rgb(255, 253, 245);"> </span>El día de EVALUACIÓN (1 Hora antes) al postulante se le envía el RECORDATORIO por parte de DIV-POS.<br><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se espera que ASESOR tambien envie RECORDATORIO.<br><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se enviá GANCHO + RECORDATORIO (Plantilla).<br><br><span style="background-color: rgb(255, 253, 245);"><b>Paso 2:</b>&nbsp;</span>Posterior al recordatorio se inicia con LLAMADAS a los postulantes para presionar ingreso.</div>
@@ -559,7 +570,7 @@
             </div><div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-alert">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">guiar ingreso a evaluación</div>
                     <div class="node-title" contenteditable="true">SOLUCIONAR DUDAS AL INGRESAR</div>
                     <div class="node-content" contenteditable="true">*DIV-POS realiza llamadas en el paso anterior.<br><div><strong style="background-color: rgb(255, 253, 245);">Caso A: </strong>Guiará el ingreso paso a paso en LLAMADA si lo requiere un CLIENTE para recién pasar al siguiente.<br><strong style="background-color: rgb(255, 253, 245);">Caso B:</strong><span style="background-color: rgb(255, 253, 245);">&nbsp;</span>A la par si hay respuestas de dudas por Whatsapp guiará el ingreso por ese medio.<div><div><span style="background-color: rgb(255, 253, 245);">🟢</span>&nbsp;Se espera que en días de no conexión de DIV-POS el ASESOR se encuentré atento del ingreso.</div></div></div></div>
@@ -567,7 +578,7 @@
             </div><div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-decision">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">POSTERIOR A EVALUACIÓN</div>
                     <div class="node-title" contenteditable="true">¿Logró ingreso a UC?</div>
                     <div class="node-content" contenteditable="true"><div>*Si un cliente responde a DIV-POS.<strong></strong></div><strong>DIV-POS:&nbsp;</strong>Enviará FELICIDADES DE INGRESO y DERIVACIÓN a DIV-ING para continuar atención.&nbsp;<div><br style="background-color: rgb(254, 242, 242);"><strong>ASESOR OUT: </strong>Enviará FELICIDADES DE INGRESO.<strong><br><br></strong><div><strong>Caso A - Asesor OUT&nbsp;</strong><strong>generará compromiso:</strong></div><div><div>🟢&nbsp;Solicitar DOCUMENTOS y pedir SOPORTE a DIV-ING por la pestaña 📍S-ING para la activación de beneficios.</div><div>(Dejar archivos en chat de DIV-ING).<br>(Considerar horario de DIV-ING si no realizarlo solo o con soporte de SUPERVISOR 24/7)</div></div><div>🟢&nbsp;Dejar WSP COMPROMISO realizada al cliente y comentario con DERIVACIÓN a DIV-ING para que tenga presene se comunicará el día de compromiso.</div><div>🟢&nbsp;Dejar COMPROMISO en pestaña 📍S-ING para no reabordarlo y se mapee el cliente.<br>(Compromiso debe ser dentro de las 48 horas excepto caso puntuales que se mediran por %)</div><div><br></div><div><strong>Caso B - Asesor OUT NO generará compromiso:</strong></div><div><div>🟢&nbsp;Solicitar DOCUMENTOS y pedir SOPORTE a DIV-ING por la pestaña 📍S-ING para la activación de beneficios.</div><div>(Dejar archivos en chat de DIV-ING).<br>(Considerar horario de DIV-ING si no realizarlo solo o con soporte de SUPERVISOR 24/7)</div></div><div>🟢Dejar WSP direccionando a DIV-ING.</div></div></div>
@@ -600,7 +611,7 @@
             <div class="flow-work-cell">
                 <div class="dynamic-step-container">
                     <div class="process-node node-action">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                         <div class="node-meta" contenteditable="true">abordaje de div-ing</div>
                         <div class="node-title" contenteditable="true">Revisión de Ingresantes</div>
                         <div class="node-content" contenteditable="true"><div><font color="#000000"><b>Caso A - Asesor OUT generará compromiso:</b></font></div><div>🟢 DIV-ING el día del COMPROMISO revisará si el CLIENTE REALIZO EL PAGO y si no REALIZARÁ LLAMADAS para asegurar el cobro del cliente.</div><div>🟢 Primero intenta llamarlo y en caso no conteste dejará WSP de recordatorio con PLANTILLA usando GANCHO en almenos 03 cortes al día.</div><div><br></div><div><b style="color: rgb(0, 0, 0);">Caso B - Asesor OUT NO generará compromiso:</b></div><div>🟢DIV-ING el día de ingreso del cliente le realizará llamadas lo más pronto posible bajo ESTRUCTURA DE LLAMADA y generando compromiso dentro 48 horas.</div></div>
@@ -610,7 +621,7 @@
                 <div class="dynamic-step-container">
                     <div class="flow-arrow">⬇️</div>
                     <div class="process-node node-decision">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                         <div class="node-meta" contenteditable="true">recordatorio de pago</div>
                         <div class="node-title" contenteditable="true">¿Pago Completado?</div>
                         <div class="node-content" contenteditable="true"><b>Caso A - Asesor OUT generará compromiso:</b><br><div>🟢 Si el cliente no realiza el pago en el primer momento DIV-ING realizará el seguimiento en adelante.<br>(Si el cliente desea solo contactarse con el asesor es responsabilidad de este convertirse para no afectar el avance general y DIV-ING)<span style="background-color: rgb(255, 255, 255);"></span></div><div><b><br></b></div><div><b>Caso B - Asesor OUT NO generará compromiso:</b></div><div>🟢 Cada día tiene que asegurar las llamadas necesarias para contactar y convertir al cliente.</div></div>
@@ -620,7 +631,7 @@
                 <div class="dynamic-step-container">
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-alert">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">Alerta / Riesgo</div>
                     <div class="node-title" contenteditable="true">OBJECIONES O QUEJAS DE CLIENTES</div>
                     <div class="node-content" contenteditable="true"><div>🟢&nbsp; En caso el CLIENTE escriba a DIV-ING sobre alguna objeción para su pago o generar compromiso es responsabilidad de resolverlo por por parte de DIV.ING en caso pueda conseguir la solución.</div><div>🟢&nbsp; Solo si el caso escala a uno complicado dejar en STAND BY para que el asesor pueda resolver con soporte de SUPERVISOR.</div><div>🟢&nbsp; Registrar errores de gestión dentro del DRIVE.</div></div>
@@ -636,7 +647,7 @@
             <div class="flow-work-cell">
                 <div class="dynamic-step-container">
                     <div class="process-node node-action" style="background-color: #f0fdf4;">
-                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                        <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                         <div class="node-meta" contenteditable="true">Onboarding Académico</div>
                         <div class="node-title" contenteditable="true">Mensaje WSP Final</div>
                         <div class="node-content" contenteditable="true">1. Agradecimiento por el proceso.<br>2. Instrucciones de Convalidantes si es necesario.<br></div>
@@ -675,16 +686,71 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast" style="display: block;">¡Cambios guardados en este navegador!</div>
+    <div class="toast-notification" id="saveToast"></div>
 
-    <script>
+    <script id="appScript">
+        // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
+        // aplicar cualquier respaldo guardado en el navegador. Sirve para poder
+        // "Restablecer base" sin perder lo que trae oficialmente el archivo.
+        let freshEmbeddedHTML = null;
+
+        /*==DATA_VERSION_START==*/
+        const DATA_VERSION = "2026-09-22T12-00-00";
+        /*==DATA_VERSION_END==*/
+
+        // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
+        // hacia abajo la barra superior flotante y el contenido para que no se tapen.
+        function adjustLayoutForBanner() {
+            const banner = document.getElementById('updateBanner');
+            const bar = document.querySelector('.enterprise-bar');
+            const wrap = document.querySelector('.doc-wrap');
+            if (!banner || !bar || !wrap) return;
+            if (getComputedStyle(banner).display !== 'none') {
+                const h = banner.offsetHeight;
+                bar.style.top = (16 + h) + 'px';
+                wrap.style.marginTop = (108 + h) + 'px';
+            } else {
+                bar.style.top = '16px';
+                wrap.style.marginTop = '108px';
+            }
+        }
+        window.addEventListener('resize', adjustLayoutForBanner);
+
         // Carga de datos automatizada
         window.onload = function() {
+            freshEmbeddedHTML = document.getElementById('mainDiagramCanvas').innerHTML;
+
             const cacheDiagram = localStorage.getItem('cgo_mapa_procesos_v1');
-            if (cacheDiagram) {
+            const storedVersion = localStorage.getItem('cgo_mapa_procesos_v1_version');
+
+            if (!cacheDiagram) {
+                // Primera vez que se abre este archivo en este navegador.
+                localStorage.setItem('cgo_mapa_procesos_v1', freshEmbeddedHTML);
+                localStorage.setItem('cgo_mapa_procesos_v1_version', DATA_VERSION);
+            } else {
                 document.getElementById('mainDiagramCanvas').innerHTML = cacheDiagram;
+                if (storedVersion !== DATA_VERSION) {
+                    // Este navegador tenía guardada una versión anterior del archivo:
+                    // seguimos mostrando lo que tenía guardado, pero avisamos que hay
+                    // una versión más reciente disponible.
+                    const banner = document.getElementById('updateBanner');
+                    if (banner) banner.style.display = 'flex';
+                }
             }
+            adjustLayoutForBanner();
         };
+
+        // Guardado automático silencioso: se llama cada vez que se edita, agrega o
+        // borra un paso del mapa, para que los cambios persistan en este navegador.
+        function persistDiagram() {
+            const mapHtml = document.getElementById('mainDiagramCanvas').innerHTML;
+            localStorage.setItem('cgo_mapa_procesos_v1', mapHtml);
+            localStorage.setItem('cgo_mapa_procesos_v1_version', DATA_VERSION);
+        }
+        // Cualquier edición de texto sobre el diagrama (contenteditable) se guarda sola.
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('mainDiagramCanvas').addEventListener('blur', persistDiagram, true);
+        });
 
         // Adición avanzada y limpia de nodos
         function addNewNode(button, nodeType) {
@@ -701,7 +767,7 @@
             stepContainer.innerHTML = `
                 <div class="flow-arrow">⬇️</div>
                 <div class="process-node node-${nodeType}">
-                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove()">✕</button>
+                    <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="node-meta" contenteditable="true">${metaText}</div>
                     <div class="node-title" contenteditable="true">Título del Lineamiento</div>
                     <div class="node-content" contenteditable="true">Escribe aquí los pasos claros del proceso para tus asesores comerciales.</div>
@@ -710,22 +776,34 @@
             
             // Insertamos todo el bloque junto antes de la botonera
             cell.insertBefore(stepContainer, toolsArea);
-        }
-
-        // Almacenamiento local rápido (guarda intro, leyenda y el mapa completo)
-        function saveDiagram() {
-            const mapHtml = document.getElementById('mainDiagramCanvas').innerHTML;
-            localStorage.setItem('cgo_mapa_procesos_v1', mapHtml);
-
-            const toast = document.getElementById('saveToast');
-            toast.textContent = '¡Cambios guardados en este navegador!';
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2200);
+            persistDiagram();
         }
 
         // Exportador a archivo físico HTML (incluye TODOS los cambios hechos en pantalla)
         function downloadDiagram() {
-            saveDiagram();
+            persistDiagram();
+
+            // Asegura que el toast quede oculto en el archivo exportado, sin importar
+            // si estaba visible en este momento por una acción previa en esta sesión.
+            const toastEl = document.getElementById('saveToast');
+            if (toastEl) toastEl.style.display = 'none';
+
+            // Marca esta exportación con una versión NUEVA y única: así, cualquier
+            // navegador que tenga guardada una versión anterior detectará el cambio
+            // apenas abra este archivo y mostrará el aviso de actualización.
+            const newVersion = new Date().toISOString();
+            const scriptEl = document.getElementById('appScript');
+            let scriptSrc = scriptEl.textContent;
+            scriptSrc = scriptSrc.replace(
+                /\/\*==DATA_VERSION_START==\*\/[\s\S]*?\/\*==DATA_VERSION_END==\*\//,
+                "/*==DATA_VERSION_START==*/\n        const DATA_VERSION = \"" + newVersion + "\";\n        /*==DATA_VERSION_END==*/"
+            );
+            scriptEl.textContent = scriptSrc;
+
+            const banner = document.getElementById('updateBanner');
+            const bannerWasVisible = banner ? banner.style.display : '';
+            if (banner) banner.style.display = 'none';
+
             const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
             const downloader = document.createElement('a');
@@ -736,18 +814,36 @@
             downloader.click();
             document.body.removeChild(downloader);
 
+            if (banner) banner.style.display = bannerWasVisible;
+            adjustLayoutForBanner();
+
             const toast = document.getElementById('saveToast');
             toast.textContent = '📥 Archivo descargado con tus últimos cambios';
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 2500);
         }
 
-        // Reseteo de fábrica
+        // Fuerza la actualización a la versión más reciente incluida en este archivo,
+        // descartando lo que este navegador tenía guardado localmente.
+        function applyUpdate() {
+            try {
+                localStorage.setItem('cgo_mapa_procesos_v1', freshEmbeddedHTML);
+                localStorage.setItem('cgo_mapa_procesos_v1_version', DATA_VERSION);
+            } catch (e) {}
+            location.reload();
+        }
+
+        // "🔄 Restablecer base": deshace ediciones o borrados accidentales de un asesor,
+        // y también sirve para forzar la verificación de una actualización reciente —
+        // en ambos casos el resultado es el mismo: volver a la versión oficial del archivo.
         function resetDiagram() {
-            if (confirm('¿Deseas eliminar las ediciones y regresar al mapa base original?')) {
-                localStorage.removeItem('cgo_mapa_procesos_v1');
-                location.reload();
-            }
+            const ok = confirm(
+                '¿Restablecer este Mapa de Procesos?\n\n' +
+                'Esto descartará cualquier cambio hecho en ESTE navegador (ediciones, pasos borrados, etc.) ' +
+                'y mostrará la versión oficial publicada en este archivo.\n\nEsta acción no se puede deshacer.'
+            );
+            if (!ok) return;
+            applyUpdate();
         }
     </script>
 
