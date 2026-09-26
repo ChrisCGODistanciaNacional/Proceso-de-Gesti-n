@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             /* Base */
@@ -248,7 +249,9 @@
             justify-content: space-between;
             color: var(--ink);
         }
-        .role-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; border-bottom: 2px solid var(--line); padding-bottom: 8px; outline: none; }
+        .role-name-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+        .role-name { font-family: var(--font-display); font-weight: 700; font-size: 14px; outline: none; }
+        .guideline-cat-header .btn-group-copy { margin-left: auto; }
         .role-metrics { background: var(--panel); padding: 10px; border-radius: 8px; border: 1.5px dashed #b8b09a; font-size: 11px; margin-top: 10px; }
         .metric-field { margin-bottom: 4px; outline: none; color: var(--ink-soft); }
         .metric-field b, .metric-field strong { color: var(--ink); }
@@ -314,6 +317,25 @@
             z-index: 10;
         }
         .process-node:hover .btn-node-remove { display: block; }
+
+        /* Botón "Copiar como imagen" de GRUPO (todo un bloque/lista, no una tarjeta suelta) */
+        .btn-group-copy {
+            background: var(--action-line);
+            color: white;
+            border: 1.5px solid var(--line-strong);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            font-size: 11px;
+            cursor: pointer;
+            line-height: 18px;
+            text-align: center;
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .btn-group-copy:hover { filter: brightness(1.1); }
+        .btn-group-copy:disabled { opacity: 0.5; cursor: wait; }
 
         /* Conectores Logísticos (Flechas) */
         .flow-arrow { text-align: center; font-size: 14px; color: #a49c86; font-weight: bold; user-select: none; font-family: var(--font-display); }
@@ -430,6 +452,10 @@
         }
         .guideline-item:last-child { border-bottom: none; }
         .guideline-marker { width: 7px; height: 7px; margin-top: 5px; background: var(--cat-color, var(--ink)); flex-shrink: 0; }
+        .guideline-handle { cursor: grab; color: var(--muted); font-size: 13px; line-height: 1; margin-top: 3px; user-select: none; flex-shrink: 0; }
+        .guideline-handle:active { cursor: grabbing; }
+        .guideline-item.dragging { opacity: 0.4; }
+        .guideline-item[draggable="true"] { background: var(--decision-bg); border-radius: 6px; }
         .guideline-text { outline: none; flex: 1; }
         .guideline-item .btn-node-remove { display: none; top: 6px; right: -2px; }
         .guideline-item:hover .btn-node-remove { display: block; }
@@ -509,15 +535,15 @@
 
     <!-- INTRODUCCIÓN / RECORRIDO DEL CLIENTE -->
     <div class="hero-card">
-        <div class="hero-eyebrow" contenteditable="true">PROCESO DE VENTAS — ADMISIÓN UNIVERSITARIA A DISTANCIA</div>
+        <div class="hero-eyebrow" contenteditable="true">PROCESO DE VENTAS</div>
         <h2 contenteditable="true">Del lead al matriculado: así se reparte la atención entre asesores</h2>
-        <p class="hero-desc" contenteditable="true">Cada lead avanza por cuatro etapas. Los asesores OUT preinscriben y cierran la venta inicial; DIV-POS y DIV-ING dan soporte especializado en cada tramo del camino hasta que el cliente paga su matrícula, el único momento en que la gestión cuenta como venta cerrada.</p>
+        <p class="hero-desc" contenteditable="true">Cada lead avanza por cuatro etapas. Los asesores DIV-PRE preinscriben y cierran la venta inicial; DIV-POS y DIV-ING dan soporte especializado en cada tramo del camino hasta que el cliente paga su matrícula, el único momento en que la gestión cuenta como venta cerrada.</p>
 
         <div class="journey-stepper">
             <div class="journey-step" data-stage="1">
                 <div class="journey-num">ETAPA 1</div>
                 <div class="journey-title" contenteditable="true">Preinscrito</div>
-                <div class="journey-sub" contenteditable="true">El lead llega al sistema y el asesor OUT lo contacta y paga su admisión.</div>
+                <div class="journey-sub" contenteditable="true">El lead llega al sistema y el asesor DIV-PRE lo contacta y paga su admisión.</div>
             </div>
             <div class="journey-step" data-stage="2">
                 <div class="journey-num">ETAPA 2</div>
@@ -542,7 +568,7 @@
         <h3>Cómo leer el mapa</h3>
         <div class="legend-grid">
             <div class="legend-role" data-role="out">
-                <div class="legend-role-name">DIV-OUTBOUND (OUT)</div>
+                <div class="legend-role-name">DIV-PREINSCRITO (DIV-PRE)</div>
                 <div class="legend-role-desc" contenteditable="true">Preinscribe leads y cierra la venta de admisión y matrícula.</div>
             </div>
             <div class="legend-role" data-role="pos">
@@ -566,22 +592,14 @@
         <div class="guidelines-head">
             <div class="guidelines-eyebrow" contenteditable="true">REGLAMENTO INTERNO DE GESTIÓN</div>
             <h3 contenteditable="true">Lineamientos y Reglas de Gestión</h3>
-            <p contenteditable="true">Criterios oficiales del equipo: cuándo se asigna, reasigna o escala un cliente, y qué se exige en cada etapa. Edita, agrega o elimina reglas con los controles de cada bloque.</p>
+            <p contenteditable="true">Criterios oficiales del equipo: cuándo se asigna, reasigna o escala un cliente, y qué se exige en cada etapa.</p>
         </div>
 
         <div class="goals-block">
-            <div class="goals-title">🎯 Meta de Indicadores</div>
+            <div class="goals-title">🚦 Límites de Gestión</div>
             <div class="goals-grid" id="goalsGrid">
-                <div class="goal-chip">
-                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="goal-chip-label" contenteditable="true">Conversión a Postulante</div>
-                    <div class="goal-chip-value" contenteditable="true">≥ 79%</div>
-                </div>
-                <div class="goal-chip">
-                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="goal-chip-label" contenteditable="true">Conversión a Ingresante</div>
-                    <div class="goal-chip-value" contenteditable="true">≥ 74%</div>
-                </div>
+                
+                
                 <div class="goal-chip">
                     <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
                     <div class="goal-chip-label" contenteditable="true">Conversión a Matriculado</div>
@@ -614,12 +632,18 @@
                 <div class="guideline-cat-header">
                     <span class="guideline-cat-dot"></span>
                     <span class="guideline-cat-title" contenteditable="true">Preinscritos</span>
+                    <button class="btn-group-copy" onclick="copyGuidelineCategoryAsImage(this)" title="Copiar todos los lineamientos de esta lista como imagen">📋</button>
                 </div>
-                <ul class="guideline-list">
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Un lead nuevo solo puede asignarse a un asesor OUT en el momento en que ingresa al sistema; si vuelve a escribir, se asigna al asesor que lo preinscribió originalmente.</span></li>
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Si el asesor OUT no realiza el primer contacto dentro de 12 horas, el lead puede reasignarse a otro asesor OUT disponible.</span></li>
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Todo preinscrito debe quedar tipificado el mismo día de la atención; no se permite dejar preinscritos sin tipificar de un día para otro.</span></li>
-                </ul>
+                <ul class="guideline-list" ondragover="guidelineDragOver(event)">
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true"><b>Sobre los EQUIPOS HOY y MIR<br></b><br>🔰Un lead solo está protegido 01 vez desde su inscripción; el tiempo de protección es&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">03 días </b>contando desde el día de tipificación (No se cuentan los dias que no labora el colaborador que tiene protección).<br><br>SOLO procederá con la reasignación si el nuevo asesor consigue el <b data-path-to-node="4,0" data-index-in-node="49">PAGO</b>&nbsp;del cliente pasandome el VOUCHER del cliente y/o CONVERSACION de CHAT que le envie ello.<br><br><b>✅ Supervisor: Para la reasignación me pueden avisar.<br></b><br></span></li>
+                    
+                    
+                <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span>
+                <span class="guideline-marker"></span>
+                <span class="guideline-text" contenteditable="true"><b>Sobre los EQUIPOS IN<br></b><br>🔰Un lead solo está protegido 01 vez desde su inscripción; el tiempo de protección es <b data-path-to-node="4,0" data-index-in-node="49">02 día&nbsp;</b>contando desde el día de tipificación (No se cuentan los dias que no labora el colaborador que tiene protección).<br><br>SOLO procederá con la reasignación si el nuevo asesor consigue el&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">PAGO</b> del cliente pasandome el VOUCHER del cliente y/o CONVERSACION de CHAT que le envie ello.<br><br><b>✅ Supervisor: Para la reasignación deben pasarlo al análista.</b></span>
+            </li></ul>
                 <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
             </div>
 
@@ -627,12 +651,18 @@
                 <div class="guideline-cat-header">
                     <span class="guideline-cat-dot"></span>
                     <span class="guideline-cat-title" contenteditable="true">Postulantes</span>
+                    <button class="btn-group-copy" onclick="copyGuidelineCategoryAsImage(this)" title="Copiar todos los lineamientos de esta lista como imagen">📋</button>
                 </div>
-                <ul class="guideline-list">
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">DIV-POS solo puede tomar la atención directa de un postulante si el asesor titular no lo registró en 📍S-POS o no responde en más de 48 horas.</span></li>
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Todo cambio de fecha de evaluación debe quedar registrado en 📍S-POS antes de las 24 horas previas al examen.</span></li>
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Un postulante no puede quedar sin seguimiento por más de 2 días consecutivos, sin importar quién lo esté atendiendo.</span></li>
-                </ul>
+                <ul class="guideline-list" ondragover="guidelineDragOver(event)">
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">🔰Un lead está protegido por cada <b>Tipificación de Programado&nbsp;</b>del mismo asesor; el tiempo de protección es <b data-path-to-node="4,0" data-index-in-node="49">08 días&nbsp;</b>contando desde el día de tipificación <br><br><b>(No se cuentan los dias que no labora el colaborador que tiene protección).</b></span></li>
+                    
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">🔰Si el lead&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">NO TIENE</b>&nbsp;GLPI de CONVENIO o GLPI de CAMBIO DE PERIODO es decir solo se le registro en CRM con DTO de S/200 entonces se le considera como PREINSCRITO y sigue las reglas de preinscrito para ASIGNACIÓN.</span></li>
+                <li class="guideline-item" draggable="false">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span>
+                <span class="guideline-marker"></span>
+                <span class="guideline-text" contenteditable="true">🔰Si un <b>Postulante No Ingreso a Evaluación </b>SOLO está protegido por <b>02 días. <br></b><br><b>Ejemplo: </b>Si mi POSTULANTE tenia programado su evaluación HOY pero NO INGRESÓ entonces el cliente esta protegido para reprogramarlo HOY y MAÑANA, para PASADO esta libre para quien contacte y logre REPROGRAMACIÓN.<br><br><b>(No se cuentan los dias que no labora el colaborador que tiene protección).</b></span>
+            </li></ul>
                 <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
             </div>
 
@@ -640,12 +670,23 @@
                 <div class="guideline-cat-header">
                     <span class="guideline-cat-dot"></span>
                     <span class="guideline-cat-title" contenteditable="true">Engagement</span>
+                    <button class="btn-group-copy" onclick="copyGuidelineCategoryAsImage(this)" title="Copiar todos los lineamientos de esta lista como imagen">📋</button>
                 </div>
-                <ul class="guideline-list">
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Todo cliente con compromiso de pago vencido pasa a seguimiento prioritario dentro de las primeras 24 horas.</span></li>
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">Las objeciones que escalen a SUPERVISOR deben quedar documentadas en el DRIVE el mismo día en que ocurren.</span></li>
-                    <li class="guideline-item"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">El envío de recordatorios (GANCHO + plantilla) es obligatorio antes de cada fecha de compromiso o evaluación.</span></li>
-                </ul>
+                <ul class="guideline-list" ondragover="guidelineDragOver(event)">
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">🔰Un lead&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">SOLO</b>&nbsp;está protegido por una&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">PRIMERA TIPIFICACIÓN&nbsp;</b>de <b>PROGRAMADO </b>del mismo asesor; el tiempo de protección es <b data-path-to-node="4,0" data-index-in-node="49">02 días</b>&nbsp;contando desde el día de tipificación.<br><br><b>(No se cuentan los dias que no labora el colaborador que tiene protección).</b><br><br><b>Ejemplo:</b> Tipifique HOY entonces esta protegido HOY y MAÑANA, para PASADO aunque lo vuelvas a tipificar esta libre para el siguiente asesor que realice abordaje y logre la preinscripción del CLIENTE.<br><br><b>*&nbsp;</b>Si te llega un lead protegido por llamada / chat del SISTEMA (o Base MANUAL) entonces:<b> 1. Deriven y 2. Avisen al asesor correspondiente.</b><br><br><b>(a.) REGISTREN ese ABORDAJE </b>y limpien la base. Lo pueden <b>TIPIFICAR </b>como PROGRAMADO y en DESCRIPCIÓN colocar&nbsp;<b>"Se deriva a Asesor."<br></b><br><b>(b.) SOLO si el CLIENTE PIDE quedarse en CONVERSACIÓN</b> con ustedes pueden realizar la atención pero igual <b>MANTENDRÁ LA PROTECCIÓN</b>&nbsp;<b>los días que le quede al primer asesor</b>. Solo podrá inscribirlo pasado el tiempo de protección.<br><b>* </b>Recuerden que lo ideal es haberlo derivado al primer asesor.<br><br></span></li>
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span>
+                <span class="guideline-marker"></span>
+                <span class="guideline-text" contenteditable="true">🔰 Sobre la <b>PERTENENCIA DEL LEAD</b> corresponde al:<br><br><b>(a.) </b>El primer asesor que registra la atención en CRM.<br><br><b>(b.) </b>Que exista una atención e ingreso real al asesor.<br><br><b>*&nbsp;</b>Pueden validarlo con su Supervisor si ingreso por SISTEMA o MANUAL AUTORIZADO ya que en caso no ingreso por conducto regular se realizará amonestación y perdera el LEAD.<br><br></span>
+            </li><li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">🔰 <b>REPASANDO </b>si les llega un lead con PROTECCIÓN: <br><br><b>(a.) </b>Si ya venció protección entonces atiendan.<br><br><b>(b.) </b>Si no venció DERIVENLO al asesor (si está en linea) o *Supervisor.<br><b>* </b>Si me lo pasan yo dejare mensaje de derivación y les avisare a su interno; así mismo podre cerrarle el chat para que no les cuenten a ustedes.<br><br><b>(c.) </b>Solo si el CLIENTE pide mantener la comunicación con el nuevo asesor podríamos atenderlo pero igual se respeta los días que queda de PROTECCIÓN del ASESOR ANTERIOR y solo podrá inscribirse pasando su tiempo de protección.<br><b>* </b>Para esto debió existir un <b>(a.)</b> intento de derivación y que el <b>(b.)</b> cliente explicitamente haya solicitado la atención con el nuevo asesor.<br><br></span></li>
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true">🔰<b>SI SU LEAD PROTEGIDO FUE INSCRITO POR OTRO ASESOR </b>solo<b>&nbsp;</b>pueden solicitar <b>REASIGNACIÓN</b> dentro de los <b data-path-to-node="4,0" data-index-in-node="49">02 días de protección</b>. Pasado este plazo, no habrá lugar a reasignación por falta de seguimiento o atención.<br><br><b>* </b>El análista no lo podrá reasignar.<br><br></span></li>
+                <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span>
+                <span class="guideline-marker"></span>
+                <span class="guideline-text" contenteditable="true"><div>🔰&nbsp;Si les llega <b>chat de otra modalidad / carrera promuevan para DISTANCIA</b>, si pese a eso el CLIENTE NO DESEA pueden pasarlo a la CANASTA.<br><br></div><div><b>*</b> Si es uno que queria POSGRADO pueden pasarlo a la CANASTA.<br><b>*</b> Si es un CHAT que indica que no desea pueden pasarlo a la CANASTA.<br><br><b>La CANASTA es el usuario de DANIEL MATTA en CHATTIGO donde derivaran estos casos para que no ingrese en su conteo de derivaciones.</b></div></span>
+            </li></ul>
                 <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
             </div>
         </div>
@@ -663,10 +704,13 @@
             <div class="phase-cell" style="background-color: var(--col-matriculado);">4. MATRICULADO</div>
         </div>
 
-        <!-- CARRIL 1: DIV-OUTBOUND -->
+        <!-- CARRIL 1: DIV-PREINSCRITO -->
         <div class="swimlane-row">
             <div class="role-label-pane">
-                <div class="role-name" contenteditable="true">DIV-OUTBOUND</div>
+                <div class="role-name-row">
+                    <div class="role-name" contenteditable="true">DIV-PREINSCRITO</div>
+                    <button class="btn-group-copy" onclick="copyRoleRowGroupAsImage(this, 'cellPreinscrito', '1. Preinscrito')" title="Copiar este bloque completo como imagen">📋</button>
+                </div>
                 <div class="role-metrics">
                     <div class="metric-field" contenteditable="true"><div><b>Estructura de Llamada:</b></div><div><b><br></b></div><div><div>🔰 1. Saludo</div></div><div>🔰 2. Sondeo / Perfilamiento</div><div>🔰 3. Beneficios: Universidad / Modalidad / Carrera</div><div>🔰 4. Proceso Admsión</div><div>🔰 5. Inversión</div><div>🔰 6. Cierre (Preinscripción)</div><div>🔰 7. Despedida</div><div>🔰 8. Envío a Encuesta</div><div><br></div><div><b>🧑🏻‍💻</b><strong> Funciones:</strong></div><div><br></div><div>✅ Asegurar una buena PROSPECCIÓN para entregar PROPUESTA coherente.</div><div>* Beneficios Universidad<br>* Beneficios Carrera<br>* Beneficios Modalidad</div><div><br></div><div>✅ Comunicar correctamente requisitos, inversión y admisión.</div><div><br></div><div>✅ Resolver OBJECIONES en base a las MOTIVACIONES o DOLORES.</div><div><br></div><div>✅ Impulsar venta con GANCHOS o DESCUENTOS en el CIERRE.<br>*No desde el inicio.<strong></strong></div><div><br></div><div>✅ RESPONDER toda LLAMADA y CHAT asignada manual o por Genesys.</div><div><br></div><div><strong>🎯 Objetivo:</strong>&nbsp;</div><div>Lograr Preinscripciones que se conviertan a Matrícula.</div><div><br></div></div>
                     <div class="metric-field" contenteditable="true"><strong>📊&nbsp;</strong><strong>&nbsp;KPI:</strong><div><b>🟢 Atención</b></div><div>* Calidad &gt; 90%</div><div><br></div><div><b>🔵 Gestión</b></div><div>* Fuera de Cola &lt; 20%<b></b></div><div>* Time Out &lt; 5%</div><div>* Tiempo Tipificación (AWS) &lt; 35seg</div><div>* Cantidad de Llamadas &gt; 160</div><div>* Conversión a Postulante &lt; 79%</div><div>* Conversión a Ingresante &lt; 74%</div><div>* Conversión a Matriculado &lt; 76%</div><div>* Conversión Global</div><div><br></div><div><b>🟠 Seguimiento</b></div><div>* Seguimiento &lt; 02 días</div></div>
@@ -674,7 +718,7 @@
             </div>
             
             <!-- Preinscrito -->
-            <div class="flow-work-cell">
+            <div class="flow-work-cell" id="cellPreinscrito">
                 <div class="bpmn-event-badge">🏁 Inicio: Lead Registrado</div>
                 
                 <div class="dynamic-step-container">
@@ -721,7 +765,10 @@
         <!-- CARRIL 2: DIV-POSTULANTE -->
         <div class="swimlane-row">
             <div class="role-label-pane">
-                <div class="role-name" contenteditable="true">DIV-POSTULANTE</div>
+                <div class="role-name-row">
+                    <div class="role-name" contenteditable="true">DIV-POSTULANTE</div>
+                    <button class="btn-group-copy" onclick="copyRoleRowGroupAsImage(this, 'cellPostulante', '2. Postulante')" title="Copiar este bloque completo como imagen">📋</button>
+                </div>
                 <div class="role-metrics">
                     <div class="metric-field" contenteditable="true"><div><b>🧑🏻‍💻</b><strong> Funciones:</strong></div><div>✅ ACTUALIZAR y ASIGNARSE nuevos postulantes para atención.</div><div><br></div><div>✅ Reforzar proceso de admisión / requisitos si es necesario.</div><div><br></div><div>✅ Resolver OBJECIONES si fueran necesarias según caso.<br>* Derivar al asesor si hay error en la información brindada.</div><div><br></div><div>✅ Solicitar DOCUMENTOS y PROGRAMAR EVALUACIONES.<br>* Incluyendo CAMBIOS DE PERIODO.</div><div><br></div><div>✅ Enviar RECORDATORIOS y GUÍAR al postulante antes y durante evaluación ASEGURANDO logré ingreso.<br>* Usando GANCHOS para reforzar comunicación.<br>* Derivando a DIV-ING finalizando la evaluación.<strong></strong></div><div><br></div><div>✅ RECUPERAR postulantes que no ingresaron a evaluación.</div><div><br></div><div><strong>🎯 Objetivo:</strong>&nbsp;</div><div>Lograr que todo postulante programe admisión y conseguir ingresantes.</div><div><br></div></div>
                     <div class="metric-field" contenteditable="true"><strong>📊&nbsp;</strong><strong>&nbsp;KPI:</strong><div><div><div><b>🟢 Conversión</b></div><div><b></b></div><div>* Postulantes Programados &gt; 80%<br>(En base a tu bolsa asignada)</div></div></div><div>* Ingresantes a Evaluación &gt; 90%<br>(En base a tu bolsa asignada)</div><div><br></div><div><div><b>🟠 Seguimiento</b></div><div>* Seguimiento &lt; 02 días</div></div></div>
@@ -731,7 +778,7 @@
             <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
             
             <!-- Postulante -->
-            <div class="flow-work-cell">
+            <div class="flow-work-cell" id="cellPostulante">
                 
 
                 
@@ -784,7 +831,10 @@
         <!-- CARRIL 3: DIV-INGRESANTE -->
         <div class="swimlane-row">
             <div class="role-label-pane">
-                <div class="role-name" contenteditable="true">DIV-INGRESANTE</div>
+                <div class="role-name-row">
+                    <div class="role-name" contenteditable="true">DIV-INGRESANTE</div>
+                    <button class="btn-group-copy" onclick="copyRoleRowGroupAsImage(this, 'cellIngresante', '3. Ingresante')" title="Copiar este bloque completo como imagen">📋</button>
+                </div>
                 <div class="role-metrics">
                     <div class="metric-field" contenteditable="true"><div><b>🧑🏻‍💻</b><strong> Funciones:</strong></div><div>✅ ACTUALIZAR y ASIGNARSE nuevos ingresantes para atención.</div><div><br></div><div>✅ Reforzar proceso de matrícula o&nbsp; requisitos si es necesario.<br>* Inicio de Clases<br>* Convalidación<br>* Otros relacionadas a Académico</div><div><br></div><div>✅ Resolver OBJECIONES si fueran necesarias según caso.<br>* Derivar al asesor si hay error en la información brindada.</div><div><br></div><div>✅ Solicitar DOCUMENTOS y ACTIVAR BENEFICIOS ECONÓMICOS</div><div>* Escala, Convenios, Seguros.<br><br></div><div>✅ Enviar RECORDATORIOS y GUÍAR al PAGO de matrícula.<br>* Usando GANCHOS para asegurar pago de matrícula.<strong></strong></div><div><br></div><div>✅ RECUPERAR ingresanes que no cumplieron con compromisos.</div><div><br></div><div><strong>🎯 Objetivo:</strong>&nbsp;</div><div>Lograr que matrículados.</div><div><br></div></div>
                     <div class="metric-field" contenteditable="true"><div><div><strong>📊&nbsp;</strong><strong>&nbsp;KPI:</strong><div><b><br></b><div><div><b>🟢 Conversión</b></div><div><b></b></div><div>* % Matrículados &gt; 85%<br><br></div></div></div></div><div><div><b>🟠 Seguimiento</b></div><div>* Seguimiento &lt; 02 días</div></div></div></div>
@@ -795,7 +845,7 @@
             <div class="flow-work-cell"><div class="flow-arrow" style="margin:auto;">—</div></div>
             
             <!-- Ingresante -->
-            <div class="flow-work-cell">
+            <div class="flow-work-cell" id="cellIngresante">
                 <div class="dynamic-step-container">
                     <div class="process-node node-action">
                         <button class="btn-node-remove" onclick="this.parentElement.parentElement.remove(); persistDiagram();">✕</button>
@@ -848,13 +898,16 @@
             </div>
         </div>
 
-        <!-- CARRIL 4: COORDINACIÓN OUT -->
+        <!-- CARRIL 4: COORDINACIÓN DIV-PRE -->
         <div class="swimlane-row" style="min-height: 160px;">
             <div class="role-label-pane" style="background-color: #f1f5f9;">
-                <div class="role-name" contenteditable="true">ESTRUCTURA DE&nbsp; LLAMADA</div>
+                <div class="role-name-row" style="border-bottom: none;">
+                    <div class="role-name" contenteditable="true">ESTRUCTURA DE&nbsp; LLAMADA</div>
+                    <button class="btn-group-copy" onclick="copyEstructuraLlamadaAsImage(this)" title="Copiar este bloque completo como imagen">📋</button>
+                </div>
                 <div style="font-size: 9px; font-weight: bold; color: #475569;">Tráfico Transversal</div>
             </div>
-            <div class="flow-work-cell" style="grid-column: span 4; background: #fff; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="flow-work-cell" id="cellEstructuraLlamada" style="grid-column: span 4; background: #fff; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="process-node node-action" style="border-left-color: #10b981; margin: auto 0;">
                     <div class="node-title" contenteditable="true">DIV-POS</div>
                     <div class="node-content" contenteditable="true">🔰 1. Felicitaciones por el pago admisión realizado.<div>🔰 *. Si cliente lo necesita recordar requisitos.<br>🔰 2. Solicitar documentos / Acordar fecha de entrega.<br>🔰 * En caso cliente se sienta proactivo o tenga OBJECIONES reforzar con PROPUESTA DE VALOR y GANCHO creando sentido de urgencia con las herramientas que tenemos.</div><div>🔰 3. Registrar compromiso o próxima comunicación.</div><div>🔰 4. Despedida agradeciendo el tiempo y con tu nombre.</div></div>
@@ -873,7 +926,7 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast" style="display: none;">📥 Archivo descargado con tus últimos cambios</div>
+    <div class="toast-notification" id="saveToast" style="display: none;">📋 Imagen copiada — ya la puedes pegar en WhatsApp</div>
 
     <script id="appScript">
         // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
@@ -882,7 +935,7 @@
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-23T21:05:33.908Z";
+        const DATA_VERSION = "2026-09-26T23:40:18.529Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -956,14 +1009,239 @@
             const list = button.previousElementSibling; // el <ul class="guideline-list">
             const li = document.createElement('li');
             li.className = 'guideline-item';
+            li.setAttribute('draggable', 'false');
+            li.addEventListener('dragstart', guidelineDragStart);
+            li.addEventListener('dragend', guidelineDragEnd);
             li.innerHTML = `
                 <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span>
                 <span class="guideline-marker"></span>
                 <span class="guideline-text" contenteditable="true">Escribe aquí el nuevo lineamiento o regla de gestión.</span>
             `;
             list.appendChild(li);
             persistDiagram();
             li.querySelector('.guideline-text').focus();
+        }
+
+        // Reordenamiento por arrastre de los lineamientos dentro de su categoría
+        function guidelineDragStart(e) {
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            try { e.dataTransfer.setData('text/plain', ''); } catch (err) {}
+        }
+        function guidelineDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            e.currentTarget.setAttribute('draggable', 'false');
+            persistDiagram();
+        }
+        function guidelineDragOver(e) {
+            e.preventDefault();
+            const list = e.currentTarget;
+            const dragging = list.querySelector('.guideline-item.dragging');
+            if (!dragging) return;
+            const afterEl = getGuidelineDragAfterElement(list, e.clientY);
+            if (afterEl == null) {
+                list.appendChild(dragging);
+            } else {
+                list.insertBefore(dragging, afterEl);
+            }
+        }
+        function getGuidelineDragAfterElement(list, y) {
+            const items = [...list.querySelectorAll('.guideline-item:not(.dragging)')];
+            return items.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // ===================== COPIAR COMO IMAGEN (para pegar en WhatsApp) =====================
+        // Genera una tarjeta limpia fuera de pantalla (sin botones ni manijas que se sobrepongan),
+        // la convierte en una imagen PNG nítida con html2canvas y la copia al portapapeles.
+        // Si el navegador no soporta copiar imágenes directo, descarga el PNG como respaldo.
+
+        function showToast(msg, duration) {
+            const toast = document.getElementById('saveToast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, duration || 2600);
+        }
+
+        const GUIDELINE_CAT_COLORS = { preinscritos: '#35509c', postulantes: '#1f8f6f', engagement: '#5b6478' };
+
+        function buildExportCard(eyebrow, eyebrowColor, title, bodyHtml) {
+            const card = document.createElement('div');
+            card.style.cssText = 'position:fixed; top:0; left:-10000px; width:680px; background:#ffffff; font-family:\'IBM Plex Sans\', Arial, sans-serif; color:#1c2541; border:3px solid #1c2541; border-radius:14px; overflow:hidden;';
+            card.innerHTML = `
+                <div style="background:${eyebrowColor}; color:#fdf7e3; padding:14px 26px; font-family:'Space Grotesk', Arial, sans-serif; font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">${eyebrow}</div>
+                <div style="padding:26px 30px 30px;">
+                    <div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:20px; font-weight:700; color:#1c2541; margin-bottom:16px; border-bottom:2px solid #e3ddcd; padding-bottom:12px;">${title || ''}</div>
+                    <div style="font-size:14.5px; line-height:1.65; color:#3a4262;">${bodyHtml && bodyHtml.trim() ? bodyHtml : '<i style="color:#9a9382;">(sin contenido)</i>'}</div>
+                </div>
+                <div style="padding:12px 30px; border-top:1px solid #e3ddcd; font-size:11px; color:#7a7466; font-family:'Space Grotesk', Arial, sans-serif; text-align:right;">CGO Distancia · Mapa de Procesos</div>
+            `;
+            document.body.appendChild(card);
+            return card;
+        }
+
+        function renderCardToBlob(card) {
+            return html2canvas(card, { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(canvas => {
+                document.body.removeChild(card);
+                return new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'));
+            });
+        }
+
+        async function copyBlobOrDownload(blob, filename) {
+            try {
+                if (!navigator.clipboard || !window.ClipboardItem) throw new Error('sin soporte de portapapeles');
+                await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                showToast('📋 Imagen copiada — ya la puedes pegar en WhatsApp');
+            } catch (err) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = filename;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 4000);
+                showToast('🖼️ Tu navegador no deja copiar directo: se descargó la imagen');
+            }
+        }
+
+        // Copia TODA la lista de lineamientos de una categoría (Preinscritos/Postulantes/
+        // Engagement) como una sola imagen, cada regla separada con un divisor.
+        async function copyGuidelineCategoryAsImage(button) {
+            const category = button.closest('.guideline-category');
+            const catKey = category ? category.getAttribute('data-cat') : '';
+            const catTitleEl = category ? category.querySelector('.guideline-cat-title') : null;
+            const catTitle = catTitleEl ? catTitleEl.innerText.trim() : 'Lineamientos';
+            const color = GUIDELINE_CAT_COLORS[catKey] || '#1c2541';
+            const items = category ? category.querySelectorAll('.guideline-item') : [];
+            let bodyHtml = '';
+            items.forEach((item, idx) => {
+                const textEl = item.querySelector('.guideline-text');
+                if (!textEl) return;
+                const isLast = idx === items.length - 1;
+                bodyHtml += `<div style="display:flex; gap:10px; ${isLast ? '' : 'margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid #e3ddcd;'}">
+                    <div style="width:7px; height:7px; min-width:7px; margin-top:6px; background:${color}; border-radius:1px;"></div>
+                    <div style="flex:1;">${textEl.innerHTML}</div>
+                </div>`;
+            });
+            button.disabled = true;
+            try {
+                const card = buildExportCard('CGO Distancia · Lineamientos', color, catTitle, bodyHtml);
+                const blob = await renderCardToBlob(card);
+                await copyBlobOrDownload(blob, 'lineamientos-' + (catKey || 'cgo') + '.png');
+            } catch (err) {
+                showToast('⚠️ No se pudo generar la imagen');
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Arma el bloque de "Rol / Área" (nombre + funciones/KPI) de una role-label-pane,
+        // listo para usarse como una columna del cuadro exportado.
+        function buildRoleColumnHtml(roleLabelPane) {
+            const roleNameEl = roleLabelPane.querySelector('.role-name');
+            const roleName = roleNameEl ? roleNameEl.innerText.trim() : '';
+            const roleMetricsEl = roleLabelPane.querySelector('.role-metrics');
+            let html = `<div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:15px; font-weight:700; color:#1c2541; margin-bottom:10px;">${roleName}</div>`;
+            html += roleMetricsEl ? roleMetricsEl.innerHTML : '';
+            return html;
+        }
+
+        // Apila el/los process-node de una celda de fase, cada uno con su meta + título,
+        // separados por una flechita, listo para usarse como columna del cuadro exportado.
+        function buildPhaseColumnHtml(cell) {
+            if (!cell) return '';
+            const nodes = cell.querySelectorAll('.process-node');
+            let html = '';
+            nodes.forEach((node, idx) => {
+                const metaEl = node.querySelector('.node-meta');
+                const titleEl = node.querySelector('.node-title');
+                const contentEl = node.querySelector('.node-content');
+                if (idx > 0) html += '<div style="text-align:center; color:#a49c86; font-size:13px; margin:14px 0;">⬇️</div>';
+                html += '<div>';
+                if (metaEl && metaEl.innerText.trim()) html += `<div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; color:#7a7466; margin-bottom:3px;">${metaEl.innerText.trim()}</div>`;
+                if (titleEl && titleEl.innerText.trim()) html += `<div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:14px; font-weight:700; color:#1c2541; margin-bottom:6px;">${titleEl.innerText.trim()}</div>`;
+                html += `<div style="font-size:13px; line-height:1.55; color:#3a4262;">${contentEl ? contentEl.innerHTML : ''}</div>`;
+                html += '</div>';
+            });
+            return html;
+        }
+
+        // Cuadro de varias columnas lado a lado (Rol / Área + una o más columnas de contenido).
+        function buildColumnsExportCard(eyebrow, columns) {
+            const totalWidth = columns.length >= 3 ? 940 : 760;
+            const card = document.createElement('div');
+            card.style.cssText = `position:fixed; top:0; left:-10000px; width:${totalWidth}px; background:#ffffff; font-family:'IBM Plex Sans', Arial, sans-serif; color:#1c2541; border:3px solid #1c2541; border-radius:14px; overflow:hidden;`;
+            const colsHtml = columns.map((col, i) => `
+                <div style="flex:1; min-width:0; ${i > 0 ? 'border-left:2px solid #e3ddcd; padding-left:24px;' : ''} ${i < columns.length - 1 ? 'padding-right:24px;' : ''}">
+                    <div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; color:#7a7466; margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid #e3ddcd;">${col.title || ''}</div>
+                    <div style="font-size:13px; line-height:1.6; color:#3a4262;">${col.html && col.html.trim() ? col.html : '<i style="color:#9a9382;">(sin contenido)</i>'}</div>
+                </div>
+            `).join('');
+            card.innerHTML = `
+                <div style="background:#1c2541; color:#fdf7e3; padding:14px 28px; font-family:'Space Grotesk', Arial, sans-serif; font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">${eyebrow}</div>
+                <div style="padding:26px 30px 30px; display:flex; gap:0;">${colsHtml}</div>
+                <div style="padding:12px 30px; border-top:1px solid #e3ddcd; font-size:11px; color:#7a7466; font-family:'Space Grotesk', Arial, sans-serif; text-align:right;">CGO Distancia · Mapa de Procesos</div>
+            `;
+            document.body.appendChild(card);
+            return card;
+        }
+
+        // Copia el bloque completo de un carril: su columna de Rol / Área + toda su
+        // celda de fase correspondiente (1. Preinscrito / 2. Postulante / 3. Ingresante),
+        // como un cuadro de 2 columnas.
+        async function copyRoleRowGroupAsImage(button, cellId, phaseLabel) {
+            const roleLabelPane = button.closest('.role-label-pane');
+            const roleNameEl = roleLabelPane ? roleLabelPane.querySelector('.role-name') : null;
+            const roleName = roleNameEl ? roleNameEl.innerText.trim() : '';
+            const phaseCell = document.getElementById(cellId);
+            const columns = [
+                { title: 'Rol / Área', html: buildRoleColumnHtml(roleLabelPane) },
+                { title: phaseLabel, html: buildPhaseColumnHtml(phaseCell) }
+            ];
+            button.disabled = true;
+            try {
+                const card = buildColumnsExportCard('CGO Distancia · ' + roleName, columns);
+                const blob = await renderCardToBlob(card);
+                await copyBlobOrDownload(blob, 'bloque-' + (cellId || 'cgo') + '.png');
+            } catch (err) {
+                showToast('⚠️ No se pudo generar la imagen');
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Copia el bloque transversal de Estructura de Llamada: Rol / Área + DIV-POS +
+        // DIV-ING, como un cuadro de 3 columnas.
+        async function copyEstructuraLlamadaAsImage(button) {
+            const roleLabelPane = button.closest('.role-label-pane');
+            const cell = document.getElementById('cellEstructuraLlamada');
+            const columns = [{ title: 'Rol / Área', html: buildRoleColumnHtml(roleLabelPane) }];
+            if (cell) {
+                cell.querySelectorAll('.process-node').forEach(node => {
+                    const titleEl = node.querySelector('.node-title');
+                    const contentEl = node.querySelector('.node-content');
+                    columns.push({
+                        title: titleEl ? titleEl.innerText.trim() : '',
+                        html: contentEl ? contentEl.innerHTML : ''
+                    });
+                });
+            }
+            button.disabled = true;
+            try {
+                const card = buildColumnsExportCard('CGO Distancia · Estructura de Llamada', columns);
+                const blob = await renderCardToBlob(card);
+                await copyBlobOrDownload(blob, 'estructura-llamada.png');
+            } catch (err) {
+                showToast('⚠️ No se pudo generar la imagen');
+            } finally {
+                button.disabled = false;
+            }
         }
 
         // Agrega un nuevo indicador editable a la Meta de Indicadores
@@ -1087,6 +1365,7 @@
             applyUpdate();
         }
     </script>
+
 
 
 </body></html>
