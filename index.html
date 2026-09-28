@@ -600,29 +600,25 @@
             <div class="goals-grid" id="goalsGrid">
                 
                 
-                <div class="goal-chip">
-                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="goal-chip-label" contenteditable="true">Conversión a Matriculado</div>
-                    <div class="goal-chip-value" contenteditable="true">≥ 76%</div>
-                </div>
-                <div class="goal-chip">
-                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="goal-chip-label" contenteditable="true">Calidad de Atención</div>
-                    <div class="goal-chip-value" contenteditable="true">≥ 90%</div>
-                </div>
-                <div class="goal-chip">
-                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                    <div class="goal-chip-label" contenteditable="true">sin seguimiento</div>
-                    <div class="goal-chip-value" contenteditable="true">≤ 2 días</div>
-                </div>
+                
+                
+                
                 <div class="goal-chip">
                 <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                <div class="goal-chip-label" contenteditable="true">time out</div>
-                <div class="goal-chip-value" contenteditable="true">&lt; 5% o 5 Lead</div>
+                <div class="goal-chip-label" contenteditable="true">Revision de bases divisiones<span style="letter-spacing: 0.3px;"> [ESPERA]</span></div>
+                <div class="goal-chip-value" contenteditable="true">Asegurar atención de Partner en horario que no esté</div>
             </div><div class="goal-chip">
                 <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                <div class="goal-chip-label" contenteditable="true">q. de llamadas</div>
-                <div class="goal-chip-value" contenteditable="true">120</div>
+                <div class="goal-chip-label" contenteditable="true">engagmente persona ocupada [ESPERA]</div>
+                <div class="goal-chip-value" contenteditable="true">¿Se podria tratar distinto?</div>
+            </div><div class="goal-chip">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="goal-chip-label" contenteditable="true">Engagement<span style="letter-spacing: 0.3px;"> [ESPERA]</span></div>
+                <div class="goal-chip-value" contenteditable="true">¿Solo vale la primera atencion luego nada de nada?</div>
+            </div><div class="goal-chip">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="goal-chip-label" contenteditable="true">permisos (no justificada)</div>
+                <div class="goal-chip-value" contenteditable="true">Maximos 03 al mes</div>
             </div><button class="btn-add-goal" onclick="addGoal(this)">+ Agregar indicador</button>
             </div>
         </div>
@@ -926,7 +922,7 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast" style="display: none;">📋 Imagen copiada — ya la puedes pegar en WhatsApp</div>
+    <div class="toast-notification" id="saveToast" style="display: none;">📥 Archivo descargado con tus últimos cambios</div>
 
     <script id="appScript">
         // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
@@ -935,7 +931,7 @@
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-26T23:40:18.529Z";
+        const DATA_VERSION = "2026-09-28T20:05:27.053Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -1365,6 +1361,7 @@
             applyUpdate();
         }
     </script>
+
 
 
 
