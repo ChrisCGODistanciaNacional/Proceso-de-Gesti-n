@@ -741,7 +741,10 @@
     <!-- LÍNEA DE ATENCIÓN (orden de abordaje del día) -->
     <div class="linea-panel" id="lineaPanel" style="display: none;">
         <div class="linea-head">
-            <div class="linea-eyebrow" contenteditable="true">ORDEN DE ABORDAJE DEL EQUIPO</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                <div class="linea-eyebrow" contenteditable="true">ORDEN DE ABORDAJE DEL EQUIPO</div>
+                <button class="btn-group-copy" onclick="copyLineaAtencionAsImage(this)" title="Copiar toda la Línea de Atención como imagen">📋</button>
+            </div>
             <h3 contenteditable="true">Línea de Atención</h3>
             <p contenteditable="true">Así se reparte la atención en el día: qué dispara el contacto, en qué orden se revisa, y qué nunca debe soltarse.</p>
         </div>
@@ -1065,7 +1068,7 @@
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-30T14:52:01.684Z";
+        const DATA_VERSION = "2026-09-30T17:01:31.400Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -1401,6 +1404,97 @@
             }
         }
 
+        // Copia TODO el panel de Línea de Atención (disparadores + ciclo + alerta) como
+        // una sola imagen prolija, replicando el mismo diseño que se ve en pantalla
+        // pero sin los controles de edición (botones de agregar/quitar).
+        function buildLineaExportCard(panel) {
+            const txt = el => el ? el.innerText.trim() : '';
+            const html = el => el ? el.innerHTML.trim() : '';
+
+            const eyebrow = txt(panel.querySelector('.linea-eyebrow'));
+            const title = txt(panel.querySelector('.linea-head h3'));
+
+            const triggersHtml = [...panel.querySelectorAll('.trigger-card')].map(card => {
+                const t = card.querySelector('.trigger-card-title');
+                const b = card.querySelector('.trigger-card-body');
+                return `<div style="flex:1; background:#fff; border:2px solid #1c2541; border-left:7px solid #0f7c7f; border-radius:10px; padding:16px 20px;">
+                    <div style="font-family:'Space Grotesk', Arial, sans-serif; font-weight:700; font-size:17px; color:#1c2541; margin-bottom:8px;">${txt(t)}</div>
+                    <div style="font-size:15.5px; line-height:1.5; color:#3a4262;">${html(b)}</div>
+                </div>`;
+            }).join('');
+
+            const stepCardsEls = [...panel.querySelectorAll('.step-card')];
+            const stepsHtml = stepCardsEls.map((step, idx) => {
+                const num = txt(step.querySelector('.step-num'));
+                const stitle = txt(step.querySelector('.step-card-title'));
+                const note = txt(step.querySelector('.step-note'));
+                const itemsHtml = [...step.querySelectorAll('.abordaje-item')].map(item => {
+                    const marker = txt(item.querySelector('.abordaje-marker'));
+                    const itTitle = txt(item.querySelector('.abordaje-item-title'));
+                    const itBody = html(item.querySelector('.abordaje-item-body'));
+                    return `<div style="background:#fbfaf6; border:1.5px solid #e3ddcd; border-radius:8px; padding:12px 16px; margin-bottom:10px;">
+                        <div style="display:flex; align-items:center; gap:9px;">
+                            <span style="font-size:17px;">${marker}</span>
+                            <span style="font-family:'Space Grotesk', Arial, sans-serif; font-weight:700; font-size:15.5px; color:#1c2541;">${itTitle}</span>
+                        </div>
+                        ${itBody ? `<div style="font-size:14.5px; line-height:1.5; color:#3a4262; margin-top:5px;">${itBody}</div>` : ''}
+                    </div>`;
+                }).join('');
+                let block = `<div style="width:100%; background:#fff; border:2px solid #1c2541; border-radius:12px; padding:22px 26px; box-shadow:4px 4px 0 rgba(28,37,65,0.06);">
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:${note ? '4px' : '16px'}; padding-bottom:14px; border-bottom:2px solid #e3ddcd;">
+                        <span style="font-size:27px; line-height:1;">${num}</span>
+                        <span style="font-family:'Space Grotesk', Arial, sans-serif; font-weight:700; font-size:19px; color:#1c2541;">${stitle}</span>
+                    </div>
+                    ${note ? `<div style="font-size:14.5px; color:#6f6a5c; font-style:italic; margin:12px 0 16px;">${note}</div>` : ''}
+                    <div>${itemsHtml}</div>
+                </div>`;
+                if (idx < stepCardsEls.length - 1) {
+                    block += `<div style="text-align:center; color:#a49c86; font-size:19px; margin:12px 0;">⬇️</div>`;
+                }
+                return block;
+            }).join('');
+
+            const loopBadgeTxt = txt(panel.querySelector('.loop-back-badge'));
+            const loopBadgeHtml = loopBadgeTxt ? `<div style="display:block; width:fit-content; margin:18px auto 4px; background:#fff; border:2px dashed #0f7c7f; color:#0f7c7f; border-radius:20px; padding:8px 20px; font-family:'Space Grotesk', Arial, sans-serif; font-weight:700; font-size:15px;">${loopBadgeTxt}</div>` : '';
+
+            const alertTitleTxt = txt(panel.querySelector('.linea-alert-title'));
+            const alertBodyHtml = html(panel.querySelector('.linea-alert-body'));
+            const alertHtml = alertTitleTxt ? `<div style="background:#fbecec; border:2px solid #c74545; border-left:7px solid #c74545; border-radius:10px; padding:18px 24px; margin-top:24px;">
+                <div style="font-family:'Space Grotesk', Arial, sans-serif; font-weight:700; font-size:17px; color:#1c2541; margin-bottom:6px;">${alertTitleTxt}</div>
+                <div style="font-size:15px; color:#3a4262;">${alertBodyHtml}</div>
+            </div>` : '';
+
+            const card = document.createElement('div');
+            card.style.cssText = 'position:fixed; top:0; left:-10000px; width:700px; background:#ffffff; font-family:\'IBM Plex Sans\', Arial, sans-serif; color:#1c2541; border:3px solid #1c2541; border-radius:14px; overflow:hidden;';
+            card.innerHTML = `
+                <div style="background:#0f7c7f; color:#fdf7e3; padding:22px 30px;">
+                    <div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:13px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; color:#cdeeee;">${eyebrow}</div>
+                    <div style="font-family:'Space Grotesk', Arial, sans-serif; font-size:27px; font-weight:700; margin-top:8px;">${title}</div>
+                </div>
+                <div style="padding:26px 30px 8px; display:flex; gap:16px;">${triggersHtml}</div>
+                <div style="padding:24px 30px 6px; display:flex; flex-direction:column; align-items:center;">${stepsHtml}${loopBadgeHtml}</div>
+                <div style="padding:6px 30px 26px;">${alertHtml}</div>
+                <div style="padding:12px 30px; border-top:1px solid #e3ddcd; font-size:11px; color:#7a7466; font-family:'Space Grotesk', Arial, sans-serif; text-align:right;">CGO Distancia · Línea de Atención</div>
+            `;
+            document.body.appendChild(card);
+            return card;
+        }
+
+        async function copyLineaAtencionAsImage(button) {
+            const panel = document.getElementById('lineaPanel');
+            if (!panel) return;
+            button.disabled = true;
+            try {
+                const card = buildLineaExportCard(panel);
+                const blob = await renderCardToBlob(card);
+                await copyBlobOrDownload(blob, 'linea-de-atencion.png');
+            } catch (err) {
+                showToast('⚠️ No se pudo generar la imagen');
+            } finally {
+                button.disabled = false;
+            }
+        }
+
         // Agrega un nuevo indicador editable a la Meta de Indicadores
         function addGoal(button) {
             const grid = button.parentElement; // #goalsGrid
@@ -1532,6 +1626,7 @@
             applyUpdate();
         }
     </script>
+
 
 
 
