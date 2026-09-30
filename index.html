@@ -29,6 +29,7 @@
             --role-pos: #1f8f6f;
             --role-ing: #c9791f;
             --col-engagement: #5b6478; /* Pizarra — transversal, no es una etapa del journey */
+            --linea-accent: #0f7c7f; /* Verde azulado — distinto de los demás paneles */
 
             /* Estados de nodo */
             --action-line: #2f4ea3;
@@ -392,6 +393,10 @@
         .btn-guidelines { background: #f3f0e4; color: var(--ink); }
         .btn-guidelines[aria-expanded="true"] { background: var(--ink); color: #fdf7e3; }
 
+        /* Botón toggle de Línea de Atención en la barra superior */
+        .btn-linea { background: #e5f4f4; color: var(--linea-accent); border-color: var(--linea-accent); }
+        .btn-linea[aria-expanded="true"] { background: var(--linea-accent); color: #fdf7e3; }
+
         /* ============ PANEL DE LINEAMIENTOS Y REGLAS DE GESTIÓN ============ */
         /* Trato visual algo más serio/formal que el resto: cabecera oscura,
            marcadores cuadrados en vez de emojis, menos color, más estructura. */
@@ -487,6 +492,50 @@
         }
         .btn-add-goal:hover { background: var(--ink); color: #fdf7e3; }
 
+        /* ============ PANEL DE LÍNEA DE ATENCIÓN ============ */
+        .linea-panel {
+            background: var(--panel);
+            border: 2px solid var(--line-strong);
+            border-radius: 14px;
+            box-shadow: 7px 7px 0px rgba(28, 37, 65, 0.08);
+            overflow: hidden;
+        }
+        .linea-head { background: var(--linea-accent); color: #fdf7e3; padding: 22px 36px; }
+        .linea-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: #cdeeee; text-transform: uppercase; outline: none; }
+        .linea-head h3 { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin-top: 6px; outline: none; }
+        .linea-head p { font-size: 13px; color: #e3f5f5; margin-top: 6px; max-width: 760px; outline: none; }
+
+        /* Fila de disparadores (Wapis) */
+        .trigger-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 24px 36px; border-bottom: 2px solid var(--line); }
+        .trigger-card { background: #fff; border: 2px solid var(--line-strong); border-left: 6px solid var(--linea-accent); border-radius: 10px; padding: 14px 18px; position: relative; }
+        .trigger-card-title { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; margin-bottom: 6px; outline: none; }
+        .trigger-card-body { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); outline: none; }
+        .trigger-card-note { font-size: 11px; line-height: 1.5; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); outline: none; }
+
+        /* El ciclo de abordaje (Paso 1 ⇄ Paso 2) */
+        .loop-section { padding: 28px 36px 10px; display: flex; flex-direction: column; align-items: center; }
+        .step-card { width: 100%; max-width: 820px; background: #fff; border: 2px solid var(--line-strong); border-radius: 12px; padding: 20px 26px; box-shadow: 4px 4px 0px rgba(28, 37, 65, 0.06); }
+        .step-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; padding-bottom: 12px; border-bottom: 2px solid var(--line); }
+        .step-num { font-size: 22px; line-height: 1; flex-shrink: 0; }
+        .step-card-title { font-family: var(--font-display); font-weight: 700; font-size: 15.5px; color: var(--ink); outline: none; }
+        .step-note { font-size: 12px; color: var(--muted); font-style: italic; margin: 10px 0 14px; outline: none; }
+        .abordaje-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+        .abordaje-item { position: relative; background: #fbfaf6; border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 30px 10px 14px; }
+        .abordaje-item-head { display: flex; align-items: center; gap: 8px; }
+        .abordaje-marker { font-size: 14px; outline: none; }
+        .abordaje-item-title { font-family: var(--font-display); font-weight: 700; font-size: 12.5px; color: var(--ink); outline: none; }
+        .abordaje-item-body { font-size: 12px; line-height: 1.5; color: var(--ink-soft); margin-top: 4px; outline: none; }
+        .abordaje-item .btn-node-remove { display: none; top: 6px; right: 6px; }
+        .abordaje-item:hover .btn-node-remove { display: block; }
+        .btn-add-abordaje { width: 100%; background: transparent; border: 1.5px dashed #b8b09a; color: var(--muted); font-family: var(--font-display); font-size: 10.5px; font-weight: 700; padding: 7px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        .btn-add-abordaje:hover { background: var(--linea-accent); color: #fdf7e3; border-style: solid; border-color: var(--linea-accent); }
+        .loop-back-badge { display: block; width: fit-content; margin: 16px auto 4px; background: #fff; border: 2px dashed var(--linea-accent); color: var(--linea-accent); border-radius: 20px; padding: 6px 18px; font-family: var(--font-display); font-weight: 700; font-size: 12px; outline: none; }
+
+        /* Recordatorio permanente al pie del panel */
+        .linea-alert-card { background: var(--alert-bg); border: 2px solid var(--alert-line); border-left: 6px solid var(--alert-line); border-radius: 10px; padding: 16px 22px; margin: 10px 36px 28px; }
+        .linea-alert-title { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; color: var(--ink); margin-bottom: 4px; outline: none; }
+        .linea-alert-body { font-size: 12.5px; color: var(--ink-soft); outline: none; }
+
         /* Notificación Toast */
         .toast-notification {
             position: fixed;
@@ -526,6 +575,7 @@
         </div>
         <div class="action-group">
             <button class="btn btn-guidelines" id="btnGuidelines" aria-expanded="false" onclick="toggleGuidelines()">📜 Lineamientos</button>
+            <button class="btn btn-linea" id="btnLinea" aria-expanded="false" onclick="toggleLineaAtencion()">🧭 Línea de Atención</button>
             <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
             <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer base</button>
         </div>
@@ -631,7 +681,7 @@
                     <button class="btn-group-copy" onclick="copyGuidelineCategoryAsImage(this)" title="Copiar todos los lineamientos de esta lista como imagen">📋</button>
                 </div>
                 <ul class="guideline-list" ondragover="guidelineDragOver(event)">
-                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true"><b>Sobre los EQUIPOS HOY y MIR<br></b><br>🔰Un lead solo está protegido 01 vez desde su inscripción; el tiempo de protección es&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">03 días </b>contando desde el día de tipificación (No se cuentan los dias que no labora el colaborador que tiene protección).<br><br>SOLO procederá con la reasignación si el nuevo asesor consigue el <b data-path-to-node="4,0" data-index-in-node="49">PAGO</b>&nbsp;del cliente pasandome el VOUCHER del cliente y/o CONVERSACION de CHAT que le envie ello.<br><br><b>✅ Supervisor: Para la reasignación me pueden avisar.<br></b><br></span></li>
+                    <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)"><button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button><span class="guideline-handle" onmousedown="this.closest('.guideline-item').setAttribute('draggable','true')" onmouseup="this.closest('.guideline-item').removeAttribute('draggable')" title="Arrastra para reordenar">⠿</span><span class="guideline-marker"></span><span class="guideline-text" contenteditable="true"><b>Sobre los EQUIPOS HOY y MIR<br></b><br>🔰Un lead solo está protegido 01 vez desde su inscripción; el tiempo de protección es&nbsp;<b data-path-to-node="4,0" data-index-in-node="49">03 días </b>contando desde el día de tipificación (No se cuentan los dias que no labora el colaborador que tiene protección).<br><br>SOLO procederá con la reasignación si el nuevo asesor consigue el <b data-path-to-node="4,0" data-index-in-node="49">PAGO</b>&nbsp;del cliente pasandome el VOUCHER del cliente y/o CONVERSACION de CHAT que le envie ello.<br><br><b>✅ Supervisor: Para la reasignación me pueden avisar.<br>Lo realizaré y notificaré a ambos asesores para conocimiento y no reasignación por GLPI.<br></b><br></span></li>
                     
                     
                 <li class="guideline-item" draggable="false" ondragstart="guidelineDragStart(event)" ondragend="guidelineDragEnd(event)">
@@ -685,6 +735,90 @@
             </li></ul>
                 <button class="btn-add-guideline" onclick="addGuideline(this)">+ Agregar lineamiento</button>
             </div>
+        </div>
+    </div>
+
+    <!-- LÍNEA DE ATENCIÓN (orden de abordaje del día) -->
+    <div class="linea-panel" id="lineaPanel" style="display: none;">
+        <div class="linea-head">
+            <div class="linea-eyebrow" contenteditable="true">ORDEN DE ABORDAJE DEL EQUIPO</div>
+            <h3 contenteditable="true">Línea de Atención</h3>
+            <p contenteditable="true">Así se reparte la atención en el día: qué dispara el contacto, en qué orden se revisa, y qué nunca debe soltarse.</p>
+        </div>
+
+        <div class="trigger-row">
+            <div class="trigger-card">
+                <div class="trigger-card-title" contenteditable="true">🔰 Wapis Impulso</div>
+                <div class="trigger-card-body" contenteditable="true">8AM envío de WAPIs al primer bloque de NEW LEADS.</div>
+                <div class="trigger-card-note" contenteditable="true">Solo enviemos a ese primer grupo de 8am; si lo hacemos cada hora vamos a saturar al alumno de mensajes y se quemará.</div>
+            </div>
+            <div class="trigger-card">
+                <div class="trigger-card-title" contenteditable="true">🔰 Wapis PROG e INC</div>
+                <div class="trigger-card-body" contenteditable="true">Supervisor les avisará.</div>
+                <div class="trigger-card-note" contenteditable="true">Cada vez que nos acumulemos de PROG e INC sin atención (tipificación) armaremos bolsa de Wapis para que envíen.</div>
+            </div>
+        </div>
+
+        <div class="loop-section">
+            <div class="step-card">
+                <div class="step-card-head">
+                    <span class="step-num">1️⃣</span>
+                    <span class="step-card-title" contenteditable="true">Vean lo más FRESCO</span>
+                </div>
+                <div class="abordaje-list">
+                    <div class="abordaje-item">
+                        <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔰</span><span class="abordaje-item-title" contenteditable="true">Llamadas de GENESIS</span></div>
+                        <div class="abordaje-item-body" contenteditable="true">Si es UC_DISTANCIA y corta: (1) Vuelve a llamar (2) Déjale WSP.<br>Es la Campaña más convertible.</div>
+                    </div>
+                    <div class="abordaje-item">
+                        <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅰️</span><span class="abordaje-item-title" contenteditable="true">NEW LEAD</span></div>
+                        <div class="abordaje-item-body" contenteditable="true">Lo puede revisar SOLO el asesor ASIGNADO.<br>Cortes 8am, 11am, 3pm, 5pm y 7pm.<br>Si hay base será cada hora.</div>
+                    </div>
+                    <div class="abordaje-item">
+                        <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅱️</span><span class="abordaje-item-title" contenteditable="true">PARTNER</span></div>
+                        <div class="abordaje-item-body" contenteditable="true">Un asesor puede revisar su BASE ASIGNADA y la de su PARTNER ASIGNADO.<br>Bidi, Prog, Inc, ST.</div>
+                    </div>
+                    <div class="abordaje-item">
+                        <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🟢</span><span class="abordaje-item-title" contenteditable="true">FUNNEL</span></div>
+                        <div class="abordaje-item-body" contenteditable="true">Date 30 minutos y no dejes clientes con 2 días sin atención.</div>
+                    </div>
+                </div>
+                <button class="btn-add-abordaje" onclick="addAbordajeItem(this)">+ Agregar punto</button>
+            </div>
+
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="step-card">
+                <div class="step-card-head">
+                    <span class="step-num">2️⃣</span>
+                    <span class="step-card-title" contenteditable="true">Sin perder sus CHATS</span>
+                </div>
+                <div class="step-note" contenteditable="true">La mayoría de INS son CHAT y WAPI: tipifiquen y conviertan.</div>
+                <div class="abordaje-list">
+                    <div class="abordaje-item">
+                        <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔥</span><span class="abordaje-item-title" contenteditable="true">Busquen cerrarlo en el chat</span></div>
+                        <div class="abordaje-item-body" contenteditable="true"></div>
+                    </div>
+                    <div class="abordaje-item">
+                        <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">📞</span><span class="abordaje-item-title" contenteditable="true">O jálenlos para llamada</span></div>
+                        <div class="abordaje-item-body" contenteditable="true"></div>
+                    </div>
+                </div>
+                <button class="btn-add-abordaje" onclick="addAbordajeItem(this)">+ Agregar punto</button>
+            </div>
+
+            <div class="loop-back-badge" contenteditable="true">🔁 Acaban y vuelven a 1️⃣</div>
+        </div>
+
+        <div class="linea-alert-card">
+            <div class="linea-alert-title" contenteditable="true">⚠️ COBREN EXAMEN en el momento con SENTIDO DE URGENCIA</div>
+            <div class="linea-alert-body" contenteditable="true">Usen DTOS y GANCHOS.</div>
         </div>
     </div>
 
@@ -931,7 +1065,7 @@
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-28T20:05:27.053Z";
+        const DATA_VERSION = "2026-09-30T14:52:01.684Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -998,6 +1132,33 @@
             if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
             if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             persistDiagram();
+        }
+
+        // Despliega / oculta el panel de Línea de Atención
+        function toggleLineaAtencion() {
+            const panel = document.getElementById('lineaPanel');
+            const btn = document.getElementById('btnLinea');
+            if (!panel) return;
+            const isOpen = panel.style.display !== 'none';
+            panel.style.display = isOpen ? 'none' : 'block';
+            if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
+            if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            persistDiagram();
+        }
+
+        // Agrega un nuevo punto editable dentro de un paso de la Línea de Atención
+        function addAbordajeItem(button) {
+            const list = button.previousElementSibling; // el <div class="abordaje-list">
+            const item = document.createElement('div');
+            item.className = 'abordaje-item';
+            item.innerHTML = `
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔰</span><span class="abordaje-item-title" contenteditable="true">Nuevo punto</span></div>
+                <div class="abordaje-item-body" contenteditable="true">Escribe aquí el detalle.</div>
+            `;
+            list.appendChild(item);
+            persistDiagram();
+            item.querySelector('.abordaje-item-title').focus();
         }
 
         // Agrega un nuevo lineamiento editable dentro de su categoría
@@ -1315,6 +1476,12 @@
             if (guidelinesPanel) guidelinesPanel.style.display = 'none';
             if (btnGuidelines) btnGuidelines.setAttribute('aria-expanded', 'false');
 
+            const lineaPanel = document.getElementById('lineaPanel');
+            const lineaWasOpen = lineaPanel ? lineaPanel.style.display !== 'none' : false;
+            const btnLinea = document.getElementById('btnLinea');
+            if (lineaPanel) lineaPanel.style.display = 'none';
+            if (btnLinea) btnLinea.setAttribute('aria-expanded', 'false');
+
             const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
             const downloader = document.createElement('a');
@@ -1329,6 +1496,10 @@
             if (guidelinesPanel && guidelinesWasOpen) {
                 guidelinesPanel.style.display = 'block';
                 if (btnGuidelines) btnGuidelines.setAttribute('aria-expanded', 'true');
+            }
+            if (lineaPanel && lineaWasOpen) {
+                lineaPanel.style.display = 'block';
+                if (btnLinea) btnLinea.setAttribute('aria-expanded', 'true');
             }
             adjustLayoutForBanner();
 
@@ -1361,6 +1532,7 @@
             applyUpdate();
         }
     </script>
+
 
 
 
