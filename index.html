@@ -577,7 +577,7 @@
             <button class="btn btn-guidelines" id="btnGuidelines" aria-expanded="false" onclick="toggleGuidelines()">📜 Lineamientos</button>
             <button class="btn btn-linea" id="btnLinea" aria-expanded="false" onclick="toggleLineaAtencion()">🧭 Línea de Atención</button>
             <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
-            <button class="btn btn-reset" onclick="resetDiagram()">🔄 Actualizar Versión</button>
+            <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer base</button>
         </div>
     </div>
 
@@ -655,20 +655,12 @@
                 
                 <div class="goal-chip">
                 <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                <div class="goal-chip-label" contenteditable="true">Revision de bases divisiones<span style="letter-spacing: 0.3px;"> [ESPERA]</span></div>
-                <div class="goal-chip-value" contenteditable="true">Asegurar atención de Partner en horario que no esté</div>
-            </div><div class="goal-chip">
-                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                <div class="goal-chip-label" contenteditable="true">engagmente persona ocupada [ESPERA]</div>
-                <div class="goal-chip-value" contenteditable="true">¿Se podria tratar distinto?</div>
-            </div><div class="goal-chip">
-                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                <div class="goal-chip-label" contenteditable="true">Engagement<span style="letter-spacing: 0.3px;"> [ESPERA]</span></div>
-                <div class="goal-chip-value" contenteditable="true">¿Solo vale la primera atencion luego nada de nada?</div>
-            </div><div class="goal-chip">
-                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
                 <div class="goal-chip-label" contenteditable="true">permisos (no justificada)</div>
-                <div class="goal-chip-value" contenteditable="true">Maximos 03 al mes</div>
+                <div class="goal-chip-value" contenteditable="true">Maximos 04 al mes</div>
+            </div><div class="goal-chip">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="goal-chip-label" contenteditable="true">LOS QUE RECUPERAN HORAS</div>
+                <div class="goal-chip-value" contenteditable="true">No tendrán base hasta su horario oficial</div>
             </div><button class="btn-add-goal" onclick="addGoal(this)">+ Agregar indicador</button>
             </div>
         </div>
@@ -789,7 +781,11 @@
                         <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🟢</span><span class="abordaje-item-title" contenteditable="true">FUNNEL</span></div>
                         <div class="abordaje-item-body" contenteditable="true">Date 30 minutos y no dejes clientes con 2 días sin atención.</div>
                     </div>
-                </div>
+                <div class="abordaje-item">
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔰</span><span class="abordaje-item-title" contenteditable="true">PARTNER EXTRA</span></div>
+                <div class="abordaje-item-body" contenteditable="true">A partir de las 5PM. Registren en el Drive validando <br><b>¿La base de que asesor esta disponible?</b><br>Colocan su nombre al lado para saber<br>y no aborden lo mismo</div>
+            </div></div>
                 <button class="btn-add-abordaje" onclick="addAbordajeItem(this)">+ Agregar punto</button>
             </div>
 
@@ -1059,16 +1055,16 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast" style="display: none;">📋 Imagen copiada — ya la puedes pegar en WhatsApp</div>
+    <div class="toast-notification" id="saveToast" style="display: none;">📥 Archivo descargado con tus últimos cambios</div>
 
     <script id="appScript">
         // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
         // aplicar cualquier respaldo guardado en el navegador. Sirve para poder
-        // "🔄 Actualizar Versión" sin perder lo que trae oficialmente el archivo.
+        // "Restablecer base" sin perder lo que trae oficialmente el archivo.
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-02T00:33:51.910Z";
+        const DATA_VERSION = "2026-10-02T15:27:48.951Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -1613,7 +1609,7 @@
             location.reload();
         }
 
-        // "🔄 Actualizar Versión": deshace ediciones o borrados accidentales de un asesor,
+        // "🔄 Restablecer base": deshace ediciones o borrados accidentales de un asesor,
         // y también sirve para forzar la verificación de una actualización reciente —
         // en ambos casos el resultado es el mismo: volver a la versión oficial del archivo.
         function resetDiagram() {
