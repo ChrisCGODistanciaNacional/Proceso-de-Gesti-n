@@ -577,7 +577,7 @@
             <button class="btn btn-guidelines" id="btnGuidelines" aria-expanded="false" onclick="toggleGuidelines()">📜 Lineamientos</button>
             <button class="btn btn-linea" id="btnLinea" aria-expanded="false" onclick="toggleLineaAtencion()">🧭 Línea de Atención</button>
             <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
-            <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer base</button>
+            <button class="btn btn-reset" onclick="resetDiagram()">🔄 Actualizar Versión</button>
         </div>
     </div>
 
@@ -1059,16 +1059,16 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast" style="display: none;">📥 Archivo descargado con tus últimos cambios</div>
+    <div class="toast-notification" id="saveToast" style="display: none;">📋 Imagen copiada — ya la puedes pegar en WhatsApp</div>
 
     <script id="appScript">
         // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
         // aplicar cualquier respaldo guardado en el navegador. Sirve para poder
-        // "Restablecer base" sin perder lo que trae oficialmente el archivo.
+        // "🔄 Actualizar Versión" sin perder lo que trae oficialmente el archivo.
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-09-30T17:01:31.400Z";
+        const DATA_VERSION = "2026-10-02T00:33:51.910Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -1613,7 +1613,7 @@
             location.reload();
         }
 
-        // "🔄 Restablecer base": deshace ediciones o borrados accidentales de un asesor,
+        // "🔄 Actualizar Versión": deshace ediciones o borrados accidentales de un asesor,
         // y también sirve para forzar la verificación de una actualización reciente —
         // en ambos casos el resultado es el mismo: volver a la versión oficial del archivo.
         function resetDiagram() {
@@ -1626,6 +1626,7 @@
             applyUpdate();
         }
     </script>
+
 
 
 
