@@ -30,6 +30,7 @@
             --role-ing: #c9791f;
             --col-engagement: #5b6478; /* Pizarra — transversal, no es una etapa del journey */
             --linea-accent: #0f7c7f; /* Verde azulado — distinto de los demás paneles */
+            --valores-accent: #8c3a52; /* Vino — distinto de los demás paneles */
 
             /* Estados de nodo */
             --action-line: #2f4ea3;
@@ -56,6 +57,7 @@
         #updateBanner button { background-color: #3a2a00; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
         #updateBanner button:hover { background-color: #55400a; }
 
+        html { overflow-x: hidden; }
         body {
             font-family: var(--font-body);
             background-color: var(--paper);
@@ -65,17 +67,24 @@
             background-size: 34px 34px;
             background-position: -1px -1px;
             padding: 28px;
-            min-width: 1800px;
+            max-width: 1760px;
+            margin: 0 auto;
             color: var(--ink);
             line-height: 1.5;
+            overflow-x: hidden;
+        }
+        @media (max-width: 760px) {
+            body { padding: 14px; }
         }
 
         /* ============ BARRA SUPERIOR ============ */
         .enterprise-bar {
             position: fixed;
             top: 16px;
-            left: 28px;
-            right: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 56px);
+            max-width: 1704px;
             background: var(--panel);
             padding: 14px 26px;
             border-radius: var(--radius);
@@ -85,6 +94,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            row-gap: 10px;
         }
 
         .brand-section { display: flex; align-items: center; gap: 12px; }
@@ -102,7 +113,7 @@
         .brand-section h1 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: 0.1px; }
         .brand-section p { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-        .action-group { display: flex; gap: 10px; }
+        .action-group { display: flex; gap: 10px; flex-wrap: wrap; row-gap: 8px; }
 
         .btn {
             padding: 9px 16px;
@@ -208,13 +219,17 @@
             background: var(--panel);
             border-radius: 14px;
             box-shadow: 8px 8px 0px rgba(28, 37, 65, 0.10);
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
         }
+        /* Aviso sutil de que el mapa se puede deslizar horizontalmente (solo en pantallas angostas) */
+        .swimlane-scroll-hint { display: none; font-family: var(--font-display); font-size: 10.5px; font-weight: 700; color: var(--muted); text-align: center; padding: 7px; background: #f2efe4; border-top: 2px solid var(--line-strong); }
 
         /* Cabeceras de Fases (Columnas del Journey) */
         .swimlane-headers {
             display: grid;
-            grid-template-columns: 250px repeat(4, 1fr);
+            grid-template-columns: 220px repeat(4, minmax(230px, 1fr));
             border-bottom: 2px solid var(--line-strong);
             font-family: var(--font-display);
             font-weight: 700;
@@ -228,7 +243,7 @@
         /* Filas Operativas (Carriles de Roles) */
         .swimlane-row {
             display: grid;
-            grid-template-columns: 250px repeat(4, 1fr);
+            grid-template-columns: 220px repeat(4, minmax(230px, 1fr));
             border-bottom: 2px solid var(--line-strong);
             min-height: 280px;
         }
@@ -397,6 +412,10 @@
         .btn-linea { background: #e5f4f4; color: var(--linea-accent); border-color: var(--linea-accent); }
         .btn-linea[aria-expanded="true"] { background: var(--linea-accent); color: #fdf7e3; }
 
+        /* Botón toggle de Valores y Pilares en la barra superior */
+        .btn-valores { background: #f6e9ee; color: var(--valores-accent); border-color: var(--valores-accent); }
+        .btn-valores[aria-expanded="true"] { background: var(--valores-accent); color: #fdf7e3; }
+
         /* ============ PANEL DE LINEAMIENTOS Y REGLAS DE GESTIÓN ============ */
         /* Trato visual algo más serio/formal que el resto: cabecera oscura,
            marcadores cuadrados en vez de emojis, menos color, más estructura. */
@@ -500,10 +519,10 @@
             box-shadow: 7px 7px 0px rgba(28, 37, 65, 0.08);
             overflow: hidden;
         }
-        .linea-head { background: var(--linea-accent); color: #fdf7e3; padding: 22px 36px; }
-        .linea-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: #cdeeee; text-transform: uppercase; outline: none; }
+        .linea-head { background: var(--ink); color: #fdf7e3; padding: 22px 36px; border-bottom: 4px solid var(--linea-accent); }
+        .linea-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: #6fd6d6; text-transform: uppercase; outline: none; }
         .linea-head h3 { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin-top: 6px; outline: none; }
-        .linea-head p { font-size: 13px; color: #e3f5f5; margin-top: 6px; max-width: 760px; outline: none; }
+        .linea-head p { font-size: 13px; color: #d9d6c8; margin-top: 6px; max-width: 760px; outline: none; }
 
         /* Fila de disparadores (Wapis) */
         .trigger-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 24px 36px; border-bottom: 2px solid var(--line); }
@@ -536,6 +555,52 @@
         .linea-alert-title { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; color: var(--ink); margin-bottom: 4px; outline: none; }
         .linea-alert-body { font-size: 12.5px; color: var(--ink-soft); outline: none; }
 
+        /* ============ PANEL DE VALORES Y PILARES ============ */
+        .valores-panel {
+            background: var(--panel);
+            border: 2px solid var(--line-strong);
+            border-radius: 14px;
+            box-shadow: 7px 7px 0px rgba(28, 37, 65, 0.08);
+            overflow: hidden;
+        }
+        .valores-head { background: var(--ink); color: #fdf7e3; padding: 22px 36px; border-bottom: 4px solid var(--valores-accent); }
+        .valores-eyebrow { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.6px; color: #e38ba8; text-transform: uppercase; outline: none; }
+        .valores-head h3 { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin-top: 6px; outline: none; }
+        .valores-head p { font-size: 13px; color: #d9d6c8; margin-top: 6px; max-width: 760px; outline: none; }
+
+        .valores-section { padding: 26px 36px; border-bottom: 2px solid var(--line); }
+        .valores-section:last-child { border-bottom: none; }
+        .valores-section-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); margin-bottom: 16px; outline: none; }
+
+        /* Fila de valores centrales */
+        .values-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+        .value-card { position: relative; background: #fbfaf6; border: 2px solid var(--line-strong); border-left: 6px solid var(--valores-accent); border-radius: 10px; padding: 16px 20px; }
+        .value-card-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--ink); margin-bottom: 6px; outline: none; }
+        .value-card-body { font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); outline: none; }
+
+        /* Nota de filosofía + cita */
+        .valores-quote-card { background: var(--decision-bg); border: 2px dashed var(--decision-line); border-radius: 10px; padding: 16px 22px; margin-top: 18px; }
+        .valores-quote-body { font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); outline: none; }
+        .valores-quote-cita { font-family: var(--font-display); font-style: italic; font-size: 12.5px; color: var(--ink); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); outline: none; }
+
+        /* Grilla de pilares formales */
+        .pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .pillar-card { position: relative; background: #fff; border: 2px solid var(--line-strong); border-radius: 12px; padding: 18px 22px; box-shadow: 4px 4px 0px rgba(28, 37, 65, 0.06); }
+        .pillar-card-num { font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--valores-accent); letter-spacing: 0.3px; text-transform: uppercase; outline: none; }
+        .pillar-card-title { font-family: var(--font-display); font-weight: 700; font-size: 15.5px; color: var(--ink); margin: 4px 0 8px; outline: none; }
+        .pillar-card-base { font-size: 11px; color: var(--muted); font-style: italic; margin-bottom: 10px; outline: none; }
+        .pillar-card-concept { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); margin-bottom: 10px; outline: none; }
+        .pillar-card-aplicacion-label { font-family: var(--font-display); font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--valores-accent); margin-bottom: 4px; outline: none; }
+        .pillar-card-aplicacion { font-size: 12.5px; line-height: 1.5; color: var(--ink-soft); outline: none; }
+
+        /* Sistema base: tipos de indicadores + enfoque de supervisión */
+        .sistema-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .sistema-col-title { font-family: var(--font-display); font-weight: 700; font-size: 13.5px; color: var(--ink); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 3px solid var(--valores-accent); outline: none; }
+        .sistema-item-list { display: flex; flex-direction: column; gap: 10px; }
+        .sistema-item { background: #fbfaf6; border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+        .sistema-item-title { font-family: var(--font-display); font-weight: 700; font-size: 12.5px; color: var(--ink); outline: none; }
+        .sistema-item-body { font-size: 12px; line-height: 1.5; color: var(--ink-soft); margin-top: 4px; outline: none; }
+
         /* Notificación Toast */
         .toast-notification {
             position: fixed;
@@ -552,6 +617,62 @@
             z-index: 2000;
             border: 2px solid #fdf7e3;
             box-shadow: 4px 4px 0px rgba(0,0,0,0.25);
+        }
+
+        /* ============================================================
+           RESPONSIVE — tablets y celulares
+           El mapa de procesos (swimlane-container) es una tabla densa:
+           se permite que deslice horizontalmente solo él. El resto del
+           contenido (barra, hero, leyenda, paneles) se adapta a 1 columna.
+           ============================================================ */
+        @media (max-width: 1240px) {
+            .legend-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 960px) {
+            .enterprise-bar { padding: 12px 16px; }
+            .brand-section p:last-child { display: none; }
+            .action-group { width: 100%; justify-content: flex-start; }
+            .btn { padding: 8px 12px; font-size: 11px; }
+
+            .hero-card, .legend-card, .guidelines-head, .linea-head, .valores-head { padding: 22px 24px; }
+            .goals-block, .guideline-category, .trigger-row, .loop-section, .valores-section { padding-left: 24px; padding-right: 24px; }
+
+            .hero-card h2 { font-size: 23px; }
+            .journey-stepper { grid-template-columns: repeat(2, 1fr); row-gap: 20px; }
+            .journey-step::after { content: ""; }
+            .legend-grid { grid-template-columns: 1fr; }
+
+            .guideline-categories { grid-template-columns: 1fr; }
+            .guideline-category { border-right: none; border-bottom: 2px solid var(--line); }
+            .guideline-category:last-child { border-bottom: none; }
+
+            .trigger-row { grid-template-columns: 1fr; }
+            .values-row { grid-template-columns: 1fr; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .sistema-columns { grid-template-columns: 1fr; gap: 28px; }
+
+            .swimlane-headers, .swimlane-row { grid-template-columns: 190px repeat(4, minmax(210px, 1fr)); }
+            .swimlane-scroll-hint { display: block; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .enterprise-bar { left: 10px; right: 10px; width: auto; transform: none; border-radius: 10px; }
+            .brand-section h1 { font-size: 14px; }
+            .brand-mark { width: 32px; height: 32px; font-size: 13px; }
+
+            .doc-wrap { gap: 16px; }
+            .hero-card, .legend-card { padding: 18px; }
+            .hero-card h2 { font-size: 20px; }
+            .hero-card p.hero-desc { font-size: 13.5px; }
+
+            .guidelines-head, .linea-head, .valores-head { padding: 18px; }
+            .guidelines-head h3, .linea-head h3, .valores-head h3 { font-size: 18px; }
+            .goals-block, .guideline-category, .trigger-row, .loop-section, .valores-section { padding-left: 18px; padding-right: 18px; }
+            .step-card { padding: 16px 18px; }
+
+            .swimlane-headers, .swimlane-row { grid-template-columns: 170px repeat(4, minmax(190px, 1fr)); }
         }
     </style>
 </head>
@@ -576,12 +697,13 @@
         <div class="action-group">
             <button class="btn btn-guidelines" id="btnGuidelines" aria-expanded="false" onclick="toggleGuidelines()">📜 Lineamientos</button>
             <button class="btn btn-linea" id="btnLinea" aria-expanded="false" onclick="toggleLineaAtencion()">🧭 Línea de Atención</button>
+            <button class="btn btn-valores" id="btnValores" aria-expanded="false" onclick="toggleValores()">💎 Valores y Pilares</button>
             <button class="btn btn-download" onclick="downloadDiagram()">📥 Descargar mapa (.html)</button>
             <button class="btn btn-reset" onclick="resetDiagram()">🔄 Restablecer base</button>
         </div>
     </div>
 
-    <div class="doc-wrap" id="mainDiagramCanvas" style="margin-top: 108px;">
+    <div class="doc-wrap" id="mainDiagramCanvas" style="margin-top: 131px;">
 
     <!-- INTRODUCCIÓN / RECORRIDO DEL CLIENTE -->
     <div class="hero-card">
@@ -768,7 +890,7 @@
                     </div>
                     <div class="abordaje-item">
                         <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅰️</span><span class="abordaje-item-title" contenteditable="true">NEW LEAD</span></div>
+                        <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅰️</span><span class="abordaje-item-title" contenteditable="true">NEW LEAD y&nbsp;🔥 SOS</span></div>
                         <div class="abordaje-item-body" contenteditable="true">Lo puede revisar SOLO el asesor ASIGNADO.<br>Cortes 8am, 11am, 3pm, 5pm y 7pm.<br>Si hay base será cada hora.</div>
                     </div>
                     <div class="abordaje-item">
@@ -818,6 +940,136 @@
         <div class="linea-alert-card">
             <div class="linea-alert-title" contenteditable="true">⚠️ COBREN EXAMEN en el momento con SENTIDO DE URGENCIA</div>
             <div class="linea-alert-body" contenteditable="true">Usen DTOS y GANCHOS.</div>
+        </div>
+    </div>
+
+    <!-- PANEL DE VALORES Y PILARES -->
+    <div class="valores-panel" id="valoresPanel" style="display: none;">
+        <div class="valores-head">
+            <div class="valores-eyebrow" contenteditable="true">FORMAS DE TRABAJO CGO</div>
+            <h3 contenteditable="true">Valores y Pilares</h3>
+            <p contenteditable="true">La base de cómo trabajamos en equipo: lo que no se negocia, el marco formal detrás, y cómo lo medimos y acompañamos en el día a día.</p>
+        </div>
+
+        <!-- Valores centrales -->
+        <div class="valores-section">
+            <div class="valores-section-title" contenteditable="true">Valores centrales del equipo</div>
+            <div class="values-row">
+                <div class="value-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="value-card-title" contenteditable="true">⏱️ Puntualidad</div>
+                    <div class="value-card-body" contenteditable="true">Hacer las cosas a su tiempo y en el momento que corresponde, no solo llegar temprano a la oficina. Hacer las cosas en su momento es el primer paso para hacerlas bien.</div>
+                </div>
+                <div class="value-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="value-card-title" contenteditable="true">🗂️ Orden</div>
+                    <div class="value-card-body" contenteditable="true">Tener un sistema o forma de categorizar las cosas. Sin orden, no suma a los resultados: es un hito importante para conseguirlos.</div>
+                </div>
+                <div class="value-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="value-card-title" contenteditable="true">💪 Resiliencia</div>
+                    <div class="value-card-body" contenteditable="true">No rendirse, mantenerse activo, tener presentes las motivaciones personales y profesionales propias para no desmotivarse. Detrás de la resiliencia está la disciplina: hacer las cosas que toca hacer aunque no se quieran hacer, incluso en los días sin motivación.</div>
+                </div>
+            </div>
+            <button class="btn-add-abordaje" onclick="addValueItem(this)">+ Agregar valor</button>
+
+            <div class="valores-quote-card">
+                <div class="valores-quote-body" contenteditable="true">Primero hay que querer hacer las cosas (Motivación) y solo después buscar cómo hacerlas (Insumo, Herramientas y Hábilidad).</div>
+                <div class="valores-quote-cita" contenteditable="true">"Si una persona no sabe, enséñale; si no puede, motívale; si no quiere, despídele."</div>
+            </div>
+        </div>
+
+        <!-- Pilares formales -->
+        <div class="valores-section">
+            <div class="valores-section-title" contenteditable="true">Pilares — Formas de Trabajo CGO: Fundamento, Concepto y Aplicación</div>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="pillar-card-num" contenteditable="true">Pilar 1</div>
+                    <div class="pillar-card-title" contenteditable="true">Adaptabilidad Inteligente</div>
+                    <div class="pillar-card-base" contenteditable="true">Basado en Kaizen y Antifragilidad (Nassim Taleb)</div>
+                    <div class="pillar-card-concept" contenteditable="true">Mejorar de forma continua y pequeña, y usar los cambios o problemas como oportunidad para salir más fuertes, no solo para resistirlos.</div>
+                    <div class="pillar-card-aplicacion-label" contenteditable="true">En la gestión</div>
+                    <div class="pillar-card-aplicacion" contenteditable="true">Ajustar rápido el abordaje cuando algo no está funcionando, y capitalizar los imprevistos del día (bases, metas, campañas) como aprendizaje pero sobre todo entiende cómo funciona cada cosa.</div>
+                </div>
+                <div class="pillar-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="pillar-card-num" contenteditable="true">Pilar 2</div>
+                    <div class="pillar-card-title" contenteditable="true">Comunicación Transformadora</div>
+                    <div class="pillar-card-base" contenteditable="true">Basado en Escucha Activa (Carl Rogers) y Comunicación No Violenta (Marshall Rosenberg)</div>
+                    <div class="pillar-card-concept" contenteditable="true">Escuchar para entender antes de responder, centrado en hechos y necesidades, sin juicio ni etiquetas.</div>
+                    <div class="pillar-card-aplicacion-label" contenteditable="true">En la gestión</div>
+                    <div class="pillar-card-aplicacion" contenteditable="true">No asumas cosas ya que cada persona se expresa de forma diferente, lo que tu creas ya sea del cliente o asesor puede o impulsar tu venta o tirarla para eso escucha bien y prospecta.</div>
+                </div>
+                <div class="pillar-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="pillar-card-num" contenteditable="true">Pilar 3</div>
+                    <div class="pillar-card-title" contenteditable="true">Enfoque en Resultados Sostenibles</div>
+                    <div class="pillar-card-base" contenteditable="true">Basado en Flow (Mihaly Csikszentmihalyi) y mejora continua</div>
+                    <div class="pillar-card-concept" contenteditable="true">Buscar metas que reten pero no quemen al equipo, manteniendo un ritmo de trabajo sostenible en el tiempo, no solo picos puntuales.</div>
+                    <div class="pillar-card-aplicacion-label" contenteditable="true">En la gestión</div>
+                    <div class="pillar-card-aplicacion" contenteditable="true">Metas e indicadores. Siempre ten algo concreto que conseguir ideal sea un número o porcentaje si no solo disparadamos a cualquier lado y no todo llega por la suerte.</div>
+                </div>
+                <div class="pillar-card">
+                    <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                    <div class="pillar-card-num" contenteditable="true">Pilar 4</div>
+                    <div class="pillar-card-title" contenteditable="true">Trabajo en Equipo Potenciador</div>
+                    <div class="pillar-card-base" contenteditable="true">Basado en el Equilibrio de Nash y la Inteligencia Colectiva</div>
+                    <div class="pillar-card-concept" contenteditable="true">El mejor resultado del equipo aparece cuando cada asesor toma decisiones considerando también al resto, no solo su propio beneficio individual.</div>
+                    <div class="pillar-card-aplicacion-label" contenteditable="true">En la gestión</div>
+                    <div class="pillar-card-aplicacion" contenteditable="true">Centrate en tu resultado, pero si tienes la oportunidad enseña y ayuda al que tienes a lado ya que si bien la meta es distinta lo que no haga tu compañero el próximo mes será para todos.</div>
+                </div>
+            </div>
+            <button class="btn-add-abordaje" onclick="addPillarItem(this)">+ Agregar pilar</button>
+        </div>
+
+        <!-- Sistema base -->
+        <div class="valores-section">
+            <div class="valores-section-title" contenteditable="true">Sistema base: cómo medimos y acompañamos</div>
+            <div class="sistema-columns">
+                <div class="sistema-col">
+                    <div class="sistema-col-title" contenteditable="true">📊 Tipos de indicadores</div>
+                    <div class="sistema-item-list">
+                        <div class="sistema-item">
+                            <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                            <div class="sistema-item-title" contenteditable="true">Gestión</div>
+                            <div class="sistema-item-body" contenteditable="true">Numéricos: metas, volumen de contactos, tipificaciones, conversión.</div>
+                        </div>
+                        <div class="sistema-item">
+                            <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                            <div class="sistema-item-title" contenteditable="true">Atención</div>
+                            <div class="sistema-item-body" contenteditable="true">Cualitativo: calidad del trato, tiempos de respuesta, uso correcto del guion y protocolos.</div>
+                        </div>
+                        <div class="sistema-item">
+                            <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                            <div class="sistema-item-title" contenteditable="true">Seguimiento</div>
+                            <div class="sistema-item-body" contenteditable="true">La frecuencia con la que se revisa y retoma a cada alumno hasta que decide.</div>
+                        </div>
+                    </div>
+                    <button class="btn-add-abordaje" onclick="addSistemaItem(this)">+ Agregar indicador</button>
+                </div>
+                <div class="sistema-col">
+                    <div class="sistema-col-title" contenteditable="true">🧭 Enfoque de supervisión</div>
+                    <div class="sistema-item-list">
+                        <div class="sistema-item">
+                            <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                            <div class="sistema-item-title" contenteditable="true">Motivación</div>
+                            <div class="sistema-item-body" contenteditable="true">Reconectar al asesor con su motivo personal y profesional antes de corregir resultados.</div>
+                        </div>
+                        <div class="sistema-item">
+                            <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                            <div class="sistema-item-title" contenteditable="true">Seguimiento</div>
+                            <div class="sistema-item-body" contenteditable="true">Revisión constante de su base y avance, no solo al cierre del mes.</div>
+                        </div>
+                        <div class="sistema-item">
+                            <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                            <div class="sistema-item-title" contenteditable="true">Acompañamiento</div>
+                            <div class="sistema-item-body" contenteditable="true">Estar presente en el día a día del asesor, no solo evaluarlo al final.</div>
+                        </div>
+                    </div>
+                    <button class="btn-add-abordaje" onclick="addSistemaItem(this)">+ Agregar enfoque</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1055,7 +1307,7 @@
     </div>
 
     <!-- Alerta Flotante Toast -->
-    <div class="toast-notification" id="saveToast" style="display: none;">📥 Archivo descargado con tus últimos cambios</div>
+    <div class="toast-notification" id="saveToast" style="display: none;">🖼️ Tu navegador no deja copiar directo: se descargó la imagen</div>
 
     <script id="appScript">
         // Copia del mapa tal como viene embebido en ESTE archivo, capturada antes de
@@ -1064,7 +1316,7 @@
         let freshEmbeddedHTML = null;
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-02T15:27:48.951Z";
+        const DATA_VERSION = "2026-10-09T17:27:20.497Z";
         /*==DATA_VERSION_END==*/
 
         // Cuando el aviso de actualización está visible (fixed, arriba de todo), empuja
@@ -1074,14 +1326,12 @@
             const bar = document.querySelector('.enterprise-bar');
             const wrap = document.querySelector('.doc-wrap');
             if (!banner || !bar || !wrap) return;
-            if (getComputedStyle(banner).display !== 'none') {
-                const h = banner.offsetHeight;
-                bar.style.top = (16 + h) + 'px';
-                wrap.style.marginTop = (108 + h) + 'px';
-            } else {
-                bar.style.top = '16px';
-                wrap.style.marginTop = '108px';
-            }
+            const bannerH = getComputedStyle(banner).display !== 'none' ? banner.offsetHeight : 0;
+            bar.style.top = (16 + bannerH) + 'px';
+            // La barra puede ocupar 1 o 2 líneas según el ancho de pantalla (botones
+            // que se acomodan), así que medimos su alto real en vez de asumir un valor fijo.
+            const barH = bar.offsetHeight;
+            wrap.style.marginTop = (16 + bannerH + barH + 24) + 'px';
         }
         window.addEventListener('resize', adjustLayoutForBanner);
 
@@ -1121,6 +1371,17 @@
             document.getElementById('mainDiagramCanvas').addEventListener('blur', persistDiagram, true);
         });
 
+        // Desplaza un panel recién abierto a la vista, dejando espacio para la
+        // barra superior fija (que puede ocupar 1, 2 o 3 líneas según el ancho
+        // de pantalla), para que su encabezado no quede tapado.
+        function scrollPanelIntoView(panel) {
+            const bar = document.querySelector('.enterprise-bar');
+            const barBottom = bar ? bar.getBoundingClientRect().bottom : 0;
+            const rect = panel.getBoundingClientRect();
+            const targetY = window.scrollY + rect.top - barBottom - 16;
+            window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' });
+        }
+
         // Despliega / oculta el panel de Lineamientos y Reglas de Gestión
         function toggleGuidelines() {
             const panel = document.getElementById('guidelinesPanel');
@@ -1129,7 +1390,7 @@
             const isOpen = panel.style.display !== 'none';
             panel.style.display = isOpen ? 'none' : 'block';
             if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
-            if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (!isOpen) scrollPanelIntoView(panel);
             persistDiagram();
         }
 
@@ -1141,8 +1402,69 @@
             const isOpen = panel.style.display !== 'none';
             panel.style.display = isOpen ? 'none' : 'block';
             if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
-            if (!isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (!isOpen) scrollPanelIntoView(panel);
             persistDiagram();
+        }
+
+        // Despliega / oculta el panel de Valores y Pilares
+        function toggleValores() {
+            const panel = document.getElementById('valoresPanel');
+            const btn = document.getElementById('btnValores');
+            if (!panel) return;
+            const isOpen = panel.style.display !== 'none';
+            panel.style.display = isOpen ? 'none' : 'block';
+            if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
+            if (!isOpen) scrollPanelIntoView(panel);
+            persistDiagram();
+        }
+
+        // Agrega un nuevo valor editable en la fila de Valores centrales
+        function addValueItem(button) {
+            const row = button.previousElementSibling; // el <div class="values-row">
+            const card = document.createElement('div');
+            card.className = 'value-card';
+            card.innerHTML = `
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="value-card-title" contenteditable="true">🔸 Nuevo valor</div>
+                <div class="value-card-body" contenteditable="true">Escribe aquí el detalle de este valor.</div>
+            `;
+            row.appendChild(card);
+            persistDiagram();
+            card.querySelector('.value-card-title').focus();
+        }
+
+        // Agrega un nuevo pilar editable en la grilla de Pilares formales
+        function addPillarItem(button) {
+            const grid = button.previousElementSibling; // el <div class="pillars-grid">
+            const card = document.createElement('div');
+            card.className = 'pillar-card';
+            card.innerHTML = `
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="pillar-card-num" contenteditable="true">Pilar</div>
+                <div class="pillar-card-title" contenteditable="true">Nuevo pilar</div>
+                <div class="pillar-card-base" contenteditable="true">Base teórica</div>
+                <div class="pillar-card-concept" contenteditable="true">Escribe aquí el concepto del pilar.</div>
+                <div class="pillar-card-aplicacion-label" contenteditable="true">En la gestión</div>
+                <div class="pillar-card-aplicacion" contenteditable="true">Escribe aquí cómo se aplica en la gestión diaria.</div>
+            `;
+            grid.appendChild(card);
+            persistDiagram();
+            card.querySelector('.pillar-card-title').focus();
+        }
+
+        // Agrega un nuevo indicador/enfoque editable en el Sistema base
+        function addSistemaItem(button) {
+            const list = button.previousElementSibling; // el <div class="sistema-item-list">
+            const item = document.createElement('div');
+            item.className = 'sistema-item';
+            item.innerHTML = `
+                <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
+                <div class="sistema-item-title" contenteditable="true">Nuevo punto</div>
+                <div class="sistema-item-body" contenteditable="true">Escribe aquí el detalle.</div>
+            `;
+            list.appendChild(item);
+            persistDiagram();
+            item.querySelector('.sistema-item-title').focus();
         }
 
         // Agrega un nuevo punto editable dentro de un paso de la Línea de Atención
@@ -1572,6 +1894,12 @@
             if (lineaPanel) lineaPanel.style.display = 'none';
             if (btnLinea) btnLinea.setAttribute('aria-expanded', 'false');
 
+            const valoresPanel = document.getElementById('valoresPanel');
+            const valoresWasOpen = valoresPanel ? valoresPanel.style.display !== 'none' : false;
+            const btnValores = document.getElementById('btnValores');
+            if (valoresPanel) valoresPanel.style.display = 'none';
+            if (btnValores) btnValores.setAttribute('aria-expanded', 'false');
+
             const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
             const downloader = document.createElement('a');
@@ -1590,6 +1918,10 @@
             if (lineaPanel && lineaWasOpen) {
                 lineaPanel.style.display = 'block';
                 if (btnLinea) btnLinea.setAttribute('aria-expanded', 'true');
+            }
+            if (valoresPanel && valoresWasOpen) {
+                valoresPanel.style.display = 'block';
+                if (btnValores) btnValores.setAttribute('aria-expanded', 'true');
             }
             adjustLayoutForBanner();
 
@@ -1622,6 +1954,7 @@
             applyUpdate();
         }
     </script>
+
 
 
 
