@@ -533,7 +533,7 @@
     <header class="topbar" id="topbar">
         <div id="updateBanner">
             <span>Hay una versión más reciente de este Mapa de Procesos. Lo que ves puede estar desactualizado.</span>
-            <button onclick="applyUpdate()">Actualizar ahora</button>
+            <button onclick="actualizarAhora()">Actualizar ahora</button>
         </div>
         <div class="topbar-inner">
             <div class="brand">
@@ -1141,6 +1141,18 @@
             const canvas = document.getElementById('mainDiagramCanvas');
             freshEmbeddedHTML = canvas.innerHTML;
 
+            // Si se pulsó "Actualizar ahora" desde una pestaña vieja, la versión nueva se aplica sola.
+            try {
+                if (sessionStorage.getItem('mapa_auto_update') === '1') {
+                    sessionStorage.removeItem('mapa_auto_update');
+                    if (localStorage.getItem(STORAGE_VERSION_KEY) !== DATA_VERSION) {
+                        localStorage.setItem(STORAGE_KEY, freshEmbeddedHTML);
+                        localStorage.setItem(STORAGE_VERSION_KEY, DATA_VERSION);
+                    }
+                }
+                if (/[?&]v=\d+/.test(location.search)) history.replaceState(null, '', location.pathname + location.hash);
+            } catch (e) {}
+
             const cached = localStorage.getItem(STORAGE_KEY);
             const storedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
             if (!cached) {
@@ -1649,7 +1661,10 @@
 
             const banner = document.getElementById('updateBanner');
             const bannerWasVisible = banner ? banner.style.display : '';
+            const bannerMsg = banner ? banner.querySelector('span') : null;
+            const bannerTxt = bannerMsg ? bannerMsg.textContent : '';
             if (banner) banner.style.display = 'none';
+            if (bannerMsg) bannerMsg.textContent = 'Hay una versión más reciente de este Mapa de Procesos. Lo que ves puede estar desactualizado.';
 
             // El archivo exportado abre siempre en el mapa y en modo consulta.
             const viewBefore = currentView();
@@ -1668,10 +1683,48 @@
 
             if (htmlStyle !== null) document.documentElement.setAttribute('style', htmlStyle);
             if (banner) banner.style.display = bannerWasVisible;
+            if (bannerMsg) bannerMsg.textContent = bannerTxt;
             showView(viewBefore, { silent: true, keepScroll: true });
             if (wasEditing) setEditing(true);
             showToast('📥 Archivo descargado con tus últimos cambios');
         }
+
+        // ---------------------------------------------------------------- Aviso de versión nueva
+        // Una pestaña puede quedar abierta todo el día: cada 5 minutos (y al volver a la pestaña) se
+        // pregunta a GitHub con una consulta liviana (HEAD) si el archivo publicado cambió; si cambió,
+        // se descarga una vez para confirmar que trae otra DATA_VERSION y se muestra el aviso de arriba.
+        let versionRemotaNueva = false, vigiaUltimaFecha = null, vigiaRevisando = false;
+        function urlSinCache() { return location.pathname + '?v=' + Date.now(); }
+        async function revisarVersionPublicada() {
+            if (versionRemotaNueva || vigiaRevisando || !/^https?:$/.test(location.protocol)) return;
+            vigiaRevisando = true;
+            try {
+                const h = await fetch(urlSinCache(), { method: 'HEAD', cache: 'no-store' });
+                const lm = h.ok ? Date.parse(h.headers.get('last-modified') || '') : NaN;
+                if (isNaN(lm)) return;
+                const base = vigiaUltimaFecha !== null ? vigiaUltimaFecha : Date.parse(document.lastModified);
+                if (!isNaN(base) && lm <= base + 60000) return;
+                vigiaUltimaFecha = lm;
+                const txt = await (await fetch(urlSinCache(), { cache: 'no-store' })).text();
+                const m = txt.match(/const DATA_VERSION = "([^"]+)"/);
+                if (m && m[1] !== DATA_VERSION) {
+                    versionRemotaNueva = true;
+                    const banner = document.getElementById('updateBanner');
+                    if (banner) { const msg = banner.querySelector('span'); if (msg) msg.textContent = 'Se publicó una versión nueva del Mapa de Procesos.'; banner.style.display = 'flex'; measureBar(); }
+                }
+            } catch (e) {} finally { vigiaRevisando = false; }
+        }
+        function actualizarAhora() {
+            if (versionRemotaNueva) {
+                try { sessionStorage.setItem('mapa_auto_update', '1'); } catch (e) {}
+                location.replace(urlSinCache() + location.hash);
+            } else {
+                applyUpdate();
+            }
+        }
+        setTimeout(revisarVersionPublicada, 20000);
+        setInterval(revisarVersionPublicada, 5 * 60 * 1000);
+        document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') revisarVersionPublicada(); });
 
         // ---------------------------------------------------------------- Actualizar / restablecer
         function applyUpdate() {
