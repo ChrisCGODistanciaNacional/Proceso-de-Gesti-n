@@ -79,6 +79,24 @@
             -webkit-backdrop-filter: blur(8px);
             border-bottom: 2px solid var(--line-strong);
         }
+
+        /* ===== Ventana "Hay una versión nueva" (bloquea la página hasta actualizar) ===== */
+        .vm-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(9,26,51,0.72); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 16px; animation: vmFade .25s ease-out; }
+        .vm-card { background: var(--panel); color: var(--ink); font-family: var(--font-body); width: 100%; max-width: 400px; border-radius: 16px; padding: 28px 24px 22px; text-align: center; box-shadow: 0 24px 60px rgba(9,26,51,0.45); border-top: 5px solid var(--gold); animation: vmPop .3s cubic-bezier(.2,.9,.3,1.2); }
+        .vm-icon { width: 60px; height: 60px; margin: 0 auto 12px; border-radius: 50%; background: var(--ink); color: var(--gold); font-size: 28px; display: flex; align-items: center; justify-content: center; }
+        .vm-card h2 { font-family: var(--font-display); margin: 0 0 8px; font-size: 20px; font-weight: 700; color: var(--ink); }
+        .vm-card p { margin: 0 0 18px; font-size: 14.5px; line-height: 1.55; color: var(--ink-2); }
+        .vm-btn { width: 100%; border: none; border-radius: 999px; background: var(--ink); color: #fff; font-family: inherit; font-size: 15px; font-weight: 700; padding: 13px 18px; cursor: pointer; transition: transform .15s, box-shadow .15s; }
+        .vm-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(9,26,51,0.3); }
+        .vm-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+        .vm-btn .vm-arrow { color: var(--gold); }
+        .vm-note { display: block; margin-top: 12px; font-size: 12px; color: var(--ink-2); }
+        .vm-skip { margin-top: 10px; background: none; border: none; color: var(--ink-2); font-family: inherit; font-size: 12.5px; text-decoration: underline; cursor: pointer; }
+        body.vm-lock { overflow: hidden !important; }
+        @keyframes vmFade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes vmPop { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .vm-overlay, .vm-card { animation: none; } }
+
         #updateBanner {
             display: none; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
             background: var(--gold); color: var(--ink);
@@ -1161,8 +1179,7 @@
             } else {
                 canvas.innerHTML = cached;
                 if (storedVersion !== DATA_VERSION) {
-                    const banner = document.getElementById('updateBanner');
-                    if (banner) banner.style.display = 'flex';
+                    mostrarAvisoVersion();
                 }
             }
 
@@ -1672,7 +1689,14 @@
             const htmlStyle = document.documentElement.getAttribute('style');
             document.documentElement.removeAttribute('style');
 
+            // La ventana de versión nueva (si está abierta) no viaja en el archivo descargado.
+            const vmEl = document.getElementById('versionModal');
+            const vmLock = document.body.classList.contains('vm-lock');
+            if (vmEl) vmEl.remove();
+            document.body.classList.remove('vm-lock');
             const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            if (vmEl) document.body.appendChild(vmEl);
+            if (vmLock) document.body.classList.add('vm-lock');
             const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
             const downloader = document.createElement('a');
             downloader.href = URL.createObjectURL(blobFile);
@@ -1694,6 +1718,40 @@
         // pregunta a GitHub con una consulta liviana (HEAD) si el archivo publicado cambió; si cambió,
         // se descarga una vez para confirmar que trae otra DATA_VERSION y se muestra el aviso de arriba.
         let versionRemotaNueva = false, vigiaUltimaFecha = null, vigiaRevisando = false;
+        // Ventana "Hay una versión nueva": aparece al abrir una copia guardada más antigua o cuando el vigía
+        // detecta que se publicó otra versión. Bloquea la página hasta pulsar "Actualizar versión"; solo el
+        // supervisor en modo edición puede posponerla (para no perder cambios que aún no exportó).
+        function mostrarAvisoVersion() {
+          if (document.getElementById('versionModal')) return;
+          const enEdicion = !!(isEditing);
+          const ov = document.createElement('div');
+          ov.id = 'versionModal';
+          ov.className = 'vm-overlay';
+          ov.setAttribute('role', 'dialog');
+          ov.setAttribute('aria-modal', 'true');
+          ov.setAttribute('aria-labelledby', 'vmTitle');
+          ov.innerHTML = '<div class="vm-card">'
+            + '<div class="vm-icon" aria-hidden="true">✨</div>'
+            + '<h2 id="vmTitle">¡Hay una versión nueva!</h2>'
+            + '<p>Se publicaron cambios en el Mapa de Procesos. Actualiza para trabajar con la información más reciente.</p>'
+            + '<button type="button" class="vm-btn" onclick="actualizarAhora()">Actualizar versión <span class="vm-arrow">→</span></button>'
+            + '<span class="vm-note">Toma un segundo y verás el mapa al día.</span>'
+            + (enEdicion ? '<button type="button" class="vm-skip" onclick="cerrarAvisoVersion()">Ahora no: estoy en modo edición y aún no exporto mis cambios</button>' : '')
+            + '</div>';
+          document.body.appendChild(ov);
+          document.body.classList.add('vm-lock');
+          setTimeout(function () { const b = ov.querySelector('.vm-btn'); if (b) b.focus(); }, 60);
+          // Sin modo edición no hay forma de seguir sin actualizar: el foco se queda dentro de la ventana.
+          ov.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { e.stopPropagation(); if (!enEdicion) e.preventDefault(); }
+            if (e.key === 'Tab') { e.preventDefault(); const b = ov.querySelector('.vm-btn'); if (b) b.focus(); }
+          }, true);
+        }
+        function cerrarAvisoVersion() {
+          const ov = document.getElementById('versionModal');
+          if (ov) ov.remove();
+          document.body.classList.remove('vm-lock');
+        }
         function urlSinCache() { return location.pathname + '?v=' + Date.now(); }
         async function revisarVersionPublicada() {
             if (versionRemotaNueva || vigiaRevisando || !/^https?:$/.test(location.protocol)) return;
@@ -1709,8 +1767,7 @@
                 const m = txt.match(/const DATA_VERSION = "([^"]+)"/);
                 if (m && m[1] !== DATA_VERSION) {
                     versionRemotaNueva = true;
-                    const banner = document.getElementById('updateBanner');
-                    if (banner) { const msg = banner.querySelector('span'); if (msg) msg.textContent = 'Se publicó una versión nueva del Mapa de Procesos.'; banner.style.display = 'flex'; measureBar(); }
+                    mostrarAvisoVersion();
                 }
             } catch (e) {} finally { vigiaRevisando = false; }
         }
