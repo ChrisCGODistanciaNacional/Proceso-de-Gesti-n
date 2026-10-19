@@ -39,6 +39,14 @@
             --alert: #c74545;
             --alert-soft: #fbecec;
 
+            /* Color de cada sección (pestaña): tiñe la pestaña activa, la cabecera del panel y el fondo */
+            --c-ficha: #1c2541;   --c-ficha-tab: #f0b93e;  --c-ficha-soft: #fdf3d6;
+            --c-valores: #7b2d5f; --c-valores-soft: #f6e4ef;
+            --c-mapa: #1c2541;    --c-mapa-soft: #e6e8f0;
+            --c-linea: #0b5d66;   --c-linea-soft: #dceff0;
+            --c-lineam: #5a3a1e;  --c-lineam-soft: #f3e8dc;
+            --cat: var(--c-mapa); --cat-soft: var(--c-mapa-soft); --cat-tab: var(--cat); --cat-tab-text: #fdf7e3; --cat-eyebrow: var(--gold);
+
             --radius-lg: 14px;
             --radius: 10px;
             --radius-sm: 7px;
@@ -58,12 +66,20 @@
             color: var(--ink);
             background-color: var(--paper);
             background-image:
+                radial-gradient(1100px 320px at 50% -60px, var(--cat-soft), transparent 72%),
                 linear-gradient(var(--line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--line) 1px, transparent 1px);
-            background-size: 34px 34px;
-            background-position: -1px -1px;
+            background-size: auto, 34px 34px, 34px 34px;
+            background-position: 0 0, -1px -1px, -1px -1px;
+            background-attachment: scroll;
             overflow-x: hidden;
         }
+        /* La sección elegida arriba define el color de toda la pantalla */
+        body[data-cat="ficha"] { --cat: var(--c-ficha); --cat-soft: var(--c-ficha-soft); --cat-tab: var(--c-ficha-tab); --cat-tab-text: var(--ink); --cat-eyebrow: var(--gold); }
+        body[data-cat="valores"] { --cat: var(--c-valores); --cat-soft: var(--c-valores-soft); --cat-eyebrow: var(--gold); }
+        body[data-cat="mapa"] { --cat: var(--c-mapa); --cat-soft: var(--c-mapa-soft); --cat-eyebrow: var(--gold); }
+        body[data-cat="linea"] { --cat: var(--c-linea); --cat-soft: var(--c-linea-soft); --cat-eyebrow: #fbe39a; }
+        body[data-cat="lineamientos"] { --cat: var(--c-lineam); --cat-soft: var(--c-lineam-soft); --cat-eyebrow: var(--gold); }
         b, strong { font-weight: 700; }
         [contenteditable] { outline: none; }
         [contenteditable="true"] { cursor: text; }
@@ -79,6 +95,8 @@
             -webkit-backdrop-filter: blur(8px);
             border-bottom: 2px solid var(--line-strong);
         }
+        /* Hilo de color arriba: cambia con la sección elegida */
+        .topbar::before { content: ""; display: block; height: 5px; background: linear-gradient(90deg, var(--cat) 0 62%, var(--gold)); transition: background 0.25s ease; }
 
         /* ===== Ventana "Hay una versión nueva" (bloquea la página hasta actualizar) ===== */
         .vm-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(9,26,51,0.72); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; padding: 16px; animation: vmFade .25s ease-out; }
@@ -123,11 +141,20 @@
         .tabs { display: flex; gap: 2px; background: #e6e2d4; padding: 3px; border-radius: 9px; }
         .tab {
             border: none; background: transparent; border-radius: 7px;
-            padding: 7px 13px; font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+            padding: 7px 13px 7px 11px; font-size: 12.5px; font-weight: 600; color: var(--ink-2);
             white-space: nowrap; transition: background 0.12s ease, color 0.12s ease;
+            display: inline-flex; align-items: center; gap: 7px;
         }
+        /* Cada pestaña lleva el punto de su color; la activa se pinta entera de ese color */
+        .tab::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--tc, var(--ink)); flex-shrink: 0; box-shadow: 0 0 0 1.5px rgba(255,255,255,0.6); }
+        .tab[data-view="ficha"] { --tc: var(--c-ficha-tab); }
+        .tab[data-view="valores"] { --tc: var(--c-valores); }
+        .tab[data-view="mapa"] { --tc: var(--c-mapa); }
+        .tab[data-view="linea"] { --tc: var(--c-linea); }
+        .tab[data-view="lineamientos"] { --tc: var(--c-lineam); }
         .tab:hover { background: #f5f2e8; }
-        .tab[aria-selected="true"] { background: var(--ink); color: #fdf7e3; }
+        .tab[aria-selected="true"] { background: var(--cat-tab); color: var(--cat-tab-text); }
+        .tab[aria-selected="true"]::before { background: currentColor; box-shadow: none; opacity: 0.85; }
 
         .actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
         .btn {
@@ -327,15 +354,18 @@
         .lane[data-role="all"] .flow-work-cell.transversal .process-node { margin: 0; }
 
         .swimlane-scroll-hint { display: none; font-family: var(--font-display); font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; margin: -10px 0 -8px; }
-        .tab-short { display: none; }
+        .tab-short, .tab-mid { display: none; }
+        /* Con cinco pestañas, en pantallas medianas van los nombres cortos para que la barra quede en una línea */
+        @media (max-width: 1480px) { .tab-full { display: none; } .tab-mid { display: inline; } }
 
         /* ---- Paneles (Lineamientos · Línea de atención · Valores) ---- */
         .panel { overflow: hidden; }
         .panel-head {
-            background: var(--ink); color: #fdf7e3; padding: 22px 32px 20px;
+            background: var(--cat); color: #fdf7e3; padding: 22px 32px 20px;
             display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+            transition: background 0.25s ease;
         }
-        .panel-eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 600; color: var(--gold); }
+        .panel-eyebrow { font-family: var(--font-display); font-size: 11.5px; font-weight: 600; color: var(--cat-eyebrow); }
         .panel-head h3 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-top: 4px; line-height: 1.2; }
         .panel-head p { font-size: 13px; color: #d9d6c8; margin-top: 6px; max-width: 760px; }
         .panel-section { padding: 24px 32px; border-bottom: 2px solid var(--line); }
@@ -355,8 +385,8 @@
 
         /* Límites de gestión */
         .goals-grid { display: flex; flex-wrap: wrap; gap: 12px; }
-        .goal-chip { position: relative; background: var(--ink); color: #fdf7e3; border-radius: 9px; padding: 10px 16px; min-width: 160px; }
-        .goal-chip-label { font-size: 10.5px; color: #b9c0da; }
+        .goal-chip { position: relative; background: var(--c-lineam); color: #fdf7e3; border-radius: 9px; padding: 10px 16px; min-width: 160px; }
+        .goal-chip-label { font-size: 10.5px; color: #e9d9c6; }
         .goal-chip-value { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--gold); margin-top: 2px; }
         .btn-add-goal { background: transparent; border: 1.5px dashed #b8b09a; color: var(--muted); font-size: 10.5px; font-weight: 700; padding: 10px 16px; border-radius: 9px; min-width: 150px; }
         .btn-add-goal:hover { background: var(--ink); color: #fdf7e3; }
@@ -393,7 +423,7 @@
 
         /* Línea de atención */
         .trigger-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-        .trigger-card { background: #fff; border: 2px solid var(--line-strong); border-left: 7px solid var(--gold); border-radius: var(--radius); padding: 14px 18px; }
+        .trigger-card { background: #fff; border: 2px solid var(--line-strong); border-left: 7px solid var(--c-linea); border-radius: var(--radius); padding: 14px 18px; }
         .trigger-card-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 5px; }
         .trigger-card-body { font-size: 13px; color: var(--ink-2); }
         .trigger-card-note { font-size: 11.5px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }
@@ -412,33 +442,87 @@
         .loop-step-arrow { height: 26px; position: relative; width: 100%; }
         .loop-step-arrow::before { content: ""; position: absolute; left: 50%; top: 4px; width: 2px; height: 14px; background: #bdb6a0; transform: translateX(-50%); }
         .loop-step-arrow::after { content: ""; position: absolute; left: 50%; top: 17px; transform: translateX(-50%); border: 5px solid transparent; border-top: 7px solid #bdb6a0; }
-        .loop-back-badge { display: block; width: fit-content; margin: 16px auto 4px; background: #fff; border: 2px dashed var(--ing); color: var(--ink); border-radius: 20px; padding: 6px 18px; font-family: var(--font-display); font-weight: 700; font-size: 12.5px; }
+        .loop-back-badge { display: block; width: fit-content; margin: 16px auto 4px; background: #fff; border: 2px dashed var(--c-linea); color: var(--ink); border-radius: 20px; padding: 6px 18px; font-family: var(--font-display); font-weight: 700; font-size: 12.5px; }
+        .step-card-head { border-bottom-color: var(--c-linea-soft); }
         .linea-alert-card { background: var(--alert-soft); border: 2px solid var(--alert); border-left: 7px solid var(--alert); border-radius: var(--radius); padding: 16px 22px; }
         .linea-alert-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 4px; }
         .linea-alert-body { font-size: 13px; color: var(--ink-2); }
 
         /* Valores y pilares */
         .values-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .value-card { position: relative; background: #fff; border: 2px solid var(--line-strong); border-left: 7px solid var(--gold); border-radius: var(--radius); padding: 16px 20px; }
+        .value-card { position: relative; background: #fff; border: 2px solid var(--line-strong); border-left: 7px solid var(--c-valores); border-radius: var(--radius); padding: 16px 20px; }
         .value-card-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-bottom: 6px; }
         .value-card-body { font-size: 13px; line-height: 1.55; color: var(--ink-2); }
-        .valores-quote-card { background: var(--gold-soft); border: 2px dashed var(--ing); border-radius: var(--radius); padding: 16px 22px; margin-top: 16px; }
+        .valores-quote-card { background: var(--c-valores-soft); border: 2px dashed var(--c-valores); border-radius: var(--radius); padding: 16px 22px; margin-top: 16px; }
         .valores-quote-body { font-size: 13px; line-height: 1.55; color: var(--ink-2); }
         .valores-quote-cita { font-family: var(--font-display); font-style: italic; font-size: 13px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
         .pillars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
         .pillar-card { position: relative; background: #fff; border: 2px solid var(--line-strong); border-radius: 12px; padding: 18px 22px; box-shadow: 4px 4px 0 rgba(28, 37, 65, 0.06); }
-        .pillar-card-num { font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--ing); }
+        .pillar-card-num { font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--c-valores); }
         .pillar-card-title { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin: 3px 0 6px; }
         .pillar-card-base { font-size: 11.5px; color: var(--muted); font-style: italic; margin-bottom: 10px; }
         .pillar-card-concept { font-size: 13px; line-height: 1.5; color: var(--ink-2); margin-bottom: 10px; }
-        .pillar-card-aplicacion-label { font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--ing); margin-bottom: 3px; }
+        .pillar-card-aplicacion-label { font-family: var(--font-display); font-size: 11px; font-weight: 700; color: var(--c-valores); margin-bottom: 3px; }
         .pillar-card-aplicacion { font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .sistema-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .sistema-col-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 3px solid var(--gold); }
+        .sistema-col-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 3px solid var(--c-valores); }
         .sistema-item-list { display: flex; flex-direction: column; gap: 8px; }
         .sistema-item { position: relative; background: var(--panel-2); border: 1.5px solid var(--line); border-radius: 8px; padding: 10px 14px; }
         .sistema-item-title { font-family: var(--font-display); font-weight: 700; font-size: 13px; }
         .sistema-item-body { font-size: 12.5px; line-height: 1.5; color: var(--ink-2); margin-top: 3px; }
+
+        /* ---- Ficha de evaluación (vive fuera del lienzo editable: se arma con los datos publicados) ---- */
+        .page-ficha { max-width: 1280px; padding-bottom: 8px; }
+        body[data-cat="ficha"] #mainDiagramCanvas { padding-top: 0; }
+        body[data-cat="ficha"] .editing-hint { display: none !important; }
+        .ficha-panel { overflow: visible; }
+        .ficha-panel > .panel-head { border-radius: 12px 12px 0 0; flex-wrap: wrap; }
+        .ficha-head h3 span { color: var(--gold); }
+        .ficha-corte { flex-shrink: 0; text-align: right; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(253,247,227,0.25); border-radius: 10px; padding: 9px 14px; min-width: 150px; }
+        .ficha-corte-k { display: block; font-family: var(--font-display); font-size: 10.5px; font-weight: 600; letter-spacing: 0.3px; color: #c7cde3; text-transform: uppercase; }
+        .ficha-corte b { font-family: var(--font-display); font-size: 15px; color: var(--gold); line-height: 1.25; }
+        .ficha-corte small { display: block; font-size: 11px; color: #c7cde3; margin-top: 2px; }
+        .ficha-tools { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 24px; border-bottom: 2px solid var(--line); background: var(--panel-2); }
+        .ficha-sel { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 13px; flex: 1 1 320px; min-width: 0; }
+        .ficha-sel select {
+            flex: 1; min-width: 0; max-width: 420px; font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--ink);
+            padding: 9px 38px 9px 12px; border: 2px solid var(--line-strong); border-radius: var(--radius-sm); background: #fff;
+            box-shadow: 3px 3px 0 rgba(28, 37, 65, 0.12); appearance: none; -webkit-appearance: none; cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%231c2541' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 13px center;
+        }
+        .ficha-sel select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+        .ficha-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .ficha-actions .btn { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+        .ficha-actions .btn[disabled], .ficha-actions .btn[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+        .ficha-body { position: relative; border-radius: 0 0 12px 12px; overflow: hidden; background: var(--panel-2); transition: background 0.2s ease; min-height: 120px; }
+        .ficha-body[data-tema="dark"] { background: #0f1626; }
+        .ficha-body[data-tema="light"] { background: #ffffff; }
+        .ficha-frame { display: block; width: 100%; border: 0; height: 900px; background: transparent; transition: height 0.15s ease-out; }
+        .ficha-frame[hidden] { display: none; }
+        .ficha-estado { padding: 34px 28px 38px; text-align: center; color: var(--ink-2); font-size: 14px; background: var(--panel-2); }
+        .ficha-estado[hidden] { display: none; }
+        .ficha-estado h4 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--ink); margin: 10px 0 6px; text-wrap: balance; }
+        .ficha-estado p { max-width: 560px; margin: 0 auto; }
+        .ficha-estado .ficha-ico { font-size: 34px; line-height: 1; }
+        .ficha-estado .btn { margin-top: 14px; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+        .ficha-estado.es-carga .ficha-ico { animation: fichaGira 1.1s linear infinite; display: inline-block; }
+        @keyframes fichaGira { to { transform: rotate(360deg); } }
+        .ficha-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 860px; margin: 22px auto 0; text-align: left; }
+        .ficha-tile { background: #fff; border: 2px solid var(--line-strong); border-radius: var(--radius); padding: 14px 16px; box-shadow: 3px 3px 0 rgba(28, 37, 65, 0.08); border-top: 6px solid var(--t, var(--gold)); }
+        .ficha-tile .ficha-tile-ico { font-size: 22px; line-height: 1; }
+        .ficha-tile b { display: block; font-family: var(--font-display); font-size: 14px; margin: 8px 0 4px; }
+        .ficha-tile span { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+        .ficha-foot { display: flex; gap: 8px 18px; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 24px 12px; font-size: 11.5px; color: var(--muted); border-top: 2px solid var(--line); }
+        .ficha-foot b { color: var(--ink-2); font-weight: 600; }
+        /* Vista previa de la imagen de la ficha (para enviarla por WhatsApp) */
+        .fx-share { position: fixed; inset: 0; z-index: 9000; background: rgba(9,26,51,0.72); backdrop-filter: blur(3px); display: flex; align-items: flex-start; justify-content: center; padding: 24px 14px; overflow: auto; animation: vmFade .2s ease-out; }
+        .fx-share-box { width: 100%; max-width: 720px; background: var(--panel); border: 2px solid var(--line-strong); border-radius: 14px; box-shadow: 8px 8px 0 rgba(0,0,0,0.25); overflow: hidden; }
+        .fx-share-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; background: var(--ink); color: #fdf7e3; font-family: var(--font-display); font-weight: 700; }
+        .fx-share-head button { background: transparent; border: 1.5px solid #fdf7e3; color: #fdf7e3; border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 700; }
+        .fx-share-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 16px 0; }
+        .fx-share p { padding: 8px 16px 0; font-size: 12.5px; color: var(--ink-2); }
+        .fx-share img { display: block; width: calc(100% - 32px); margin: 12px 16px 16px; border-radius: 8px; border: 1px solid var(--line); }
 
         /* ---- Controles de edición: solo en modo editar ---- */
         .btn-node-remove {
@@ -506,13 +590,25 @@
             .guideline-category:last-child { border-bottom: none; }
             .trigger-row, .values-row, .pillars-grid, .sistema-columns { grid-template-columns: 1fr; }
             :root { --lane-cols: 190px repeat(4, minmax(220px, 1fr)); }
+            .ficha-tools { padding: 12px 16px; gap: 10px; }
+            .ficha-foot { padding: 10px 16px; }
+            .ficha-tiles { grid-template-columns: 1fr; max-width: 420px; }
         }
         @media (max-width: 600px) {
             .brand h1 { font-size: 14px; }
             .brand-mark { width: 34px; height: 34px; font-size: 12.5px; }
-            .tab-full { display: none; }
+            .tab-full, .tab-mid { display: none; }
             .tab-short { display: inline; }
-            .tab { flex: 1 1 0; text-align: center; padding: 7px 6px; }
+            .tab { flex: 1 1 0; text-align: center; padding: 7px 5px; gap: 5px; justify-content: center; font-size: 11.5px; }
+            .tab::before { width: 7px; height: 7px; }
+            .ficha-sel { flex-basis: 100%; }
+            .ficha-sel select { max-width: none; }
+            .ficha-actions { margin-left: 0; width: 100%; }
+            .ficha-actions .btn { flex: 1 1 auto; justify-content: center; padding: 8px 6px; font-size: 11.5px; }
+            .ficha-actions .btn .btn-label { display: inline; }
+            .ficha-corte { min-width: 0; text-align: left; }
+            .ficha-estado { padding: 26px 16px 30px; }
+            .fx-share { padding: 10px 8px; }
             .btn-label { display: none; }
             .btn-edit, .btn-primary { padding: 7px 10px; font-size: 14px; line-height: 1; }
             .btn-danger { font-size: 11px; }
@@ -562,10 +658,11 @@
                 </div>
             </div>
             <nav class="tabs" role="tablist" aria-label="Secciones">
-                <button class="tab" role="tab" data-view="mapa" aria-selected="true" onclick="showView('mapa')"><span class="tab-full">Mapa de procesos</span><span class="tab-short">Mapa</span></button>
-                <button class="tab" role="tab" data-view="lineamientos" aria-selected="false" onclick="showView('lineamientos')"><span class="tab-full">Lineamientos</span><span class="tab-short">Lineamientos</span></button>
-                <button class="tab" role="tab" data-view="linea" aria-selected="false" onclick="showView('linea')"><span class="tab-full">Línea de atención</span><span class="tab-short">Línea</span></button>
-                <button class="tab" role="tab" data-view="valores" aria-selected="false" onclick="showView('valores')"><span class="tab-full">Valores y pilares</span><span class="tab-short">Valores</span></button>
+                <button class="tab" role="tab" data-view="ficha" aria-selected="true" onclick="showView('ficha')"><span class="tab-full">Ficha de asesor</span><span class="tab-mid">Ficha</span><span class="tab-short">Ficha</span></button>
+                <button class="tab" role="tab" data-view="valores" aria-selected="false" onclick="showView('valores')"><span class="tab-full">Valores y pilares</span><span class="tab-mid">Valores</span><span class="tab-short">Valores</span></button>
+                <button class="tab" role="tab" data-view="mapa" aria-selected="false" onclick="showView('mapa')"><span class="tab-full">Mapa de procesos</span><span class="tab-mid">Mapa</span><span class="tab-short">Mapa</span></button>
+                <button class="tab" role="tab" data-view="linea" aria-selected="false" onclick="showView('linea')"><span class="tab-full">Línea de atención</span><span class="tab-mid">Línea</span><span class="tab-short">Línea</span></button>
+                <button class="tab" role="tab" data-view="lineamientos" aria-selected="false" onclick="showView('lineamientos')"><span class="tab-full">Lineamientos</span><span class="tab-mid">Lineamientos</span><span class="tab-short">Reglas</span></button>
             </nav>
             <div class="actions">
                 <button class="btn btn-edit" id="btnEdit" aria-pressed="false" aria-label="Editar" title="Editar el contenido" onclick="toggleEditing()">✏️ <span class="btn-label">Editar</span></button>
@@ -574,6 +671,52 @@
             </div>
         </div>
     </header>
+
+    <!-- ============ VISTA: FICHA DE EVALUACIÓN (fuera del lienzo editable) ============
+         El contenido de cada ficha se publica en fichas/<asesor>.html con el mismo HTML y CSS
+         del tablero del supervisor (sync/build_fichas.py). Esta sección solo elige la ficha,
+         la muestra en su marco y avisa cuando hay un corte nuevo. -->
+    <div class="page page-ficha" id="fichaPage" hidden>
+        <section class="view" data-view="ficha">
+            <div class="card panel ficha-panel" id="fichaPanel">
+                <div class="panel-head ficha-head">
+                    <div>
+                        <div class="panel-eyebrow">TU FICHA DE EVALUACIÓN</div>
+                        <h3 id="fichaTitulo">Así va tu gestión</h3>
+                        <p>Tu nivel, tu ranking, tus metas, tu calidad de llamada y qué hacer esta semana: la misma ficha que te comparte el supervisor, siempre al último corte del tablero.</p>
+                    </div>
+                    <div class="ficha-corte" id="fichaCorte"><span class="ficha-corte-k">Último corte</span><b id="fichaCorteV">—</b><small id="fichaCorteS"></small></div>
+                </div>
+                <div class="ficha-tools">
+                    <label class="ficha-sel"><span>¿Quién eres?</span>
+                        <select id="fichaSel" aria-label="Elige tu nombre" onchange="fichaElegir(this.value)"><option value="">Elige tu nombre…</option></select>
+                    </label>
+                    <div class="ficha-actions">
+                        <button class="btn" id="fichaTema" type="button" title="Cambiar entre ficha oscura y clara" onclick="fichaCambiarTema()" disabled>☀️ <span class="btn-label">Modo claro</span></button>
+                        <button class="btn btn-primary" id="fichaCopiar" type="button" title="Genera la imagen de tu ficha para guardarla o enviarla por WhatsApp" onclick="fichaCopiar()" disabled>📷 <span class="btn-label">Copiar como imagen</span></button>
+                        <a class="btn" id="fichaAbrir" href="#" target="_blank" rel="noopener" title="Abrir solo la ficha en una pestaña nueva" aria-disabled="true">↗ <span class="btn-label">Abrir en grande</span></a>
+                    </div>
+                </div>
+                <div class="ficha-body" id="fichaBody" data-tema="dark">
+                    <div class="ficha-estado" id="fichaEstado">
+                        <div class="ficha-ico">👋</div>
+                        <h4>Elige tu nombre arriba para ver tu ficha</h4>
+                        <p>Se queda guardado en este dispositivo: la próxima vez entras directo a tu ficha.</p>
+                        <div class="ficha-tiles">
+                            <div class="ficha-tile" style="--t: var(--gold)"><div class="ficha-tile-ico">🏅</div><b>Tu nivel y tu ranking</b><span>Dónde estás hoy frente al equipo y qué te falta para subir al siguiente nivel.</span></div>
+                            <div class="ficha-tile" style="--t: var(--pre)"><div class="ficha-tile-ico">⚙️</div><b>Gestión comercial</b><span>Volumen, programados, ritmo, cierre, chat… cada indicador frente a su meta.</span></div>
+                            <div class="ficha-tile" style="--t: var(--pos)"><div class="ficha-tile-ico">🎧</div><b>Calidad de llamada</b><span>Tu última evaluación por etapa, lo que haces bien y tu foco de la semana.</span></div>
+                        </div>
+                    </div>
+                    <iframe class="ficha-frame" id="fichaFrame" title="Ficha de evaluación" scrolling="no" hidden></iframe>
+                </div>
+                <div class="ficha-foot">
+                    <span>🔄 Se actualiza sola con cada corte del tablero del supervisor. Si hay uno nuevo, te avisamos con una ventana.</span>
+                    <span id="fichaGen"></span>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <main class="page" id="mainDiagramCanvas">
 
@@ -919,12 +1062,12 @@
                 </div>
                 <div class="panel-section">
                     <div class="trigger-row"><div class="trigger-card">
-<div class="trigger-card-title" contenteditable="true">🔰 Wapis Impulso</div>
+<div class="trigger-card-title" contenteditable="true">🔰 Wapis Impulso (En Pausa)</div>
 <div class="trigger-card-body" contenteditable="true">8AM envío de WAPIs al primer bloque de NEW LEADS.</div>
 <div class="trigger-card-note" contenteditable="true">Solo enviemos a ese primer grupo de 8am; si lo hacemos cada hora vamos a saturar al alumno de mensajes y se quemará.</div>
 </div>
 <div class="trigger-card">
-<div class="trigger-card-title" contenteditable="true">🔰 Wapis PROG e INC</div>
+<div class="trigger-card-title" contenteditable="true">🔰 Wapis PROG e INC (En Pausa)</div>
 <div class="trigger-card-body" contenteditable="true">Supervisor les avisará.</div>
 <div class="trigger-card-note" contenteditable="true">Cada vez que nos acumulemos de PROG e INC sin atención (tipificación) armaremos bolsa de Wapis para que envíen.</div>
 </div></div>
@@ -950,7 +1093,7 @@
 <div class="abordaje-item">
 <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
 <div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅱️</span><span class="abordaje-item-title" contenteditable="true">PARTNER</span></div>
-<div class="abordaje-item-body" contenteditable="true">Un asesor puede revisar su BASE ASIGNADA y la de su PARTNER ASIGNADO.<br/>Bidi, Prog, Inc, ST.</div>
+<div class="abordaje-item-body" contenteditable="true">Un asesor puede revisar su BASE ASIGNADA y la de su PARTNER ASIGNADO.<br/>BIDI, PROG, INC, y ST.</div>
 </div>
 <div class="abordaje-item">
 <button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
@@ -1140,24 +1283,30 @@
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-10T02:00:00.000Z";
+        const DATA_VERSION = "2026-10-19T23:12:28.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
         // con lo que un navegador tenía guardado de la versión anterior.
         const STORAGE_KEY = 'cgo_mapa_procesos_v2';
         const STORAGE_VERSION_KEY = 'cgo_mapa_procesos_v2_version';
-        const VIEWS = ['mapa', 'lineamientos', 'linea', 'valores'];
+        // Orden de las pestañas. "ficha" vive fuera del lienzo editable (no se guarda ni se exporta).
+        const VIEWS = ['ficha', 'valores', 'mapa', 'linea', 'lineamientos'];
+        // El archivo descargado (abierto desde el disco) no tiene fichas: arranca en el mapa.
+        const VIEW_INICIAL = /^https?:$/.test(location.protocol) ? 'ficha' : 'mapa';
 
         // Copia del contenido tal como viene embebido en ESTE archivo, capturada antes
         // de aplicar cualquier respaldo guardado en el navegador ("Restablecer base").
         let freshEmbeddedHTML = null;
+        let freshFichaHTML = null;
         let isEditing = false;
 
         // ---------------------------------------------------------------- Carga
         window.onload = function () {
             const canvas = document.getElementById('mainDiagramCanvas');
             freshEmbeddedHTML = canvas.innerHTML;
+            const fichaPageEl = document.getElementById('fichaPage');
+            if (fichaPageEl) freshFichaHTML = fichaPageEl.innerHTML;
 
             // Si se pulsó "Actualizar ahora" desde una pestaña vieja, la versión nueva se aplica sola.
             try {
@@ -1184,12 +1333,13 @@
             }
 
             setEditing(false);
-            showView((location.hash || '#mapa').slice(1), { silent: true, keepScroll: true });
+            showView((location.hash || '#' + VIEW_INICIAL).slice(1), { silent: true, keepScroll: true });
             renderVersionStamp();
             measureBar();
+            fichaInit();
         };
         window.addEventListener('hashchange', function () {
-            showView((location.hash || '#mapa').slice(1), { silent: true });
+            showView((location.hash || '#' + VIEW_INICIAL).slice(1), { silent: true });
         });
 
         // La barra superior es fija: su alto real define dónde se "pega" la cabecera
@@ -1217,8 +1367,11 @@
         // ---------------------------------------------------------------- Pestañas
         function showView(name, opts) {
             opts = opts || {};
-            if (VIEWS.indexOf(name) === -1) name = 'mapa';
+            if (VIEWS.indexOf(name) === -1) name = VIEW_INICIAL;
             document.querySelectorAll('.view').forEach(function (s) { s.hidden = s.dataset.view !== name; });
+            const fp = document.getElementById('fichaPage');
+            if (fp) fp.hidden = name !== 'ficha';
+            document.body.setAttribute('data-cat', name);
             document.querySelectorAll('.tab').forEach(function (t) {
                 const on = t.dataset.view === name;
                 t.setAttribute('aria-selected', String(on));
@@ -1226,10 +1379,11 @@
             });
             if (!opts.silent) history.replaceState(null, '', '#' + name);
             if (!opts.keepScroll) window.scrollTo({ top: 0, behavior: 'auto' });
+            if (name === 'ficha') fichaAlVolver();
         }
         function currentView() {
             const t = document.querySelector('.tab[aria-selected="true"]');
-            return t ? t.dataset.view : 'mapa';
+            return t ? t.dataset.view : VIEW_INICIAL;
         }
 
         // ---------------------------------------------------------------- Edición
@@ -1690,11 +1844,19 @@
             document.documentElement.removeAttribute('style');
 
             // La ventana de versión nueva (si está abierta) no viaja en el archivo descargado.
-            const vmEl = document.getElementById('versionModal');
+            const vmEl = document.getElementById('versionModal') || document.getElementById('fichaModal');
             const vmLock = document.body.classList.contains('vm-lock');
             if (vmEl) vmEl.remove();
             document.body.classList.remove('vm-lock');
-            const documentCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            // Se exporta una copia del documento: la ficha de evaluación viaja "en blanco" (el archivo
+            // descargado la muestra solo en línea) y sin ventanas abiertas.
+            const rootClone = document.documentElement.cloneNode(true);
+            const fpClone = rootClone.querySelector('#fichaPage');
+            if (fpClone && freshFichaHTML !== null) fpClone.innerHTML = freshFichaHTML;
+            ['#fichaShare', '#fichaModal', '#versionModal'].forEach(function (sel) { const el = rootClone.querySelector(sel); if (el) el.remove(); });
+            const bodyClone = rootClone.querySelector('body');
+            if (bodyClone) { bodyClone.removeAttribute('data-cat'); bodyClone.classList.remove('vm-lock'); }
+            const documentCode = "<!DOCTYPE html>\n" + rootClone.outerHTML;
             if (vmEl) document.body.appendChild(vmEl);
             if (vmLock) document.body.classList.add('vm-lock');
             const blobFile = new Blob([documentCode], { type: 'text/html;charset=utf-8' });
@@ -1781,7 +1943,240 @@
         }
         setTimeout(revisarVersionPublicada, 20000);
         setInterval(revisarVersionPublicada, 5 * 60 * 1000);
-        document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') revisarVersionPublicada(); });
+        setInterval(fichaRevisar, 5 * 60 * 1000);
+        document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { revisarVersionPublicada(); fichaRevisar(); } });
+
+        // ======================================================================
+        // FICHA DE EVALUACIÓN
+        // Cada ficha se publica en fichas/<asesor>.html con el mismo HTML y CSS del tablero del
+        // supervisor (lo genera sync/build_fichas.py a partir del último corte). fichas/index.json
+        // trae la versión (fecha del corte) y la lista de asesores. Aquí solo se elige la ficha, se
+        // muestra en su marco con altura automática, se recuerda quién eres y se avisa (ventana) cuando
+        // hay un corte nuevo. En el archivo descargado (abierto desde el disco) no hay fichas.
+        // ======================================================================
+        const FICHA_KEY = 'cgo_ficha_asesor', FICHA_TEMA_KEY = 'cgo_ficha_tema';
+        const FICHA_ONLINE = /^https?:$/.test(location.protocol);
+        const FICHA_URL_ONLINE = 'https://chriscgodistancianacional.github.io/Proceso-de-Gesti-n/#ficha';
+        let fichaIdx = null, fichaSlug = '', fichaPendiente = null, fichaRevisando = false, fichaCargada = false, fichaBienvenida = null, fichaCopiaT = null;
+
+        function fichaEl(id) { return document.getElementById(id); }
+        function fichaEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+        function fichaNormalizar(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+        function fichaNombrePropio(n) {
+            const chicas = { DE: 1, DEL: 1, LA: 1, LAS: 1, LOS: 1, Y: 1, E: 1 };
+            return String(n || '').toLowerCase().split(' ').filter(Boolean).map(function (w, i) { return (i > 0 && chicas[w.toUpperCase()]) ? w : w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
+        }
+        function fichaFecha(iso) {
+            const d = new Date(iso); if (isNaN(d)) return '';
+            return d.toLocaleDateString('es-PE', { day: 'numeric', month: 'short' }).replace('.', '') + ' · ' + d.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+        function fichaTema() { try { return localStorage.getItem(FICHA_TEMA_KEY) === 'light' ? 'light' : 'dark'; } catch (e) { return 'dark'; } }
+        function fichaAplicarTemaUI() {
+            const t = fichaTema(), body = fichaEl('fichaBody'), btn = fichaEl('fichaTema');
+            if (body) body.setAttribute('data-tema', t);
+            if (btn) btn.innerHTML = (t === 'dark' ? '☀️ <span class="btn-label">Modo claro</span>' : '🌙 <span class="btn-label">Modo oscuro</span>');
+        }
+        function fichaCambiarTema() {
+            const t = fichaTema() === 'dark' ? 'light' : 'dark';
+            try { localStorage.setItem(FICHA_TEMA_KEY, t); } catch (e) {}
+            fichaAplicarTemaUI();
+            const fr = fichaEl('fichaFrame');
+            if (fr && fr.contentWindow) { try { fr.contentWindow.postMessage({ type: 'cgo-ficha-tema', tema: t }, '*'); } catch (e) {} }
+        }
+        function fichaEstado(tipo, html) {
+            const est = fichaEl('fichaEstado'), fr = fichaEl('fichaFrame'), body = fichaEl('fichaBody');
+            if (!est) return;
+            if (!tipo) { est.hidden = true; if (fr) { fr.hidden = false; fr.style.opacity = ''; } if (body) body.classList.remove('cargando'); return; }
+            est.className = 'ficha-estado' + (tipo === 'carga' ? ' es-carga' : '');
+            est.innerHTML = html; est.hidden = false;
+            if (fr) { if (tipo === 'carga') { fr.hidden = false; fr.style.opacity = '0'; fr.style.height = '320px'; } else fr.hidden = true; }
+        }
+        const FICHA_MSG = {
+            carga: '<div class="ficha-ico">🔄</div><h4>Cargando tu ficha…</h4><p>Un momento, estamos trayendo tu último corte.</p>',
+            offline: '<div class="ficha-ico">🌐</div><h4>Tu ficha está en la versión en línea</h4><p>Este archivo descargado no incluye las fichas de evaluación. Ábrelo en línea para verla al día.</p><a class="btn btn-primary" href="' + FICHA_URL_ONLINE + '" target="_blank" rel="noopener">Abrir el Mapa en línea →</a>',
+            error: '<div class="ficha-ico">⚠️</div><h4>No se pudo cargar la ficha</h4><p>Revisa tu conexión a internet e inténtalo de nuevo.</p><button type="button" class="btn btn-primary" onclick="fichaInit()">Reintentar</button>',
+            sinficha: '<div class="ficha-ico">🕓</div><h4>Aún no hay una ficha publicada con ese nombre</h4><p>Se publica con el próximo corte del tablero. Si crees que es un error, avísale a tu supervisor.</p>'
+        };
+        function fichaBotones(on) {
+            ['fichaTema', 'fichaCopiar'].forEach(function (id) { const b = fichaEl(id); if (b) b.disabled = !on; });
+            const a = fichaEl('fichaAbrir'); if (a) { a.setAttribute('aria-disabled', String(!on)); if (!on) a.href = '#'; }
+        }
+        function fichaTitulo(a) {
+            const h = fichaEl('fichaTitulo'); if (!h) return;
+            h.innerHTML = a ? 'Así va tu gestión, <span>' + fichaEsc(a.d || fichaNombrePropio(a.n)) + '</span>' : 'Así va tu gestión';
+        }
+        async function fichaLeerIndice() {
+            const r = await fetch('fichas/index.json?v=' + Date.now(), { cache: 'no-store' });
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            const j = await r.json();
+            if (!j || !Array.isArray(j.asesores)) throw new Error('índice inválido');
+            return j;
+        }
+        function fichaRenderIndice() {
+            const sel = fichaEl('fichaSel'); if (!sel || !fichaIdx) return;
+            const cur = sel.value, grupos = {};
+            fichaIdx.asesores.forEach(function (a) {
+                const g = a.sede === 'HYO' ? 'Huancayo' : a.sede === 'MIR' ? 'Miraflores' : (a.sede || 'Equipo');
+                (grupos[g] = grupos[g] || []).push(a);
+            });
+            let html = '<option value="">Elige tu nombre…</option>';
+            Object.keys(grupos).sort().forEach(function (g) {
+                html += '<optgroup label="' + fichaEsc(g) + '">' + grupos[g].map(function (a) { return '<option value="' + fichaEsc(a.s) + '">' + fichaEsc(fichaNombrePropio(a.n)) + '</option>'; }).join('') + '</optgroup>';
+            });
+            sel.innerHTML = html; sel.value = cur;
+            const cv = fichaEl('fichaCorteV'), cs = fichaEl('fichaCorteS'), gen = fichaEl('fichaGen');
+            if (cv) cv.textContent = fichaIdx.corte || '—';
+            if (cs) cs.textContent = fichaIdx.asesores.length + ' asesores · tablero del supervisor';
+            if (gen) gen.innerHTML = fichaIdx.generado ? 'Publicada el <b>' + fichaEsc(fichaFecha(fichaIdx.generado)) + '</b>' : '';
+        }
+        // Quién eres: lo elegido aquí; si no, el nombre guardado por Propuesta de Valor (viene escrito
+        // como en sus hojas, así que se busca el asesor con el que más coincide).
+        function fichaPreseleccion() {
+            let slug = ''; try { slug = localStorage.getItem(FICHA_KEY) || ''; } catch (e) {}
+            if (slug && fichaIdx.asesores.some(function (a) { return a.s === slug; })) return slug;
+            let nombre = ''; try { nombre = localStorage.getItem('cgo_advisor_name') || ''; } catch (e) {}
+            if (!nombre) return '';
+            const tk = fichaNormalizar(nombre).split(' ').filter(Boolean);
+            let mejor = null, max = 1, empate = false;
+            fichaIdx.asesores.forEach(function (a) {
+                const t2 = fichaNormalizar(a.n).split(' ');
+                const n = tk.filter(function (x) { return t2.indexOf(x) !== -1; }).length;
+                if (n > max) { max = n; mejor = a; empate = false; } else if (n === max && mejor) empate = true;
+            });
+            return (mejor && !empate) ? mejor.s : '';
+        }
+        async function fichaInit() {
+            const est = fichaEl('fichaEstado'); if (!est) return;
+            if (fichaBienvenida === null) fichaBienvenida = est.innerHTML;
+            fichaAplicarTemaUI();
+            fichaBotones(false);
+            if (!FICHA_ONLINE) { fichaEstado('offline', FICHA_MSG.offline); return; }
+            fichaEstado('carga', FICHA_MSG.carga);
+            try { fichaIdx = await fichaLeerIndice(); } catch (e) { fichaEstado('error', FICHA_MSG.error); return; }
+            fichaRenderIndice();
+            const slug = fichaPreseleccion();
+            const sel = fichaEl('fichaSel');
+            if (slug) { if (sel) sel.value = slug; fichaMostrar(slug); }
+            else { fichaEstado('bienvenida', fichaBienvenida); }
+        }
+        function fichaElegir(slug) {
+            try { if (slug) localStorage.setItem(FICHA_KEY, slug); else localStorage.removeItem(FICHA_KEY); } catch (e) {}
+            if (slug) { fichaMostrar(slug); return; }
+            fichaSlug = ''; fichaCargada = false; fichaTitulo(null); fichaBotones(false);
+            const fr = fichaEl('fichaFrame'); if (fr) fr.removeAttribute('src');
+            fichaEstado('bienvenida', fichaBienvenida);
+        }
+        function fichaMostrar(slug) {
+            const a = fichaIdx && fichaIdx.asesores.find(function (x) { return x.s === slug; });
+            const fr = fichaEl('fichaFrame'); if (!fr) return;
+            if (!a) { fichaSlug = ''; fichaTitulo(null); fichaBotones(false); fichaEstado('sinficha', FICHA_MSG.sinficha); return; }
+            fichaSlug = slug; fichaCargada = false; fichaTitulo(a); fichaBotones(true);
+            const ab = fichaEl('fichaAbrir'); if (ab) ab.href = 'fichas/' + encodeURIComponent(slug) + '.html';
+            fichaEstado('carga', FICHA_MSG.carga);
+            const url = 'fichas/' + encodeURIComponent(slug) + '.html?v=' + encodeURIComponent(fichaIdx.version || '');
+            fr.onload = function () {
+                let ok = false;
+                try { ok = !!(fr.contentDocument && fr.contentDocument.querySelector('.ase-card2')); } catch (e) { ok = true; }
+                if (!ok) { fichaEstado('sinficha', FICHA_MSG.sinficha); fichaBotones(false); return; }
+                fichaCargada = true; fichaEstado(null);
+                try { fr.contentWindow.postMessage({ type: 'cgo-ficha-alto?' }, '*'); } catch (e) {}
+            };
+            fr.src = url;
+        }
+        function fichaAlVolver() {
+            const fr = fichaEl('fichaFrame');
+            if (fr && fichaCargada && fr.contentWindow) { try { fr.contentWindow.postMessage({ type: 'cgo-ficha-alto?' }, '*'); } catch (e) {} }
+        }
+        // Mensajes que manda la ficha desde su marco: su alto, la imagen generada o un error.
+        window.addEventListener('message', function (ev) {
+            const d = ev && ev.data; if (!d || typeof d !== 'object') return;
+            const fr = fichaEl('fichaFrame'); if (!fr || ev.source !== fr.contentWindow) return;
+            if (d.type === 'cgo-ficha-alto' && d.alto > 0) fr.style.height = Math.ceil(d.alto) + 'px';
+            if (d.type === 'cgo-ficha-imagen') { fichaCopiaFin(); fichaMostrarImagen(d); }
+            if (d.type === 'cgo-ficha-error') { fichaCopiaFin(); showToast('⚠️ ' + (d.msg || 'No se pudo generar la imagen')); }
+        });
+        function fichaCopiaFin() {
+            clearTimeout(fichaCopiaT);
+            const b = fichaEl('fichaCopiar'); if (b) { b.disabled = !fichaCargada; b.innerHTML = '📷 <span class="btn-label">Copiar como imagen</span>'; }
+        }
+        function fichaCopiar() {
+            const fr = fichaEl('fichaFrame'), b = fichaEl('fichaCopiar');
+            if (!fr || !fichaCargada || !fr.contentWindow) return;
+            if (b) { b.disabled = true; b.innerHTML = '⏳ <span class="btn-label">Generando…</span>'; }
+            try { fr.contentWindow.postMessage({ type: 'cgo-ficha-copiar' }, '*'); } catch (e) { fichaCopiaFin(); }
+            clearTimeout(fichaCopiaT);
+            fichaCopiaT = setTimeout(function () { fichaCopiaFin(); }, 40000);
+        }
+        function fichaMostrarImagen(d) {
+            let m = fichaEl('fichaShare');
+            if (!m) {
+                m = document.createElement('div'); m.id = 'fichaShare'; m.className = 'fx-share'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-label', 'Imagen de tu ficha');
+                document.body.appendChild(m);
+                m.addEventListener('click', function (ev) { if (ev.target === m || ev.target.dataset.close) m.remove(); });
+            }
+            const nombre = d.nombre || ('Ficha_' + (fichaSlug || 'asesor') + '.png');
+            m.innerHTML = '<div class="fx-share-box"><div class="fx-share-head"><span>📷 Tu ficha como imagen</span><button type="button" data-close="1">Cerrar</button></div>'
+                + '<div class="fx-share-bar"><button type="button" class="btn btn-primary" id="fxShare" hidden>📲 Enviar por WhatsApp…</button><button type="button" class="btn" id="fxSave">⬇ Guardar</button><button type="button" class="btn" id="fxCopy">📋 Copiar</button></div>'
+                + '<p id="fxMsg">Guárdala o cópiala y pégala en el chat. En el celular también puedes mantener presionada la imagen → Compartir o Guardar.</p>'
+                + '<img src="' + d.url + '" alt="Imagen de la ficha"></div>';
+            const msg = function (t) { const el = fichaEl('fxMsg'); if (el) el.textContent = t; };
+            const blob = function () { return fetch(d.url).then(function (r) { return r.blob(); }); };
+            const file = function (b) { return new File([b], nombre, { type: 'image/png' }); };
+            blob().then(function (b) {
+                let puede = false; try { puede = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [file(b)] })); } catch (e) {}
+                const sh = fichaEl('fxShare');
+                if (sh && puede) { sh.hidden = false; sh.onclick = async function () { try { await navigator.share({ files: [file(b)], title: 'Mi ficha de evaluación' }); msg('Enviada ✅'); } catch (e) { if (e && e.name === 'AbortError') return; msg('Aquí no se puede abrir el menú de compartir: usa «Guardar» o mantén presionada la imagen → Compartir.'); } }; }
+                fichaEl('fxSave').onclick = function () { try { const a = document.createElement('a'); a.href = d.url; a.download = nombre; document.body.appendChild(a); a.click(); a.remove(); msg('Descargada: búscala en Descargas y adjúntala desde WhatsApp.'); } catch (e) { msg('No se pudo guardar: mantén presionada la imagen → Guardar imagen.'); } };
+                fichaEl('fxCopy').onclick = async function () { try { if (!navigator.clipboard || !window.ClipboardItem) throw new Error('sin portapapeles'); await navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]); msg('Copiada ✅ Pégala en el chat. Si tu WhatsApp no deja pegar imágenes, usa «Enviar» o «Guardar».'); } catch (e) { msg('Este dispositivo no permite copiar imágenes desde el navegador: usa «Enviar» o «Guardar».'); } };
+            }).catch(function () { msg('No se pudo preparar la imagen. Inténtalo de nuevo.'); });
+        }
+        // Vigía de la ficha: cada 5 minutos (y al volver a la pestaña) se revisa si hay un corte nuevo.
+        async function fichaRevisar() {
+            if (!FICHA_ONLINE || !fichaIdx || fichaRevisando || fichaPendiente) return;
+            fichaRevisando = true;
+            try {
+                const j = await fichaLeerIndice();
+                if (j.version !== fichaIdx.version || j.css !== fichaIdx.css) {
+                    fichaPendiente = j;
+                    if (fichaSlug && !document.getElementById('versionModal')) mostrarAvisoFicha(j); else fichaAplicarNueva(false);
+                }
+            } catch (e) {} finally { fichaRevisando = false; }
+        }
+        function fichaAplicarNueva(ir) {
+            if (!fichaPendiente) return;
+            fichaIdx = fichaPendiente; fichaPendiente = null;
+            cerrarAvisoFicha();
+            fichaRenderIndice();
+            if (fichaSlug) { const sel = fichaEl('fichaSel'); if (sel) sel.value = fichaSlug; fichaMostrar(fichaSlug); }
+            if (ir) showView('ficha');
+        }
+        function mostrarAvisoFicha(j) {
+            if (document.getElementById('fichaModal')) return;
+            const enEdicion = !!isEditing;
+            const ov = document.createElement('div');
+            ov.id = 'fichaModal'; ov.className = 'vm-overlay';
+            ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-labelledby', 'fmTitle');
+            ov.innerHTML = '<div class="vm-card">'
+                + '<div class="vm-icon" aria-hidden="true">📋</div>'
+                + '<h2 id="fmTitle">¡Tu ficha se actualizó!</h2>'
+                + '<p>Hay un corte nuevo del tablero' + (j && j.corte ? ' (<b>' + fichaEsc(j.corte) + '</b>)' : '') + '. Actualiza para ver tus números al día.</p>'
+                + '<button type="button" class="vm-btn" onclick="fichaAplicarNueva(true)">Ver mi ficha al día <span class="vm-arrow">→</span></button>'
+                + '<span class="vm-note">Toma un segundo: solo se recarga tu ficha.</span>'
+                + (enEdicion ? '<button type="button" class="vm-skip" onclick="fichaAplicarNueva(false)">Ahora no: sigo en modo edición (la ficha se actualiza igual)</button>' : '')
+                + '</div>';
+            document.body.appendChild(ov);
+            document.body.classList.add('vm-lock');
+            setTimeout(function () { const b = ov.querySelector('.vm-btn'); if (b) b.focus(); }, 60);
+            ov.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); }
+                if (e.key === 'Tab') { e.preventDefault(); const b = ov.querySelector('.vm-btn'); if (b) b.focus(); }
+            }, true);
+        }
+        function cerrarAvisoFicha() {
+            const ov = document.getElementById('fichaModal');
+            if (ov) ov.remove();
+            if (!document.getElementById('versionModal')) document.body.classList.remove('vm-lock');
+        }
 
         // ---------------------------------------------------------------- Actualizar / restablecer
         function applyUpdate() {
