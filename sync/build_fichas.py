@@ -236,8 +236,9 @@ def main():
     if n_parts <= 0:
         raise SystemExit('snap/meta no trae parts.ase2: el tablero aún no guardó la vista de Asesor')
     html = ''
+    pre = (meta.get('key') + '-') if meta.get('key') else ''   # desde v228 del Tablero las partes llevan la clave del corte
     for i in range(n_parts):
-        p = os.path.join(PARTS_DIR, 'ase2-%d.json' % i)
+        p = os.path.join(PARTS_DIR, '%sase2-%d.json' % (pre, i))
         if not os.path.exists(p):
             raise SystemExit('Falta la parte %s' % p)
         html += doc_data(read_json(p)).get('h', '')

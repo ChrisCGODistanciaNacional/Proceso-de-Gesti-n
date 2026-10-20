@@ -29,7 +29,7 @@ semana…). No se calcula aquí: se **publica** desde el último corte del table
 | Archivo | Cómo se obtiene |
 |---|---|
 | `sync/inputs/snap/meta.json` | `ArtifactData` → action `get`, collection `snap`, doc_id `meta`, `out_dir` = `sync/inputs` |
-| `sync/inputs/snapparts/ase2-<i>.json` | `ArtifactData` → action `list`, collection `snapparts`, `query.limit` 100, `out_dir` = `sync/inputs` (trae todas las vistas; el script usa solo `ase2-0…ase2-(parts.ase2-1)`) |
+| `sync/inputs/snapparts/<key>-ase2-<i>.json` | `ArtifactData` → action `list`, collection `snapparts`, `query.limit` 1000 (desde v228 cada parte lleva la clave `meta.key`; si `meta.key` falta, los ids son `ase2-<i>`), `out_dir` = `sync/inputs` (trae todas las vistas; el script usa solo `ase2-0…ase2-(parts.ase2-1)`) |
 | `sync/inputs/tablero/index.html` | `Artifact` → action `read`, `path` `index.html`, `out_dir` = `sync/inputs/tablero` (si falta, se conserva `fichas/ficha.css`) |
 
 ## Reglas
