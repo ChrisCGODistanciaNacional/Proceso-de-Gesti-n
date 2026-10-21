@@ -1551,6 +1551,7 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-tab.on svg{animation:gupop .3s cubic-bezier(.3,1.6,.5,1)}
 @media (prefers-reduced-motion:reduce){ .gu-card,.gu-tabs,.gu-app,.gu-chk{transition:none} .gu-card.done .gu-chk,.gu-toast,.gu-now,.gu-sit,.gu-tab.on svg,.gu-sheet{animation:none} }
 
+
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
 body.ficha-solo{padding:0;margin:0;display:block}
