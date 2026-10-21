@@ -1550,6 +1550,33 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-now{animation:gufade .35s ease-out}.gu-sit{animation:gufade .4s ease-out}@keyframes gufade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .gu-tab.on svg{animation:gupop .3s cubic-bezier(.3,1.6,.5,1)}
 @media (prefers-reduced-motion:reduce){ .gu-card,.gu-tabs,.gu-app,.gu-chk{transition:none} .gu-card.done .gu-chk,.gu-toast,.gu-now,.gu-sit,.gu-tab.on svg,.gu-sheet{animation:none} }
+/* ===== v236: escritorio con el detalle abierto: menú en barra de íconos, tareas pegadas a la izquierda y panel de cuadros más ancho ===== */
+@media (min-width:900px){
+  body.gu-sheet-on{--gu-sw:clamp(560px,calc(100vw - 820px),1100px)}
+  .gu-tabs{transition:left .3s cubic-bezier(.4,0,.2,1),width .3s cubic-bezier(.4,0,.2,1),padding .3s}
+  .gu-sheet,.gu-act{transition:width .3s cubic-bezier(.4,0,.2,1)}
+  body.gu-sheet-on .gu-tabs{left:12px;width:58px;padding:6px}
+  body.gu-sheet-on .gu-tabs::before{display:none}
+  body.gu-sheet-on .gu-tab{font-size:0;gap:0;justify-content:center;padding:10px 0}
+  body.gu-sheet-on .gu-tab svg{width:22px;height:22px;flex:none}
+  body.gu-sheet-on .gu-app{max-width:none;margin:0;padding-left:86px;padding-right:calc(var(--gu-sw) + 18px)}
+  body.gu-sheet-on .gu-list,body.gu-sheet-on .gu-wk{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+}
+/* ===== v238: en la Guía, los cuadros de 4 gráficos (p. ej. «Preinscritos del día») van uno debajo del otro cuando no caben dos legibles: se ven completos sin deslizar ===== */
+#guia .q4grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,620px),1fr))}
+
+/* ===== v239: sin animaciones cuando la Guía se repinta sola (corte nuevo o sincronización); solo tras una acción tuya ===== */
+#guia.gu-quiet *,#guia.gu-quiet *::before,#guia.gu-quiet *::after{animation:none!important}
+/* ===== v239: Conóceme ===== */
+.gu-cpb{height:8px;border-radius:99px;background:var(--line);overflow:hidden}.gu-cpb i{display:block;height:100%;background:var(--gu-cli);border-radius:99px}
+.gu-pcono{grid-column:1/-1;height:4px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:4px}.gu-pcono i{display:block;height:100%;background:var(--gu-cli)}
+.gu-p .gu-pck{grid-column:1/-1}
+.gu-cono details.gu-det{margin-top:8px}
+.gu-pf{display:flex;flex-direction:column;gap:4px;margin:0 0 10px}.gu-pf span{font-size:.8rem;font-weight:700;color:var(--ink)}
+.gu-pf input{font:inherit;font-size:.9rem;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:var(--gu-page);color:var(--text);width:100%;min-height:42px}
+.gu-pf input:focus{outline:2px solid var(--gu-cli);outline-offset:1px}
+@media (min-width:900px){ #guia .gu-ppl{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px} }
+
 
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
