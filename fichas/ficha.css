@@ -1551,7 +1551,6 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-tab.on svg{animation:gupop .3s cubic-bezier(.3,1.6,.5,1)}
 @media (prefers-reduced-motion:reduce){ .gu-card,.gu-tabs,.gu-app,.gu-chk{transition:none} .gu-card.done .gu-chk,.gu-toast,.gu-now,.gu-sit,.gu-tab.on svg,.gu-sheet{animation:none} }
 
-
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
 body.ficha-solo{padding:0;margin:0;display:block}
@@ -1571,6 +1570,10 @@ body.ficha-solo.en-marco .blk{border-radius:14px}
 .fx-bar a:hover,.fx-bar button:hover{border-color:var(--ink)}
 body.en-marco .fx-bar{display:none}
 @media (max-width:640px){body.ficha-solo main{padding:8px 6px 16px}.fx-bar{padding:8px 10px;gap:6px}}
+/* Semáforo de Gestión comercial */
+body.ficha-solo .v2lv>em.fx-sem{min-width:30px;font-size:1rem;line-height:1;text-align:right;cursor:help}
+body.ficha-solo .v2fl span.fx-add i{color:var(--ok)}
+body.ficha-solo .fx-fuente{display:block;margin-top:4px;font-size:.7rem;color:var(--muted)}
 /* Celular: cada indicador en 2 líneas (nombre + valor arriba, barra completa abajo) para que la barra no tape
    los números, y la leyenda de siglas con el texto completo (sin "…") */
 @media (max-width:560px){

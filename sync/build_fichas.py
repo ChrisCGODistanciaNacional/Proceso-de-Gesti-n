@@ -120,6 +120,10 @@ body.ficha-solo.en-marco .blk{border-radius:14px}
 .fx-bar a:hover,.fx-bar button:hover{border-color:var(--ink)}
 body.en-marco .fx-bar{display:none}
 @media (max-width:640px){body.ficha-solo main{padding:8px 6px 16px}.fx-bar{padding:8px 10px;gap:6px}}
+/* Semáforo de Gestión comercial */
+body.ficha-solo .v2lv>em.fx-sem{min-width:30px;font-size:1rem;line-height:1;text-align:right;cursor:help}
+body.ficha-solo .v2fl span.fx-add i{color:var(--ok)}
+body.ficha-solo .fx-fuente{display:block;margin-top:4px;font-size:.7rem;color:var(--muted)}
 /* Celular: cada indicador en 2 líneas (nombre + valor arriba, barra completa abajo) para que la barra no tape
    los números, y la leyenda de siglas con el texto completo (sin "…") */
 @media (max-width:560px){
@@ -207,6 +211,55 @@ FICHA_JS = r"""
       if(!enviado) showShare(r,nombre); }
     catch(e){ console.error('Captura',e); var avisado=false; if(enMarco){ try{ window.parent.postMessage({type:'cgo-ficha-error',msg:'No se pudo generar la imagen'},'*'); avisado=true; }catch(e2){} } if(!avisado) alert('No se pudo generar la imagen'); }
     if(b){ b.disabled=false; b.textContent=old; } copiando=false; }
+  // ---- «Lo que haces bien»: si la etapa más fuerte llega sin detalle, se completa con lo que observó
+  // calidad en esa etapa (data.json de Propuesta de Valor, publicado en el mismo sitio).
+  var ETAPAS={'ganar confianza':'paso1','identificar necesidades':'paso2','solucionar problemas':'paso3','cerrar':'paso4'};
+  var GENERICO={paso1:'Calidad te califica bien al generar confianza: saludo, trato cercano y buena disposición desde el inicio.',
+    paso2:'Calidad te califica bien al identificar necesidades: preguntas y escuchas para entender qué busca el prospecto.',
+    paso3:'Calidad te califica bien al solucionar problemas: explicas la propuesta de valor y resuelves sus dudas.',
+    paso4:'Calidad te califica bien al cerrar: dejas un siguiente paso y te despides con tu nombre y el de la UC.'};
+  function plano(t){ return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim(); }
+  function frasesBien(t){
+    return String(t||'').replace(/[🟢🟠🔴🟡✅]/gu,'\n').split(/\n+|(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿])/).map(function(x){
+      x=x.trim().replace(/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+,\s+/,'').replace(/^(bien|tú|tu)\s*:\s*/i,'');   // «María, realizas…» → «Realizas…»
+      if(x.length>170){ var c=x.lastIndexOf(', ',165); x=(c>60?x.slice(0,c):x.slice(0,165).replace(/\s+\S*$/,''))+'.'; }
+      if(!x) return ''; x=x.charAt(0).toUpperCase()+x.slice(1); return /[.!?]$/.test(x)?x:x+'.';
+    }).filter(function(x){ return x.length>18 && !/^(te falta|falta|evita|no |recuerda|procura|refuerza|trata|aseg|sin )/i.test(x) && !/\b(te falta|faltó|falto|debes|deberías)\b/i.test(x); });
+  }
+  function buscarAsesor(an,nombre){ var A=plano(nombre).split(' ').filter(function(w){return w.length>2;}); var mejor=null,pts=0;
+    Object.keys(an||{}).forEach(function(k){ var B=plano(k).split(' '); var c=A.filter(function(w){ return B.indexOf(w)>=0; }).length; if(c>pts){ pts=c; mejor=k; } });
+    return pts>=2?mejor:null; }
+  function completarBien(){
+    var lis=[].slice.call(document.querySelectorAll('.v2plan li')).filter(function(li){ var sm=li.querySelector('small'); return sm&&/sigue haciendo/i.test(sm.textContent); });
+    if(!lis.length) return;
+    fetch('../../Propuesta-de-Valor/data.json',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }).then(function(d){
+      lis.forEach(function(li){
+        var fl=li.querySelector('.v2fl'); if(!fl){ fl=document.createElement('div'); fl.className='v2fl'; li.appendChild(fl); }
+        // fuera lo que en realidad es «por mejorar» (a veces llega mezclado en la conclusión)
+        [].slice.call(fl.children).forEach(function(e){ var t=e.textContent.replace(/^\s*[✓•★✕]\s*/,''); if(/^(te falta|falta|evita|no |recuerda|procura|refuerza|sin )/i.test(t)||/\b(te falta|faltó|debes|deberías)\b/i.test(t)) e.remove(); });
+        var ya=[].slice.call(fl.children).map(function(e){ return plano(e.textContent); });
+        if(ya.length>=2) return;
+        var nm=li.querySelector('b')?li.querySelector('b').textContent.replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/,''):'';
+        var k=ETAPAS[plano(nm)]; if(!k) return;
+        var L=[], fuente='';
+        var key=d&&buscarAsesor(d.analisis,INFO.nombre||INFO.corto);
+        if(key){
+          var st=((d.analisis[key]||{}).stages||{})[k]||{};
+          L=frasesBien(st.fortaleza).concat(st.oportunidad?[]:frasesBien(st.conclusion));   // la conclusión solo si esa etapa no trae algo por mejorar
+          if(L.length) fuente='Lo que destacó calidad en tu última evaluación.';
+          if(!L.length){ var ev=(d.evaluacion||[]).filter(function(r){ return r.ASESOR===key&&r._etapas&&r._etapas[k]&&r._etapas[k].fortaleza; });
+            if(ev.length){ var u=ev[ev.length-1]; L=frasesBien(u._etapas[k].fortaleza); fuente='Lo que destacó calidad en tu evaluación del '+(u.Fecha||'')+'.'; } }
+        }
+        if(!L.length){ L=[GENERICO[k]]; fuente='Basado en tu promedio: calidad aún no detalló qué haces bien en esta etapa.'; }
+        var n=0;
+        L.forEach(function(t){ if(n>=3-ya.length) return; var pt=plano(t); if(ya.some(function(y){ return y&&(y.indexOf(pt.slice(0,40))>=0||pt.indexOf(y.slice(0,40))>=0); })) return;
+          var sp=document.createElement('span'); sp.className='ok fx-add'; sp.innerHTML='<i>✓</i>'+esc(t); fl.appendChild(sp); ya.push(pt); n++; });
+        if(n&&fuente){ var f=document.createElement('small'); f.className='fx-fuente'; f.textContent=fuente; fl.appendChild(f); }
+      });
+      ajustar();
+    });
+  }
+  completarBien();
   window.cgoFicha={copiar:copiar,tema:function(t){aplicarTema(t,true);},alto:avisarAlto};
   document.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest('[data-fx-accion]'); if(!t) return; var a=t.dataset.fxAccion; if(a==='copiar') copiar(); if(a==='tema') aplicarTema(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark',true); });
   document.addEventListener('toggle',function(){ avisarAlto(); },true);
@@ -216,7 +269,23 @@ FICHA_JS = r"""
 """
 
 
+SEMAFORO = {'ok': ('✅', 'Cumple su meta'), 'warn': ('⚠️', 'Cerca de su meta'), 'bad': ('❌', 'Lejos de su meta')}
+
+def semaforo(card_html):
+    """Gestión comercial: en vez del % de cumplimiento, un semáforo (✅ cumple · ⚠️ cerca · ❌ lejos).
+    El % queda en el texto de ayuda (title) al tocar o pasar el mouse. Mismo corte de colores del tablero
+    (≥100 % verde, ≥80 % ámbar, menos rojo)."""
+    def r(m):
+        ico, txt = SEMAFORO[m.group(1)]
+        return '</small><em class="fx-sem %s" title="%s: %s%%" aria-label="%s (%s%%)">%s</em></span>' % (m.group(1), txt, m.group(2), txt, m.group(2), ico)
+    card_html = re.sub(r'</small><em style="color:var\(--(ok|warn|bad)\)">(\d+)%</em></span>', r, card_html)
+    card_html = card_html.replace('<small>logrado / meta · % = cuánto de su meta cumple</small>',
+                                  '<small>logrado / meta · ✅ cumple · ⚠️ cerca (80–99 %) · ❌ lejos</small>')
+    return card_html
+
+
 def ficha_html(card_html, a, meta, css_v):
+    card_html = semaforo(card_html)
     nombre_corto = a['d']
     titulo = 'Ficha de %s · CGO Distancia' % nombre_corto
     corte = meta.get('corte', '')
