@@ -7,7 +7,7 @@
 <title>Ficha de Angelo · CGO Distancia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="ficha.css?v=e97b97d1a7">
+<link rel="stylesheet" href="ficha.css?v=377533a5e1">
 </head>
 <body class="shared ficha-solo">
 <div class="fx-bar"><b>📋 Ficha de evaluación · Angelo · MIR</b><span class="mut">Corte 21/10 10:40</span><span class="sp"></span><button type="button" id="fxTema" data-fx-accion="tema">☀️ Modo claro</button><button type="button" id="fxCopiar" data-fx-accion="copiar">📷 Copiar como imagen</button><a href="../#ficha">← Volver al Mapa de Procesos</a></div>
@@ -70,7 +70,7 @@
   // Las 3 cajas del plan (bien / foco / siguiente nivel) con la misma altura, igual que en el tablero
   function fitPlan(pl){ if(!pl||!pl.offsetHeight) return; var bx=[].slice.call(pl.children); if(bx.length<3) return;
     pl.querySelectorAll('.fxh').forEach(function(e){e.classList.remove('fxh');});
-    if(bx[0].getBoundingClientRect().top!==bx[2].getBoundingClientRect().top) return;
+    if(window.innerWidth<900||bx[0].getBoundingClientRect().top!==bx[2].getBoundingClientRect().top) return;   // en celular/tablet se ve todo el texto
     bx.forEach(function(b){b.style.alignSelf='start';}); var H=bx[2].offsetHeight;
     [bx[0],bx[1]].forEach(function(b){ var L=[].slice.call(b.querySelectorAll('[data-fx]')).sort(function(x,y){return (+y.dataset.fx)-(+x.dataset.fx);}); var i=0; while(b.offsetHeight>H&&i<L.length) L[i++].classList.add('fxh'); });
     bx.forEach(function(b){b.style.alignSelf='';}); }

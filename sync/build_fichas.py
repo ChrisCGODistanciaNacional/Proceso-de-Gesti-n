@@ -120,6 +120,20 @@ body.ficha-solo.en-marco .blk{border-radius:14px}
 .fx-bar a:hover,.fx-bar button:hover{border-color:var(--ink)}
 body.en-marco .fx-bar{display:none}
 @media (max-width:640px){body.ficha-solo main{padding:8px 6px 16px}.fx-bar{padding:8px 10px;gap:6px}}
+/* Celular: cada indicador en 2 líneas (nombre + valor arriba, barra completa abajo) para que la barra no tape
+   los números, y la leyenda de siglas con el texto completo (sin "…") */
+@media (max-width:560px){
+  body.ficha-solo .v2a.v2m{grid-template-columns:34px minmax(0,1fr) auto;grid-template-areas:"k n v" "b b b";row-gap:4px;column-gap:6px;padding:4px 0 6px;border-bottom:1px solid var(--line)}
+  body.ficha-solo .v2a.v2m:last-child{border-bottom:0}
+  body.ficha-solo .v2a.v2m>.fak{grid-area:k}
+  body.ficha-solo .v2a.v2m>b:nth-child(2){grid-area:n;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  body.ficha-solo .v2a.v2m>.cb{grid-area:b;height:7px}
+  body.ficha-solo .v2a.v2m>.v2lv{grid-area:v;justify-content:flex-end}
+  body.ficha-solo .v2att{gap:2px}
+  body.ficha-solo .v2gl>div{white-space:normal;overflow:visible;text-overflow:clip;display:grid;grid-template-columns:34px minmax(0,1fr);gap:6px;padding:2px 0}
+  body.ficha-solo .v2gl{font-size:.74rem;line-height:1.35}
+  body.ficha-solo .v2gl small{font-size:.74rem}
+}
 """
 
 # El script de la ficha: alto para el marco, tema, cajas del plan, copiar como imagen.
@@ -139,7 +153,7 @@ FICHA_JS = r"""
   // Las 3 cajas del plan (bien / foco / siguiente nivel) con la misma altura, igual que en el tablero
   function fitPlan(pl){ if(!pl||!pl.offsetHeight) return; var bx=[].slice.call(pl.children); if(bx.length<3) return;
     pl.querySelectorAll('.fxh').forEach(function(e){e.classList.remove('fxh');});
-    if(bx[0].getBoundingClientRect().top!==bx[2].getBoundingClientRect().top) return;
+    if(window.innerWidth<900||bx[0].getBoundingClientRect().top!==bx[2].getBoundingClientRect().top) return;   // en celular/tablet se ve todo el texto
     bx.forEach(function(b){b.style.alignSelf='start';}); var H=bx[2].offsetHeight;
     [bx[0],bx[1]].forEach(function(b){ var L=[].slice.call(b.querySelectorAll('[data-fx]')).sort(function(x,y){return (+y.dataset.fx)-(+x.dataset.fx);}); var i=0; while(b.offsetHeight>H&&i<L.length) L[i++].classList.add('fxh'); });
     bx.forEach(function(b){b.style.alignSelf='';}); }
@@ -278,7 +292,11 @@ def main():
         with open(css_path, 'w', encoding='utf-8') as f:
             f.write(css)
     elif os.path.exists(css_path):
-        print('⚠️ Sin sync/inputs/tablero/index.html: se conserva el CSS anterior de fichas/ficha.css')
+        print('⚠️ Sin sync/inputs/tablero/index.html: se conserva el CSS del tablero de fichas/ficha.css (con los ajustes propios al día)')
+        with open(css_path, encoding='utf-8') as f:
+            base = f.read().split('/* ===== Ajustes para la ficha sola')[0].rstrip('\n')
+        with open(css_path, 'w', encoding='utf-8') as f:
+            f.write(base + '\n' + EXTRA_CSS)
     else:
         raise SystemExit('Falta el CSS: no hay sync/inputs/tablero/index.html ni fichas/ficha.css')
     with open(css_path, 'rb') as f:
