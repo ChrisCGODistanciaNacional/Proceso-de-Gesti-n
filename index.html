@@ -760,6 +760,11 @@
                 </div>
             </div>
 
+            <div class="card" id="cjCard" data-no-edit="1">
+                <div class="section-head" style="margin:0 0 8px"><div><h3>🗺️ Customer Journey: la ruta del cliente y sus desvíos</h3><p>El camino ideal del lead al matriculado. Cada tarjeta es un desvío real de la llamada (riesgo o atajo) y la flecha muestra a qué etapa lo devolvemos. Toca una etapa o un desvío para ver qué hacer y con qué técnica.</p></div></div>
+                <div id="cjRuta"></div>
+            </div>
+
             <div class="section-head">
                 <div>
                     <h3>Quién hace qué en cada etapa</h3>
@@ -1275,6 +1280,87 @@
 
     <div class="toast-notification" id="saveToast" style="display: none;"></div>
 
+    <script id="cjData" type="application/json">{}</script>
+    <script id="cjScript">
+/* ===== Customer Journey · Ruta con desvíos · CGO Distancia (22/10/2026) =====
+   window.CJ.init({el, key, canEdit, onSave}) dibuja la ruta en `el`, guarda en localStorage[key]
+   (y llama onSave(D) para que el anfitrión la suba a su nube). Los datos de fábrica van en CJ.ORIG. */
+(function(){
+const COL=['#2E9E6A','#3B7DDD','#F2A900','#E0544B','#8E6CD8','#1BA7B5','#0E2240','#E8B84A'];
+const ORIG={etapas:[
+{id:'e1',n:'Lead nuevo',e:'🧲',c:'#1BA7B5',obj:'Contactarlo en menos de 1 hora',siente:'Curiosidad; dudas de si es para él',hace:'Dejó sus datos en web, Facebook o WhatsApp',quiere:'Información clara y rápida',tp:'Llamada + WhatsApp (plantilla de bienvenida)',hacemos:'Presentación breve y un dato de valor antes de pedir nada',tec:'🎁 Entregue algo antes · 👥 Prueba social'},
+{id:'e2',n:'Contactado',e:'📞',c:'#3B7DDD',obj:'Entender su necesidad real',siente:'Interés, pero compara opciones',hace:'Pregunta precios, horarios y convalidación',quiere:'Saber si encaja con su trabajo y su bolsillo',tp:'Llamada de diagnóstico',hacemos:'Preguntar antes de ofrecer: trabajo, horario, carrera, para qué estudia',tec:'🪞 Devuelve el dolor · ✅ Pequeños sí'},
+{id:'e3',n:'Preinscrito',e:'📝',c:'#2E9E6A',obj:'Registrar nombres y beneficio',siente:'Decidido a dar un primer paso sin pagar',hace:'Da sus datos y elige carrera',quiere:'Asegurar su vacante y el beneficio',tp:'Llamada + ficha por WhatsApp',hacemos:'Cerrar con hora de evaluación concreta (día y hora)',tec:'🔀 Promueve la decisión · 🐛 Bichito de la curiosidad'},
+{id:'e4',n:'Postulante',e:'💳',c:'#F2A900',obj:'Pago de admisión en la fecha',siente:'Ansiedad por el gasto; busca respaldo',hace:'Rinde la evaluación y revisa cómo pagar',quiere:'Seguridad de que es la decisión correcta',tp:'Llamada DIV-POS + recordatorio WhatsApp',hacemos:'Acompañar el pago con fecha y hora, no "cuando puedas"',tec:'🎯 Ancla un número mayor · 📉 Costo de no decidir'},
+{id:'e5',n:'Ingresante',e:'🎓',c:'#8E6CD8',obj:'Matrícula pagada y documentos',siente:'Orgullo; miedo a trámites',hace:'Entrega documentos y paga la matrícula',quiere:'Que sea simple y rápido',tp:'DIV-ING: llamada + WhatsApp',hacemos:'Hablar de su primer ciclo como algo que ya empieza',tec:'🎓 Habla como si ya fuera suyo'},
+{id:'e6',n:'Matriculado',e:'🏁',c:'#0E2240',obj:'Que empiece bien y recomiende',siente:'Satisfacción; expectativa',hace:'Empieza clases; cuenta a su entorno',quiere:'Sentir que eligió bien',tp:'WhatsApp de bienvenida; seguimiento primera semana',hacemos:'Felicitar, resolver su primera duda y pedir un referido',tec:'📖 Historia de otro cliente → referidos'}],
+escenarios:[
+{id:'s1',de:'e1',n:'No contesta',e:'📵',t:'riesgo',sit:'3 intentos sin respuesta',acc:'Robot + plantilla WhatsApp; cambiar horario de llamada (noche o fin de semana)',a:'e2'},
+{id:'s2',de:'e2',n:'Está ocupado / poco tiempo',e:'⏱️',t:'riesgo',sit:'"Llámame después, estoy en el trabajo"',acc:'🐛 Bichito: la inscripción toma minutos; si no, hora acordada + vacante guardada + Curso de Excel de regalo',a:'e3'},
+{id:'s3',de:'e2',n:'Prefiere WhatsApp',e:'💬',t:'atajo',sit:'Eligió WhatsApp como canal',acc:'Ficha de carrera + audio corto + propuesta de llamada de 5 min',a:'e3'},
+{id:'s4',de:'e3',n:'Evaluando costo u horario',e:'🤔',t:'riesgo',sit:'"Déjame pensarlo / ver con mi familia"',acc:'Simula su semana; ancla la inversión normal vs. promocional; fecha de evaluación con hora',a:'e4'},
+{id:'s5',de:'e4',n:'No pagó en la fecha',e:'⏳',t:'riesgo',sit:'Pasó la fecha comprometida',acc:'📉 Costo de no decidir (pierde beneficio) + nueva fecha con hora y monto exacto',a:'e4'},
+{id:'s6',de:'e5',n:'Faltan documentos',e:'📄',t:'riesgo',sit:'No tiene certificado o DNI a la mano',acc:'Lista exacta por WhatsApp; DIV-ING acompaña hasta subirlos',a:'e6'},
+{id:'s7',de:'e3',n:'Convalida estudios',e:'⚡',t:'atajo',sit:'Viene de instituto o de otra universidad',acc:'Simulación de convalidación en la llamada: ve cuánto adelanta',a:'e4'}]};
+const CSS=`.cj{font-family:Lexend,system-ui,sans-serif;color:#14213d}.cj .cjbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px}.cj .cjbar .sp{flex:1}
+.cj .cjb{border:1px solid #dfe4ec;background:#fff;color:#14213d;border-radius:9px;padding:6px 11px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}.cj .cjb.gold{background:#E8B84A;border-color:#E8B84A;color:#0E2240}.cj .cjb.pri{background:#0E2240;border-color:#0E2240;color:#fff}
+.cj .ruta{overflow-x:auto}.cj .ruta svg{min-width:760px;width:100%;height:auto;display:block}.cj .ruta text{font-family:Lexend,system-ui,sans-serif}.cj .st,.cj .sc{cursor:pointer}.cj .st:hover .halo{opacity:.35}.cj .sc:hover rect{stroke:#14213d}
+.cj .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#6b7893;margin:6px 0 0}.cj .legend i{display:inline-block;width:22px;height:0;border-top:3px dashed #E0544B;vertical-align:middle;margin-right:5px}.cj .legend i.ok{border-color:#2E9E6A}.cj .legend i.main{border-style:solid;border-color:#0E2240}
+.cj .ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px}.cj .ficha div{background:#f0f3f8;border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.4}.cj .ficha small{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b7893;margin-bottom:2px}.cj .ficha.sc div{background:#fdf1f0}.cj .ficha.sc.ok div{background:#eef9f3}
+.cj .fh{display:flex;align-items:center;gap:8px;margin:12px 0 0;font-size:14px}.cj .fh b{font-size:15px}.cj .fh small{color:#6b7893}
+.cjpanel{position:fixed;right:14px;bottom:14px;top:auto;width:340px;max-height:82vh;overflow:auto;background:#fff;border:1px solid #dfe4ec;border-radius:16px;padding:14px;box-shadow:0 12px 36px rgba(14,34,64,.22);z-index:9000;font-family:Lexend,system-ui,sans-serif;color:#14213d;font-size:13px}
+.cjpanel h3{margin:0 0 4px;font-size:15px}.cjpanel .hint{font-size:12px;color:#6b7893;margin:0 0 10px}.cjpanel .f{display:flex;flex-direction:column;gap:3px;margin:0 0 8px}.cjpanel .f label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b7893}.cjpanel input,.cjpanel textarea,.cjpanel select{font:inherit;font-size:13px;padding:7px 9px;border:1px solid #dfe4ec;border-radius:9px;background:#fff;color:#14213d;width:100%}.cjpanel textarea{min-height:52px;resize:vertical}.cjpanel .row{display:flex;gap:8px}.cjpanel .row .f{flex:1}.cjpanel .pal{display:flex;gap:5px;flex-wrap:wrap}.cjpanel .pal span{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent}.cjpanel .pal span.on{border-color:#14213d}.cjpanel .pb{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+@media(max-width:700px){.cjpanel{left:8px;right:8px;width:auto}}`;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function wrap(t,w){ const out=[],ws=String(t).split(' '); let l=''; ws.forEach(x=>{ if((l+' '+x).trim().length>w){ out.push(l.trim()); l=x; } else l=(l+' '+x); }); if(l.trim()) out.push(l.trim()); return out.slice(0,3); }
+function init(o){
+  const el=typeof o.el==='string'?document.querySelector(o.el):o.el; if(!el) return null; const KEY=o.key||'cgo_journey_v1', canEdit=o.canEdit||(()=>false);
+  if(!document.getElementById('cjCss')){ const st=document.createElement('style'); st.id='cjCss'; st.textContent=CSS; document.head.appendChild(st); }
+  let D=null, sel=null; const load=()=>{ try{ const s=localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return JSON.parse(JSON.stringify(o.data||ORIG)); }; D=load();
+  const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){} if(o.onSave) try{ o.onSave(D); }catch(e){} };
+  const et=id=>D.etapas.find(x=>x.id===id), idx=id=>D.etapas.findIndex(x=>x.id===id);
+  const api={get data(){ return D; }, set(d){ D=d; save(); render(); }, ORIG, render:()=>render(), close:()=>{ sel=null; render(); }};
+  function svg(){ const E=D.etapas, n=E.length, W=Math.max(760,n*200+60), H=520, y0=250, step=(W-120)/Math.max(1,n-1);
+    const P=E.map((e,i)=>({x:60+i*step,y:y0+(i%2?-55:55),e})); let path=''; P.forEach((p,i)=>{ if(!i) path=`M${p.x} ${p.y}`; else { const q=P[i-1], mx=(q.x+p.x)/2; path+=` C${mx} ${q.y} ${mx} ${p.y} ${p.x} ${p.y}`; } });
+    let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Customer journey"><defs><marker id="cjar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#E0544B"/></marker><marker id="cjag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#2E9E6A"/></marker></defs>
+    <path d="${path}" fill="none" stroke="#dfe4ec" stroke-width="26" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#0E2240" stroke-width="18" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="8 8"/>`;
+    const used={};
+    D.escenarios.forEach(sc=>{ const i=idx(sc.de), j=idx(sc.a); if(i<0) return; const p=P[i], up=p.y>y0, k=(used[sc.de]=(used[sc.de]||0)+1); const by=up?p.y+100+(k-1)*66:p.y-100-(k-1)*66; const bx=p.x+28; const col=sc.t==='atajo'?'#2E9E6A':'#E0544B';
+      const tgt=j>=0?P[j]:null; const ty=tgt?tgt.y:p.y; const tx=tgt?tgt.x:p.x+step; const W2=170, L=wrap(sc.acc,34), dirY=up?1:-1;
+      s+=`<path d="M${p.x} ${p.y+dirY*26} C${p.x} ${by} ${bx-24} ${by} ${bx} ${by}" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="6 5"/>`;
+      s+=`<path d="M${bx+W2} ${by} C${bx+W2+40} ${by} ${tx} ${by} ${tx} ${ty+dirY*28}" fill="none" stroke="${col}" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#${sc.t==='atajo'?'cjag':'cjar'})"/>`;
+      s+=`<g class="sc" data-cjsc="${sc.id}"><rect x="${bx}" y="${by-26}" width="${W2}" height="52" rx="10" fill="${sc.t==='atajo'?'#eef9f3':'#fdf1f0'}" stroke="${col}" stroke-width="1.5"/><text x="${bx+8}" y="${by-9}" font-size="11.5" font-weight="700" fill="#14213d">${esc(sc.e)} ${esc(sc.n).slice(0,26)}</text><text x="${bx+8}" y="${by+5}" font-size="9" fill="#6b7893">${esc(L[0]||'')}</text><text x="${bx+8}" y="${by+17}" font-size="9" fill="#6b7893">${esc(L[1]||'')}</text></g>`; });
+    P.forEach((p,i)=>{ const e=p.e; s+=`<g class="st" data-cjet="${e.id}"><circle class="halo" cx="${p.x}" cy="${p.y}" r="34" fill="${e.c}" opacity="${sel===e.id?.45:.18}"/><circle cx="${p.x}" cy="${p.y}" r="24" fill="${e.c}" stroke="#fff" stroke-width="3"/><text x="${p.x}" y="${p.y+7}" text-anchor="middle" font-size="20">${esc(e.e)}</text>`;
+      const ly=p.y>y0?p.y-44:p.y+52; s+=`<text x="${p.x}" y="${ly}" text-anchor="middle" font-size="13" font-weight="800" fill="#14213d">${i+1}. ${esc(e.n)}</text><text x="${p.x}" y="${ly+14}" text-anchor="middle" font-size="9.5" fill="#6b7893">${esc(e.obj).slice(0,34)}</text></g>`; });
+    return s+'</svg>'; }
+  function ficha(){ const e=et(sel), s=D.escenarios.find(x=>x.id===sel); if(!e&&!s) return `<p class="fh"><small>Toca una etapa o un desvío para ver qué hacer en ese momento.</small></p>`;
+    if(e) return `<div class="fh"><b>${esc(e.e)} ${idx(e.id)+1}. ${esc(e.n)}</b><small>🎯 ${esc(e.obj)}</small></div><div class="ficha">${[['Qué siente',e.siente],['Qué hace',e.hace],['Qué quiere',e.quiere],['Touchpoint',e.tp],['Qué hacemos',e.hacemos],['Técnica',e.tec]].map(([l,v])=>`<div><small>${l}</small>${esc(v)||'—'}</div>`).join('')}</div>`;
+    return `<div class="fh"><b>${esc(s.e)} ${esc(s.n)}</b><small>${s.t==='atajo'?'⚡ atajo':'⚠️ riesgo'} · pasa en ${esc((et(s.de)||{}).n||'')} → lo llevamos a ${esc((et(s.a)||{}).n||'')}</small></div><div class="ficha sc ${s.t==='atajo'?'ok':''}"><div><small>Situación</small>${esc(s.sit)||'—'}</div><div><small>Qué hacemos</small>${esc(s.acc)||'—'}</div></div>`; }
+  function render(){ const ed=canEdit();
+    el.innerHTML=`<div class="cj"><div class="cjbar">${ed?`<button class="cjb gold" data-cja="et">➕ Etapa</button><button class="cjb gold" data-cja="sc">➕ Escenario</button><button class="cjb" data-cja="exp">⬇ JSON</button><label class="cjb" style="cursor:pointer">⬆ JSON<input type="file" accept=".json" data-cja="imp" hidden></label><button class="cjb" data-cja="reset">↺ Original</button>`:''}<span class="sp"></span><span style="font-size:12px;color:#6b7893">${D.etapas.length} etapas · ${D.escenarios.length} escenarios</span></div><div class="ruta">${svg()}</div><div class="legend"><span><i class="main"></i>camino ideal</span><span><i></i>riesgo: cómo lo recuperamos</span><span><i class="ok"></i>atajo: el cliente avanza más rápido</span></div>${ficha()}</div>`;
+    panel(); }
+  function panel(){ let P=document.getElementById('cjPanel'); const e=et(sel), s=D.escenarios.find(x=>x.id===sel); if(!canEdit()||(!e&&!s)){ if(P) P.remove(); return; }
+    if(!P){ P=document.createElement('div'); P.id='cjPanel'; P.className='cjpanel'; document.body.appendChild(P);
+      P.addEventListener('input',ev=>{ const k=ev.target.dataset.k; if(!k) return; const o=et(sel)||D.escenarios.find(x=>x.id===sel); if(!o) return; o[k]=ev.target.value; save(); el.querySelector('.ruta').innerHTML=svg(); const f=el.querySelector('.fh'); if(f){ const tmp=document.createElement('div'); tmp.innerHTML=ficha(); f.replaceWith(...tmp.childNodes); } });
+      P.addEventListener('click',ev=>{ const t=ev.target, o=et(sel)||D.escenarios.find(x=>x.id===sel); if(!o) return;
+        if(t.dataset.c){ o.c=t.dataset.c; save(); render(); } if(t.dataset.mv){ const i=idx(sel), j=i+(+t.dataset.mv); if(j>=0&&j<D.etapas.length){ [D.etapas[i],D.etapas[j]]=[D.etapas[j],D.etapas[i]]; save(); render(); } }
+        if(t.dataset.del){ if(et(sel)){ if(D.etapas.length<=2) return; D.etapas.splice(idx(sel),1); D.escenarios=D.escenarios.filter(x=>x.de!==sel&&x.a!==sel); } else D.escenarios=D.escenarios.filter(x=>x.id!==sel); sel=null; save(); render(); }
+        if(t.dataset.close){ sel=null; render(); } }); }
+    const f=(k,l,v,ta)=>`<div class="f"><label>${l}</label>${ta?`<textarea data-k="${k}">${esc(v)}</textarea>`:`<input data-k="${k}" value="${esc(v)}">`}</div>`;
+    if(e) P.innerHTML=`<h3>${esc(e.e)} Etapa ${idx(e.id)+1}</h3><p class="hint">Cambia el texto y se actualiza el mapa.</p><div class="row">${f('e','Emoji',e.e)}${f('n','Nombre',e.n)}</div><div class="f"><label>Color</label><div class="pal">${COL.map(c=>`<span style="background:${c}" data-c="${c}" class="${c===e.c?'on':''}"></span>`).join('')}</div></div>${f('obj','🎯 Objetivo',e.obj)}${f('siente','Qué siente',e.siente,1)}${f('hace','Qué hace',e.hace,1)}${f('quiere','Qué quiere',e.quiere,1)}${f('tp','Touchpoint',e.tp,1)}${f('hacemos','Qué hacemos nosotros',e.hacemos,1)}${f('tec','Técnica(s)',e.tec,1)}<div class="pb"><button class="cjb" data-mv="-1">◀ Mover</button><button class="cjb" data-mv="1">Mover ▶</button><button class="cjb" data-del="1" style="color:#E0544B">✕ Quitar</button><button class="cjb pri" data-close="1">Listo</button></div>`;
+    else { const opts=D.etapas.map((x,i)=>`<option value="${x.id}">${i+1}. ${esc(x.n)}</option>`).join(''); P.innerHTML=`<h3>${esc(s.e)} Escenario</h3><p class="hint">Un desvío real: qué pasa, qué hacemos y a qué etapa lo devolvemos.</p><div class="row">${f('e','Emoji',s.e)}${f('n','Nombre',s.n)}</div><div class="f"><label>Tipo</label><select data-k="t"><option value="riesgo" ${s.t==='riesgo'?'selected':''}>Riesgo (lo recuperamos)</option><option value="atajo" ${s.t==='atajo'?'selected':''}>Atajo (avanza más rápido)</option></select></div><div class="row"><div class="f"><label>Pasa en</label><select data-k="de">${opts}</select></div><div class="f"><label>Lo llevamos a</label><select data-k="a">${opts}</select></div></div>${f('sit','Situación (lo que dice el cliente)',s.sit,1)}${f('acc','Qué hacemos (acción + técnica)',s.acc,1)}<div class="pb"><button class="cjb" data-del="1" style="color:#E0544B">✕ Quitar</button><button class="cjb pri" data-close="1">Listo</button></div>`; P.querySelector('[data-k="de"]').value=s.de; P.querySelector('[data-k="a"]').value=s.a; } }
+  el.addEventListener('click',ev=>{ const a=ev.target.closest('[data-cjet]'), b=ev.target.closest('[data-cjsc]'), c=ev.target.closest('[data-cja]');
+    if(a){ sel=sel===a.dataset.cjet?null:a.dataset.cjet; render(); return; } if(b){ sel=sel===b.dataset.cjsc?null:b.dataset.cjsc; render(); return; } if(!c||!canEdit()) return; const k=c.dataset.cja;
+    if(k==='et'){ const id='e'+Date.now(); D.etapas.push({id,n:'Nueva etapa',e:'⭐',c:COL[D.etapas.length%COL.length],obj:'Objetivo de la etapa',siente:'',hace:'',quiere:'',tp:'',hacemos:'',tec:''}); sel=id; save(); render(); }
+    if(k==='sc'){ const id='s'+Date.now(); const de=et(sel)?sel:D.etapas[0].id, i=idx(de); D.escenarios.push({id,de,n:'Nuevo escenario',e:'❓',t:'riesgo',sit:'Qué dice el cliente',acc:'Qué hacemos y con qué técnica',a:D.etapas[Math.min(i+1,D.etapas.length-1)].id}); sel=id; save(); render(); }
+    if(k==='exp'){ const x=document.createElement('a'); x.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(D,null,1)); x.download='customer_journey_cgo.json'; x.click(); }
+    if(k==='reset'&&confirm('¿Volver al journey original? Se pierden tus cambios.')){ D=JSON.parse(JSON.stringify(o.data||ORIG)); sel=null; save(); render(); } });
+  el.addEventListener('change',ev=>{ const c=ev.target.closest('[data-cja="imp"]'); if(!c||!c.files[0]) return; const r=new FileReader(); r.onload=()=>{ try{ D=JSON.parse(r.result); sel=null; save(); render(); }catch(x){ alert('Archivo no válido'); } }; r.readAsText(c.files[0]); });
+  render(); return api; }
+window.CJ={init,ORIG};
+})();
+
+    </script>
     <script id="appScript">
         // ======================================================================
         // Mapa de Procesos Comercial · CGO Distancia
@@ -1283,7 +1369,7 @@
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-19T23:12:28.000Z";
+        const DATA_VERSION = "2026-10-22T20:05:00.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
@@ -1301,6 +1387,19 @@
         let freshFichaHTML = null;
         let isEditing = false;
 
+        // ---------------------------------------------------------------- Customer Journey (ruta con desvíos)
+        function cjMount() {
+            let box = document.getElementById('cjRuta');
+            if (!box) { // copia guardada de una versión anterior sin la tarjeta: se inserta después del panel del proceso de ventas
+                const hero = document.querySelector('section[data-view="mapa"] .card.hero'); if (!hero) return;
+                const card = document.createElement('div'); card.className = 'card'; card.id = 'cjCard'; card.setAttribute('data-no-edit', '1');
+                card.innerHTML = '<div class="section-head" style="margin:0 0 8px"><div><h3>🗺️ Customer Journey: la ruta del cliente y sus desvíos</h3><p>El camino ideal del lead al matriculado. Cada tarjeta es un desvío real de la llamada (riesgo o atajo) y la flecha muestra a qué etapa lo devolvemos. Toca una etapa o un desvío para ver qué hacer y con qué técnica.</p></div></div><div id="cjRuta"></div>';
+                hero.after(card); box = card.querySelector('#cjRuta'); }
+            if (!window.CJ || box.dataset.cjOn) return; box.dataset.cjOn = '1';
+            let base = null; try { base = JSON.parse(document.getElementById('cjData').textContent || '{}'); } catch (e) {}
+            if (!base || !base.etapas) base = window.CJ.ORIG;
+            window.__cj = window.CJ.init({ el: box, key: 'cgo_journey_v1', data: base, canEdit: () => isEditing });
+        }
         // ---------------------------------------------------------------- Carga
         window.onload = function () {
             const canvas = document.getElementById('mainDiagramCanvas');
@@ -1332,6 +1431,7 @@
                 }
             }
 
+            cjMount();
             setEditing(false);
             showView((location.hash || '#' + VIEW_INICIAL).slice(1), { silent: true, keepScroll: true });
             renderVersionStamp();
@@ -1366,6 +1466,7 @@
 
         // ---------------------------------------------------------------- Pestañas
         function showView(name, opts) {
+            setTimeout(cjMount, 0);
             opts = opts || {};
             if (VIEWS.indexOf(name) === -1) name = VIEW_INICIAL;
             document.querySelectorAll('.view').forEach(function (s) { s.hidden = s.dataset.view !== name; });
@@ -1391,6 +1492,7 @@
         function setEditing(on) {
             isEditing = !!on;
             document.body.classList.toggle('is-editing', isEditing);
+            if (window.__cj) { if (!isEditing) window.__cj.close(); else window.__cj.render(); }
             document.querySelectorAll('#mainDiagramCanvas [contenteditable]').forEach(function (el) {
                 el.setAttribute('contenteditable', isEditing ? 'true' : 'false');
             });
@@ -1850,6 +1952,7 @@
             document.body.classList.remove('vm-lock');
             // Se exporta una copia del documento: la ficha de evaluación viaja "en blanco" (el archivo
             // descargado la muestra solo en línea) y sin ventanas abiertas.
+            try { const cjd = document.getElementById('cjData'); if (cjd && window.__cj) cjd.textContent = JSON.stringify(window.__cj.data); } catch (e) {}
             const rootClone = document.documentElement.cloneNode(true);
             const fpClone = rootClone.querySelector('#fichaPage');
             if (fpClone && freshFichaHTML !== null) fpClone.innerHTML = freshFichaHTML;
