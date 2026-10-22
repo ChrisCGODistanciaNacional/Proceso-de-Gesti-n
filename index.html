@@ -1309,7 +1309,7 @@ const CSS=`.cj{font-family:Lexend,system-ui,sans-serif;color:#14213d}.cj .cjbar{
 .cj .ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px}.cj .ficha div{background:#f0f3f8;border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.4}.cj .ficha small{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b7893;margin-bottom:2px}.cj .ficha.sc div{background:#fdf1f0}.cj .ficha.sc.ok div{background:#eef9f3}
 .cj .fh{display:flex;align-items:center;gap:8px;margin:12px 0 0;font-size:14px}.cj .fh b{font-size:15px}.cj .fh small{color:#6b7893}
 .cjpanel{position:fixed;right:14px;bottom:14px;top:auto;width:340px;max-height:82vh;overflow:auto;background:#fff;border:1px solid #dfe4ec;border-radius:16px;padding:14px;box-shadow:0 12px 36px rgba(14,34,64,.22);z-index:9000;font-family:Lexend,system-ui,sans-serif;color:#14213d;font-size:13px}
-.cjpanel h3{margin:0 0 4px;font-size:15px}.cjpanel .hint{font-size:12px;color:#6b7893;margin:0 0 10px}.cjpanel .f{display:flex;flex-direction:column;gap:3px;margin:0 0 8px}.cjpanel .f label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b7893}.cjpanel input,.cjpanel textarea,.cjpanel select{font:inherit;font-size:13px;padding:7px 9px;border:1px solid #dfe4ec;border-radius:9px;background:#fff;color:#14213d;width:100%}.cjpanel textarea{min-height:52px;resize:vertical}.cjpanel .row{display:flex;gap:8px}.cjpanel .row .f{flex:1}.cjpanel .pal{display:flex;gap:5px;flex-wrap:wrap}.cjpanel .pal span{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent}.cjpanel .pal span.on{border-color:#14213d}.cjpanel .pb{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.cjpanel h3{margin:0 0 4px;font-size:15px}.cjpanel .hint{font-size:12px;color:#6b7893;margin:0 0 10px}.cjpanel .f{display:flex;flex-direction:column;gap:3px;margin:0 0 8px}.cjpanel .f label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#6b7893}.cjpanel input,.cjpanel textarea,.cjpanel select{font:inherit;font-size:13px;padding:7px 9px;border:1px solid #dfe4ec;border-radius:9px;background:#fff;color:#14213d;width:100%}.cjpanel textarea{min-height:52px;resize:vertical}.cjpanel .row{display:flex;gap:8px}.cjpanel .row .f{flex:1}.cjpanel .pal{display:flex;gap:5px;flex-wrap:wrap}.cjpanel .pal span{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent}.cjpanel .pal span.on{border-color:#14213d}.cjpanel .pb{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.cjpanel .cjb{border:1px solid #dfe4ec;background:#fff;color:#14213d;border-radius:9px;padding:6px 11px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}.cjpanel .cjb.pri{background:#0E2240;border-color:#0E2240;color:#fff}
 @media(max-width:700px){.cjpanel{left:8px;right:8px;width:auto}}`;
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function wrap(t,w){ const out=[],ws=String(t).split(' '); let l=''; ws.forEach(x=>{ if((l+' '+x).trim().length>w){ out.push(l.trim()); l=x; } else l=(l+' '+x); }); if(l.trim()) out.push(l.trim()); return out.slice(0,3); }
@@ -1320,7 +1320,10 @@ function init(o){
   const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){} if(o.onSave) try{ o.onSave(D); }catch(e){} };
   const et=id=>D.etapas.find(x=>x.id===id), idx=id=>D.etapas.findIndex(x=>x.id===id);
   const api={get data(){ return D; }, set(d){ D=d; save(); render(); }, ORIG, render:()=>render(), close:()=>{ sel=null; render(); }};
-  function svg(){ const E=D.etapas, n=E.length, W=Math.max(760,n*200+60), H=520, y0=250, step=(W-120)/Math.max(1,n-1);
+  function svg(){ const E=D.etapas, n=E.length, W=Math.max(760,n*200+60), step=(W-120)/Math.max(1,n-1);
+    // alto según cuántos desvíos cuelgan por arriba (etapas impares) y por abajo (pares): nada queda fuera del lienzo
+    const cnt={}; D.escenarios.forEach(x=>{ cnt[x.de]=(cnt[x.de]||0)+1; }); let mUp=0,mDn=0; E.forEach((e,i)=>{ const k=cnt[e.id]||0; if(i%2) mUp=Math.max(mUp,k); else mDn=Math.max(mDn,k); });
+    const top=Math.max(130,100+(mUp?(mUp-1)*66+30:0)+55), bot=Math.max(130,100+(mDn?(mDn-1)*66+30:0)+55); const y0=top+10, H=y0+bot+10;
     const P=E.map((e,i)=>({x:60+i*step,y:y0+(i%2?-55:55),e})); let path=''; P.forEach((p,i)=>{ if(!i) path=`M${p.x} ${p.y}`; else { const q=P[i-1], mx=(q.x+p.x)/2; path+=` C${mx} ${q.y} ${mx} ${p.y} ${p.x} ${p.y}`; } });
     let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Customer journey"><defs><marker id="cjar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#E0544B"/></marker><marker id="cjag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#2E9E6A"/></marker></defs>
     <path d="${path}" fill="none" stroke="#dfe4ec" stroke-width="26" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#0E2240" stroke-width="18" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="8 8"/>`;
@@ -1369,7 +1372,7 @@ window.CJ={init,ORIG};
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-22T20:05:00.000Z";
+        const DATA_VERSION = "2026-10-22T20:20:00.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
