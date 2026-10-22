@@ -1312,7 +1312,7 @@ const ICOS={uc:'<svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" 
  ia:'<svg viewBox="0 0 40 40" width="34" height="34"><rect x="4" y="4" width="32" height="32" rx="9" fill="#D97757"/><text x="20" y="27" text-anchor="middle" font-size="18">✦</text></svg>',
  cert:'<svg viewBox="0 0 40 40" width="34" height="34"><rect x="4" y="4" width="32" height="32" rx="7" fill="#E8B84A"/><text x="20" y="27" text-anchor="middle" font-size="18">🎓</text></svg>'};
 const ico=g=>ICOS[g.ico]?ICOS[g.ico]:`<span style="font-size:26px;line-height:34px">${esc(g.ico||'🎁')}</span>`;
-const CSS=`.cj{font-family:Lexend,system-ui,sans-serif;color:var(--ink,#14213d)}.cj .cjbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px}.cj .cjbar .sp{flex:1}
+const CSS=`.cj{font-family:Lexend,system-ui,sans-serif;color:var(--ink,#14213d);padding:2px 4px}.cj .cjbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 8px}.cj .cjbar .sp{flex:1}
 .cj .cjb{border:1px solid #dfe4ec;background:#fff;color:#14213d;border-radius:9px;padding:6px 11px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}.cj .cjb.gold{background:#E8B84A;border-color:#E8B84A;color:#0E2240}.cj .cjb.pri{background:#0E2240;border-color:#0E2240;color:#fff}
 .cj .ruta{overflow-x:auto}.cj .ruta svg{min-width:760px;width:100%;height:auto;display:block}.cj .ruta text{font-family:Lexend,system-ui,sans-serif}.cj .st,.cj .sc{cursor:pointer}.cj .st:hover .halo{opacity:.35}.cj .sc:hover rect{stroke:#14213d}
 .cj .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted,#6b7893);margin:6px 0 0}.cj .legend i{display:inline-block;width:22px;height:0;border-top:3px dashed #E0544B;vertical-align:middle;margin-right:5px}.cj .legend i.ok{border-color:#2E9E6A}.cj .legend i.main{border-style:solid;border-color:#0E2240}
@@ -1335,11 +1335,11 @@ function init(o){
   const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(D)); }catch(e){} if(o.onSave) try{ o.onSave(D); }catch(e){} };
   const et=id=>D.etapas.find(x=>x.id===id), idx=id=>D.etapas.findIndex(x=>x.id===id);
   const api={get data(){ return D; }, set(d){ D=d; save(); render(); }, ORIG, render:()=>render(), close:()=>{ sel=null; render(); }};
-  function svg(){ const E=D.etapas, n=E.length, W=Math.max(760,n*200+60), step=(W-120)/Math.max(1,n-1);
+  function svg(){ const E=D.etapas, n=E.length, W=Math.max(860,n*200+160), step=(W-220)/Math.max(1,n-1);
     // alto según cuántos desvíos cuelgan por arriba (etapas impares) y por abajo (pares): nada queda fuera del lienzo
     const cnt={}; D.escenarios.forEach(x=>{ cnt[x.de]=(cnt[x.de]||0)+1; }); let mUp=0,mDn=0; E.forEach((e,i)=>{ const k=cnt[e.id]||0; if(i%2) mUp=Math.max(mUp,k); else mDn=Math.max(mDn,k); });
     const top=Math.max(130,100+(mUp?(mUp-1)*66+30:0)+55), bot=Math.max(130,100+(mDn?(mDn-1)*66+30:0)+55); const y0=top+10, H=y0+bot+10;
-    const P=E.map((e,i)=>({x:60+i*step,y:y0+(i%2?-55:55),e})); let path=''; P.forEach((p,i)=>{ if(!i) path=`M${p.x} ${p.y}`; else { const q=P[i-1], mx=(q.x+p.x)/2; path+=` C${mx} ${q.y} ${mx} ${p.y} ${p.x} ${p.y}`; } });
+    const P=E.map((e,i)=>({x:110+i*step,y:y0+(i%2?-55:55),e})); let path=''; P.forEach((p,i)=>{ if(!i) path=`M${p.x} ${p.y}`; else { const q=P[i-1], mx=(q.x+p.x)/2; path+=` C${mx} ${q.y} ${mx} ${p.y} ${p.x} ${p.y}`; } });
     let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Customer journey"><defs><marker id="cjar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#E0544B"/></marker><marker id="cjag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10z" fill="#2E9E6A"/></marker></defs>
     <path d="${path}" fill="none" stroke="#dfe4ec" stroke-width="26" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#0E2240" stroke-width="18" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="8 8"/>`;
     const used={};
@@ -1357,7 +1357,7 @@ function init(o){
     if(e) return `<div class="fh"><b>${esc(e.e)} ${idx(e.id)+1}. ${esc(e.n)}</b><small>🎯 ${esc(e.obj)}</small></div><div class="ficha">${[['Qué siente',e.siente],['Qué hace',e.hace],['Qué quiere',e.quiere],['Touchpoint',e.tp],['Qué hacemos',e.hacemos],['Técnica',e.tec]].map(([l,v])=>`<div><small>${l}</small>${esc(v)||'—'}</div>`).join('')}</div>`;
     return `<div class="fh"><b>${esc(s.e)} ${esc(s.n)}</b><small>${s.t==='atajo'?'⚡ atajo':'⚠️ riesgo'} · pasa en ${esc((et(s.de)||{}).n||'')} → lo llevamos a ${esc((et(s.a)||{}).n||'')}</small></div><div class="ficha sc ${s.t==='atajo'?'ok':''}"><div><small>Situación</small>${esc(s.sit)||'—'}</div><div><small>Qué hacemos</small>${esc(s.acc)||'—'}</div></div>`; }
   function render(){ const ed=canEdit();
-    el.innerHTML=`<div class="cj"><div class="cjbar">${ed?`<button class="cjb gold" data-cja="et">➕ Etapa</button><button class="cjb gold" data-cja="sc">➕ Escenario</button><button class="cjb" data-cja="exp">⬇ JSON</button><label class="cjb" style="cursor:pointer">⬆ JSON<input type="file" accept=".json" data-cja="imp" hidden></label><button class="cjb" data-cja="reset">↺ Original</button>`:''}<span class="sp"></span><span style="font-size:12px;color:#6b7893">${D.etapas.length} etapas · ${D.escenarios.length} escenarios</span></div><div class="ruta">${svg()}</div><div class="legend"><span><i class="main"></i>camino ideal</span><span><i></i>riesgo: cómo lo recuperamos</span><span><i class="ok"></i>atajo: el cliente avanza más rápido</span></div>${ganchos()}${ficha()}</div>`;
+    el.innerHTML=`<div class="cj"><div class="cjbar">${ed?`<button class="cjb gold" data-cja="et">➕ Etapa</button><button class="cjb gold" data-cja="sc">➕ Escenario</button><button class="cjb" data-cja="exp">⬇ JSON</button><label class="cjb" style="cursor:pointer">⬆ JSON<input type="file" accept=".json" data-cja="imp" hidden></label><button class="cjb" data-cja="reset">↺ Original</button>`:''}<button class="cjb pri" data-cja="foto">📷 Foto para WhatsApp</button><span class="sp"></span><span style="font-size:12px;color:#6b7893">${D.etapas.length} etapas · ${D.escenarios.length} escenarios</span></div><div class="ruta">${svg()}</div><div class="legend"><span><i class="main"></i>camino ideal</span><span><i></i>riesgo: cómo lo recuperamos</span><span><i class="ok"></i>atajo: el cliente avanza más rápido</span></div>${ganchos()}${ficha()}</div>`;
     panel(); }
   function ganchos(){ const E=D.etapas, G=D.ganchos||(D.ganchos=[]); if(E.length<2) return ''; const ed=canEdit(); if(!G.length&&!ed) return '';
     const cols=E.slice(0,-1).map((e,i)=>{ const nx=E[i+1], L=G.filter(g=>g.de===e.id); return `<div class="gcol"><small>${esc(e.e)} ${esc(e.n)} → ${esc(nx.e)} ${esc(nx.n)}</small>${L.map(g=>`<div class="gc ${sel===g.id?'sel':''}" data-cjg="${g.id}"><span class="gi">${ico(g)}</span><div><b>${esc(g.n)}</b><small>${esc(g.d)}</small></div></div>`).join('')}${ed?`<div class="gadd" data-cjgadd="${e.id}">➕ gancho</div>`:(L.length?'':'<div class="gadd" style="cursor:default">—</div>')}</div>`; }).join('');
@@ -1377,12 +1377,36 @@ function init(o){
   el.addEventListener('click',ev=>{ const a=ev.target.closest('[data-cjet]'), b=ev.target.closest('[data-cjsc]'), c=ev.target.closest('[data-cja]'), gg=ev.target.closest('[data-cjg]'), ga=ev.target.closest('[data-cjgadd]');
     if(gg){ sel=sel===gg.dataset.cjg?null:gg.dataset.cjg; render(); return; }
     if(ga&&canEdit()){ const id='g'+Date.now(); (D.ganchos||(D.ganchos=[])).push({id,de:ga.dataset.cjgadd,n:'Nuevo gancho',ico:'cert',d:'Qué es y qué gana el cliente'}); sel=id; save(); render(); return; }
-    if(a){ sel=sel===a.dataset.cjet?null:a.dataset.cjet; render(); return; } if(b){ sel=sel===b.dataset.cjsc?null:b.dataset.cjsc; render(); return; } if(!c||!canEdit()) return; const k=c.dataset.cja;
+    if(a){ sel=sel===a.dataset.cjet?null:a.dataset.cjet; render(); return; } if(b){ sel=sel===b.dataset.cjsc?null:b.dataset.cjsc; render(); return; } if(!c) return; const k=c.dataset.cja; if(k==='foto'){ foto(c); return; } if(!canEdit()) return;
     if(k==='et'){ const id='e'+Date.now(); D.etapas.push({id,n:'Nueva etapa',e:'⭐',c:COL[D.etapas.length%COL.length],obj:'Objetivo de la etapa',siente:'',hace:'',quiere:'',tp:'',hacemos:'',tec:''}); sel=id; save(); render(); }
     if(k==='sc'){ const id='s'+Date.now(); const de=et(sel)?sel:D.etapas[0].id, i=idx(de); D.escenarios.push({id,de,n:'Nuevo escenario',e:'❓',t:'riesgo',sit:'Qué dice el cliente',acc:'Qué hacemos y con qué técnica',a:D.etapas[Math.min(i+1,D.etapas.length-1)].id}); sel=id; save(); render(); }
     if(k==='exp'){ const x=document.createElement('a'); x.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(D,null,1)); x.download='customer_journey_cgo.json'; x.click(); }
     if(k==='reset'&&confirm('¿Volver al journey original? Se pierden tus cambios.')){ D=JSON.parse(JSON.stringify(o.data||ORIG)); sel=null; save(); render(); } });
   el.addEventListener('change',ev=>{ const c=ev.target.closest('[data-cja="imp"]'); if(!c||!c.files[0]) return; const r=new FileReader(); r.onload=()=>{ try{ D=JSON.parse(r.result); sel=null; save(); render(); }catch(x){ alert('Archivo no válido'); } }; r.readAsText(c.files[0]); });
+  // ---- Foto del esquema completo (ruta + ganchos) para WhatsApp: marco oscuro, panel claro, colores fijos ----
+  async function foto(btn){ const old=btn.textContent; btn.textContent='⏳ Armando la imagen…'; btn.disabled=true;
+    try{ if(!window.html2canvas&&o.loadH2C) await o.loadH2C(); if(!window.html2canvas) await new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; sc.onload=res; sc.onerror=()=>rej(new Error('No se pudo cargar el generador de imágenes')); document.head.appendChild(sc); });
+      const sv=el.querySelector('.ruta svg'), W=+sv.getAttribute('viewBox').split(' ')[2], H=+sv.getAttribute('viewBox').split(' ')[3];
+      const hoy=new Date().toLocaleDateString('es-PE',{day:'2-digit',month:'2-digit',year:'numeric'});
+      const wrapEl=document.createElement('div'); wrapEl.style.cssText=`position:fixed;left:-20000px;top:0;width:${W+64}px;background:#0f1626;padding:26px 32px 30px;font-family:Lexend,system-ui,sans-serif;--ink:#14213d;--muted:#6b7893;z-index:-1`;
+      wrapEl.innerHTML=`<div style="color:#E8B84A;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">CGO Distancia · Universidad Continental</div><div style="color:#fff;font-size:26px;font-weight:800;margin:4px 0 2px">🗺️ Customer Journey: la ruta del cliente</div><div style="color:#aab6cc;font-size:13px;margin:0 0 16px">Del lead al matriculado · desvíos (riesgos y atajos) y ganchos para acelerar cada paso · ${hoy}</div>
+        <div class="cj" style="background:#fff;border-radius:18px;padding:16px 20px 18px"><div class="ruta" style="overflow:visible"><svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="min-width:0;width:${W}px;height:${H}px">${sv.innerHTML}</svg></div>${el.querySelector('.legend').outerHTML}${ganchos().replace(/<div class="gadd"[^>]*>[^<]*<\/div>/g,'')}</div>`;
+      wrapEl.querySelectorAll('.gc.sel').forEach(x=>x.classList.remove('sel')); wrapEl.querySelectorAll('.halo').forEach(x=>x.setAttribute('opacity','.18'));
+      document.body.appendChild(wrapEl);
+      const canvas=await window.html2canvas(wrapEl,{backgroundColor:'#0f1626',scale:2,useCORS:true,logging:false,windowWidth:W+200}); wrapEl.remove();
+      const blob=await new Promise(r=>canvas.toBlob(r,'image/png')); const nombre='Customer_Journey_CGO.png';
+      if(o.onFoto){ o.onFoto({blob,url:URL.createObjectURL(blob)},nombre); } else fotoModal(blob,nombre);
+    }catch(e){ alert('No se pudo crear la imagen: '+(e&&e.message||e)); }
+    btn.textContent=old; btn.disabled=false; }
+  function fotoModal(blob,nombre){ const url=URL.createObjectURL(blob), file=new File([blob],nombre,{type:'image/png'}); let share=false; try{ share=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})); }catch(e){}
+    let m=document.getElementById('cjFoto'); if(m) m.remove(); m=document.createElement('div'); m.id='cjFoto'; m.style.cssText='position:fixed;inset:0;background:rgba(10,18,34,.72);z-index:9500;display:flex;align-items:center;justify-content:center;padding:16px';
+    m.innerHTML=`<div style="background:#fff;border-radius:16px;max-width:920px;width:100%;max-height:92vh;overflow:auto;padding:16px;font-family:Lexend,system-ui,sans-serif;color:#14213d"><div style="display:flex;align-items:center;gap:8px;margin:0 0 10px"><b style="font-size:16px">📷 Imagen lista</b><span style="flex:1"></span><button class="cjb" data-x="1">Cerrar</button></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px">${share?'<button class="cjb pri" data-sh="1">📲 Enviar por WhatsApp…</button>':''}<button class="cjb ${share?'':'pri'}" data-cp="1">📋 Copiar imagen</button><a class="cjb" href="${url}" download="${nombre}" style="text-decoration:none">⬇ Descargar</a></div>
+      <p style="font-size:12px;color:#6b7893;margin:0 0 10px" data-msg="1">${share?'«Enviar» abre el menú de compartir: elige WhatsApp y el chat.':'Cópiala y pégala en el chat de WhatsApp Web, o descárgala y adjúntala.'}</p><img src="${url}" alt="Customer Journey" style="width:100%;height:auto;border-radius:10px;display:block"></div>`;
+    document.body.appendChild(m); const msg=t=>{ const p=m.querySelector('[data-msg]'); if(p) p.textContent=t; };
+    m.addEventListener('click',async ev=>{ const t=ev.target; if(t===m||t.dataset.x){ m.remove(); return; }
+      if(t.dataset.sh){ try{ await navigator.share({files:[file],title:'Customer Journey CGO'}); msg('Enviada ✅'); }catch(e){} }
+      if(t.dataset.cp){ try{ await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); msg('✅ Copiada: pégala en el chat de WhatsApp (Ctrl+V).'); }catch(e){ msg('Este navegador no deja copiar imágenes: usa «Descargar».'); } } }); }
   render(); return api; }
 window.CJ={init,ORIG};
 })();
@@ -1396,7 +1420,7 @@ window.CJ={init,ORIG};
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-22T20:50:00.000Z";
+        const DATA_VERSION = "2026-10-22T21:20:00.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
@@ -1422,6 +1446,7 @@ window.CJ={init,ORIG};
                 const card = document.createElement('div'); card.className = 'card'; card.id = 'cjCard'; card.setAttribute('data-no-edit', '1');
                 card.innerHTML = '<div class="section-head" style="margin:0 0 8px"><div><h3>🗺️ Customer Journey: la ruta del cliente y sus desvíos</h3><p>El camino ideal del lead al matriculado. Cada tarjeta es un desvío real de la llamada (riesgo o atajo) y la flecha muestra a qué etapa lo devolvemos. Toca una etapa o un desvío para ver qué hacer y con qué técnica.</p></div></div><div id="cjRuta"></div>';
                 hero.after(card); box = card.querySelector('#cjRuta'); }
+            const cjCard = document.getElementById('cjCard'); if (cjCard) cjCard.style.padding = '22px 26px';
             if (!window.CJ || box.dataset.cjOn) return; box.dataset.cjOn = '1';
             let base = null; try { base = JSON.parse(document.getElementById('cjData').textContent || '{}'); } catch (e) {}
             if (!base || !base.etapas) base = window.CJ.ORIG;
