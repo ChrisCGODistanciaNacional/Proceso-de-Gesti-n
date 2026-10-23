@@ -1583,6 +1583,12 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-pf input:focus{outline:2px solid var(--gu-cli);outline-offset:1px}
 @media (min-width:900px){ #guia .gu-ppl{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px} }
 
+/* v254: Mapa del equipo en la Guía */
+.gu-mapa{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;display:grid;gap:6px}
+.gu-mapa .mtgrid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+.gu-mapa .mtile{cursor:inherit}
+.gu-mapa-go{justify-self:end;font-size:.78rem;font-weight:600;color:var(--info,#7aa2ff)}
+
 
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
