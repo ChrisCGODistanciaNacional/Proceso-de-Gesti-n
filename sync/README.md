@@ -39,3 +39,12 @@ semana…). No se calcula aquí: se **publica** desde el último corte del table
   Si un asesor deja de estar en el tablero, su archivo se borra en la siguiente corrida.
 - El archivo descargado del Mapa (abierto desde el disco) no incluye las fichas: la pestaña muestra
   un enlace a la versión en línea.
+
+## Customer Journey (desde 25/10/2026)
+
+El Journey que Christopher edita en el Tablero (documento `ajustes/journey` de su base) se publica
+aquí con `python3 sync/sync_journey.py`: lee `sync/inputs/ajustes/journey.json` (ArtifactData → get,
+collection `ajustes`, doc_id `journey`, out_dir `sync/inputs`) y, solo si cambió, reemplaza el bloque
+`<script id="cjData">` de `index.html` y sube `DATA_VERSION`. Es la única modificación de `index.html`
+permitida desde la tarea programada; se hace commit de `index.html` con mensaje
+"Customer Journey: sincronizado desde el Tablero".
