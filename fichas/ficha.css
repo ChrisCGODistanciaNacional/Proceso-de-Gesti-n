@@ -402,6 +402,7 @@ table.c2t tr.sub td{font-size:.66rem;color:var(--muted);border-bottom:none}
 .c3f>div{display:flex;flex-direction:column}
 .segt td small{display:block;margin-top:1px}
 .segc{display:flex;align-items:flex-end;gap:2px;height:30px;min-width:120px;max-width:180px}
+.news section.blk.nmas{display:none}.nmasbar{grid-column:1/-1;display:flex;justify-content:center;padding:4px 0}.nmasbar .btn{font-size:.82rem}.nmasbar small{color:var(--muted);font-weight:500}
 .hrtag{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:700;border-radius:99px;padding:2px 8px;background:color-mix(in srgb,var(--hc) 18%,transparent);color:var(--hc);border:1px solid color-mix(in srgb,var(--hc) 40%,transparent)}
 .hrgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
 .hrc{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--hc);border-radius:12px;padding:10px 12px;display:grid;gap:6px;align-content:start}
@@ -411,6 +412,21 @@ table.c2t tr.sub td{font-size:.66rem;color:var(--muted);border-bottom:none}
 .hrc .hrr{font-size:.74rem;color:var(--muted)}.hrst{font-size:.72rem;font-weight:700;border-radius:99px;padding:2px 8px}.hrst.activa{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}.hrst.piloto{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}.hrst.pendiente{background:var(--surface2);color:var(--muted)}.hrst.parada{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
 .cobt td.cob{text-align:right;font-variant-numeric:tabular-nums;background:color-mix(in srgb,var(--hc) calc(var(--p)*1%),transparent)}.cobt td.cob0{color:var(--muted)}.cobt td.sin{background:color-mix(in srgb,var(--bad) calc(var(--p)*0.9%),transparent)}
 .cobt th{position:sticky;top:0;background:var(--surface)}.cobsel{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;font-size:.8rem}
+.city3w{position:relative}.city3d{width:100%;height:460px;border-radius:12px;background:var(--bg);border:1px solid var(--line);touch-action:none;cursor:grab;display:block}
+.citysel{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0;font-size:.76rem}.citysel b{margin-right:4px}.citysel button{font:inherit;font-size:.74rem;border:1px solid var(--line);border-radius:99px;background:var(--bg);color:var(--text);padding:3px 10px;cursor:pointer}.citysel button.on{background:var(--info,#4f8cff);border-color:var(--info,#4f8cff);color:#fff}
+.citydet{font-size:.78rem;margin-top:6px;min-height:1.4em}
+.cityctl{display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}.cityrow{display:grid;grid-template-columns:118px 1fr;gap:8px;align-items:center}.cityl b{display:block;font-size:.78rem}.cityl small{color:var(--muted);font-size:.68rem}.cityrow .citysel{margin:0}
+.cityacts{justify-content:flex-start}
+.cdet{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:8px}.cdet-h b{font-size:1rem}.cdet-h small{display:block}
+.cdet-k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.cdet-k div{background:var(--bg);border-radius:8px;padding:6px 8px}.cdet-k b{display:block;font-size:1.15rem}.cdet-k span{font-size:.68rem;color:var(--muted)}
+.cdet-s h5{margin:0 0 4px;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.cdet-r{display:grid;grid-template-columns:minmax(120px,1fr) minmax(80px,2fr) auto auto;gap:8px;align-items:center;padding:3px 0;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent)}.cdet-r>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cdet-r b{text-align:right;min-width:40px}.cdet-r small{color:var(--muted);white-space:nowrap}
+.cbar{display:block;height:8px;border-radius:4px;background:color-mix(in srgb,var(--line) 70%,transparent);overflow:hidden}.cbar i{display:block;height:100%}
+.cdet .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.cdet-a{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.cdet-tip{font-size:.76rem;color:var(--warn)}
+.cdet-link{cursor:pointer}.cdet-link:hover{background:color-mix(in srgb,var(--info,#4f8cff) 12%,transparent)}
+@media (max-width:520px){ .cityrow{grid-template-columns:1fr} .cdet-r{grid-template-columns:1fr 1fr auto;} .cdet-r small{grid-column:1/-1;font-size:.7rem} }.citytab td.cob{text-align:right}.citytab td small{display:block;font-size:.66rem;color:var(--ink);opacity:.8}.citytab th small{display:block;font-weight:500}
+@media (max-width:520px){ .city3d{height:360px} }
 #cob3d{width:100%;height:520px;border-radius:12px;background:var(--bg);border:1px solid var(--line);touch-action:none;cursor:grab;display:block}
 .cob3w{position:relative}.cob3tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:.74rem;max-width:260px;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:3}
 .cobleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.74rem;margin-top:6px;align-items:center}.cobleg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
@@ -1607,6 +1623,13 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-hrk{grid-column:1/-1}.gu-sel{font:inherit;font-size:.9rem;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--gu-card);color:inherit;width:100%}
 .gu-swap{margin:-4px 0 10px;width:100%;font-size:.82rem}
 @media (max-width:420px){ .gu-tabs .gu-tab{font-size:.62rem} }
+
+/* v256: mapa 3D ciudad en la Guía */
+.gu-city{padding:10px}.gu-city .city3d{height:400px}.gu-city .citysel{font-size:.74rem}.gu-city .cobleg{font-size:.72rem}
+@media (max-width:520px){ .gu-city .city3d{height:330px} }
+
+/* v258 */
+.gu-mapa-det{margin-top:12px}.gu-mapa-det>summary{font-size:.8rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}.gu-mapa-det>summary small{font-weight:600;text-transform:none;letter-spacing:0}.gu-mapa-det .in{margin-top:6px}
 
 
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
