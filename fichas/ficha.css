@@ -1674,6 +1674,12 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-tag.gu-ut{color:#F2C14E;letter-spacing:-1px}
 .gu-todos{margin-top:14px}.gu-todos .gu-h{margin-top:10px}.gu-note{font-size:.72rem;color:var(--muted);margin:8px 0 0}
 
+/* v279: bitácora de incidencias en «Cómo nos fue ayer» */
+.gu-bit h3{margin:0 0 4px}.gu-bit h3 small{font-weight:500;color:var(--muted)}
+.gu-inc{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:start;padding:7px 0;border-top:1px solid var(--line);font-size:.84rem}.gu-inc .e{font-size:1rem}.gu-inc .t b{color:var(--ink)}.gu-inc .t small{color:var(--muted)}.gu-inc .dt{font-size:.76rem;color:var(--muted);margin-top:2px}
+.gu-inc.bad .e{filter:none}.gu-inc.off{opacity:.55}.gu-inc.off .t b{text-decoration:line-through}
+.gu-incx{font:inherit;font-size:.72rem;font-weight:600;padding:4px 8px;border-radius:99px;border:1px solid var(--line);background:var(--gu-card);color:var(--ink);cursor:pointer;white-space:nowrap}.gu-inc.off .gu-incx{color:var(--ok)}
+
 
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
