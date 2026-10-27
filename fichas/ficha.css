@@ -757,6 +757,19 @@ ul.disc{margin:4px 0;padding-left:18px;font-size:.84rem;line-height:1.5}
 .cvd{font-size:.78rem;font-weight:700;text-align:right}
 /* ---- v16: ficha de asesor ---- */
 body.shared .asectrl{display:flex!important}
+/* v283: pestaña Checklist oculta (Christopher no la usa); su lógica sigue corriendo para no afectar la Guía */
+nav.tabs button[data-v="chk"]{display:none!important}
+/* v282: estado interno del asesor (Activo / En riesgo / Salida) — solo en la pestaña Asesor, nunca dentro de la ficha que se copia o envía */
+.aest{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:.88rem}
+.aest select{font:inherit;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.aest .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.aest.activo .dot{background:var(--ok)} .aest.riesgo .dot{background:var(--warn)} .aest.salida .dot{background:var(--bad)}
+.aplant{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0 0 10px;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:.88rem}
+.aplant b{font-variant-numeric:tabular-nums} .aplant .ok{color:var(--ok)} .aplant .wa{color:var(--warn)} .aplant .ba{color:var(--bad)}
+.aplant small{color:var(--muted);width:100%}
+.aext{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.aext h3{margin:0 0 6px;font-size:1.05rem;color:var(--ink)} .aext dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:8px 0 0} .aext dt{color:var(--muted)} .aext dd{margin:0}
+body.shared .aest, body.shared .aplant{display:none!important}
 .fifa{border-radius:16px;padding:16px 18px;background:linear-gradient(135deg,var(--surface),var(--bg));border:2px solid var(--tc);position:relative;overflow:hidden}
 .fifa.oro{box-shadow:0 0 0 3px rgba(232,163,23,.25)} .fifa.plata{box-shadow:0 0 0 3px rgba(160,170,190,.25)} .fifa.bronce{box-shadow:0 0 0 3px rgba(176,110,60,.2)}
 .fh{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
@@ -1498,7 +1511,7 @@ body.gu-on{overflow:hidden}
 .gu-note{font-size:.76rem;color:var(--muted);margin:8px 0 0;line-height:1.4}
 .gu-sync{font-size:.7rem;color:var(--muted);text-align:center;padding:16px 0 6px}
 /* pestañas inferiores */
-.gu-tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--gu-card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);z-index:62}
+.gu-tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--gu-card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);z-index:62}
 .gu-tab{border:0;background:transparent;color:var(--muted);display:grid;justify-items:center;gap:3px;padding:7px 0 7px;font-size:.68rem;font-weight:700;min-height:56px}
 .gu-tab{position:relative}.gu-tab svg{width:22px;height:22px;position:relative;z-index:1}
 .gu-tab.on{color:var(--ink)}.gu-tab.on::before{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:54px;height:28px;border-radius:99px;background:color-mix(in srgb,var(--ink) 11%,transparent)}
@@ -1699,6 +1712,42 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-inc{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:start;padding:7px 0;border-top:1px solid var(--line);font-size:.84rem}.gu-inc .e{font-size:1rem}.gu-inc .t b{color:var(--ink)}.gu-inc .t small{color:var(--muted)}.gu-inc .dt{font-size:.76rem;color:var(--muted);margin-top:2px}
 .gu-inc.bad .e{filter:none}.gu-inc.off{opacity:.55}.gu-inc.off .t b{text-decoration:line-through}
 .gu-incx{font:inherit;font-size:.72rem;font-weight:600;padding:4px 8px;border-radius:99px;border:1px solid var(--line);background:var(--gu-card);color:var(--ink);cursor:pointer;white-space:nowrap}.gu-inc.off .gu-incx{color:var(--ok)}
+/* v288: Bitácora con ✅ Conversado / 📝 Es permiso también en Ayer / Hoy y en «Cómo nos fue ayer» */
+/* v287: Bitácora «Por asesor»: incidencias conversadas con riesgo y datos del día, como imagen para compartir */
+/* v286: Contactabilidad, Programados y embudo sobre los leads que ingresaron en la semana; Pre por asesor por día */
+/* v283: Engagement → Pre solo Digital + Inbound y KPI de otras bases por campus */
+/* v282: estado interno de cada asesor (Activo / En riesgo / Salida) y 4 asesores agregados en la pestaña Asesor */
+/* v281: metas de los KPI, % Contactabilidad CRM/Genesys, % Programados, % Incidencias conversadas */
+/* v280: pestaña «Bitácora» (incidencias por día o semana, ✅ Conversado / 📝 Es permiso) — sobre v279 (1793111046-2059) */
+.gu-bbtn{display:flex;flex-direction:column;gap:6px;align-items:stretch}.gu-bbtn .gu-incx{min-height:32px}.gu-incx.on{border-color:var(--ok);color:var(--ok)}
+.gu-inc.gu-conv{opacity:.72}.gu-inc.gu-conv .t b{color:var(--muted)}.gu-inc .ok{color:var(--ok)}
+.gu-bsum{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}.gu-bsum span{background:var(--gu-card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:.8rem;color:var(--muted)}.gu-bsum b{display:block;font-size:1.25rem;color:var(--ink)}.gu-bsum .pend b{color:var(--bad)}.gu-bsum .conv b{color:var(--ok)}
+.gu-bsel2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 0}
+.gu-bsel2 select{flex:1 1 220px;min-height:40px;border-radius:12px;border:1px solid var(--line);background:var(--gu-card);color:var(--text);padding:6px 10px;font:inherit;font-weight:600}
+.gu-bfoto{min-height:40px}
+.gbc{margin-top:12px;background:#ffffff;color:#1d2b53;border:1px solid #dde3ee;border-radius:18px;overflow:hidden;font-size:.9rem;line-height:1.4}
+.gbc-hd{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 18px;background:linear-gradient(135deg,#f3f6fb,#e8edf6);border-bottom:1px solid #dde3ee}
+.gbc-hd small{display:block;color:#6b7488;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.68rem}
+.gbc-hd h2{margin:2px 0;font-size:1.25rem;color:#1d2b53} .gbc-hd span{color:#3d4660;font-size:.82rem}
+.gbc-badge{text-align:center;background:#ffffff;border:1px solid #dde3ee;border-radius:14px;padding:8px 12px;min-width:82px} .gbc-badge b{display:block;font-size:1.5rem;color:#c08a12;line-height:1} .gbc-badge small{color:#6b7488;font-size:.68rem}
+.gbc-sum{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px 4px} .gbc-sum span{background:#f7f9fc;border:1px solid #dde3ee;border-radius:99px;padding:3px 10px;font-size:.78rem;color:#3d4660} .gbc-sum b{color:#1d2b53} .gbc-sum .alto{background:#fdecea;border-color:#f5c2bd;color:#c9372c} .gbc-sum .alto b{color:#c9372c}
+.gbc-it{display:grid;grid-template-columns:78px 1fr;gap:12px;margin:10px 18px;padding:12px;border:1px solid #dde3ee;border-left:4px solid #c08a12;border-radius:12px;background:#ffffff}
+.gbc-it.alto{border-left-color:#c9372c} .gbc-d b{display:block;font-size:.9rem;color:#1d2b53} .gbc-d small{display:block;margin-top:4px;color:#1e8e3e;font-size:.68rem;line-height:1.3}
+.gbc-t{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-weight:700;color:#1d2b53} .gbc-t em{font-style:normal;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:99px;background:#fff4dc;color:#9a6b00;white-space:nowrap} .gbc-it.alto .gbc-t em{background:#fdecea;color:#c9372c}
+.gbc-det{margin:4px 0 0;color:#3d4660;font-size:.82rem}
+.gbc-day{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:8px 0 0} .gbc-day small{color:#6b7488;font-weight:700;font-size:.7rem;margin-right:2px}
+.gbc-day span{font-size:.74rem;padding:2px 8px;border-radius:8px;background:#f3f6fb;border:1px solid #dde3ee;color:#3d4660} .gbc-day span.bad{background:#fdecea;border-color:#f5c2bd;color:#c9372c} .gbc-day span.ok{background:#e8f5ec;border-color:#bfe3c9;color:#1e8e3e}
+.gbc-r{margin:8px 0 0;padding:7px 10px;border-radius:8px;background:#fffaf0;color:#5c4a1a;font-size:.78rem} .gbc-r b{color:#9a6b00}
+.gbc-paso{margin:12px 18px;padding:12px 14px;border-radius:12px;background:#eef4ff;border:1px solid #cfdcf5;color:#1d2b53} .gbc-paso ul{margin:6px 0 0;padding-left:18px} .gbc-paso li{margin:2px 0;font-size:.84rem}
+.gbc-ft{display:flex;flex-direction:column;gap:3px;padding:12px 18px 16px;border-top:1px solid #dde3ee;background:#f7f9fc;color:#3d4660;font-size:.82rem} .gbc-ft small{color:#6b7488;font-size:.72rem}
+@media (max-width:480px){ .gbc-it{grid-template-columns:1fr;gap:6px} .gbc-d{display:flex;gap:8px;align-items:baseline} .gbc-d small{margin:0} .gbc-d small br{display:none} }
+.gbc-snap{margin:0;border-radius:0;border:0;font-size:15px} .gbc-snap .gbc-it{grid-template-columns:86px 1fr}
+.gu-reg{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line);font-size:.86rem}
+.gu-reg:first-child{border-top:0} .gu-reg .when{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap} .gu-reg em{font-style:normal;font-size:.8rem;white-space:nowrap}
+.gu-reg.ok em{color:var(--ok)} .gu-reg.perm em{color:var(--muted)}
+@media (max-width:480px){ .gu-reg{grid-template-columns:1fr auto} .gu-reg .when{grid-column:1/-1} }
+.gu-reinc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.gu-reinc span{font-size:.76rem;padding:3px 9px;border-radius:99px;background:var(--gu-soft);color:var(--ink)}
+@media (max-width:420px){ .gu-inc{grid-template-columns:22px 1fr} .gu-bbtn{grid-column:2;flex-direction:row} .gu-bbtn .gu-incx{flex:1} }
 
 
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */

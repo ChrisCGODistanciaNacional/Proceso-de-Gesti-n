@@ -1,9 +1,9 @@
 {
- "version": "2026-10-27T14:43:30.238Z",
- "corte": "Corte 27/10 09:03",
+ "version": "2026-10-27T15:58:43.234Z",
+ "corte": "Corte 27/10 10:42",
  "fecha": "27/10",
- "css": "8c6f34c118",
- "generado": "2026-10-27T09:55:32-0500",
+ "css": "37fc471645",
+ "generado": "2026-10-27T11:03:53-0500",
  "asesores": [
   {
    "n": "ANA MARIA PADILLA PARRA",
@@ -33,6 +33,12 @@
    "n": "CECILIA ESTHER ALIAGA LAPA",
    "s": "cecilia-esther-aliaga-lapa",
    "d": "Cecilia",
+   "sede": "HYO"
+  },
+  {
+   "n": "DANIEL MATTA RODRIGUEZ",
+   "s": "daniel-matta-rodriguez",
+   "d": "Daniel Matta",
    "sede": "HYO"
   },
   {
@@ -78,9 +84,21 @@
    "sede": "HYO"
   },
   {
+   "n": "JOSE AUGUSTO SALLES GAMARRA",
+   "s": "jose-augusto-salles-gamarra",
+   "d": "Jose Salles",
+   "sede": "MIR"
+  },
+  {
    "n": "JOSTYN FLORES SOLANO",
    "s": "jostyn-flores-solano",
    "d": "Jostyn",
+   "sede": "MIR"
+  },
+  {
+   "n": "KARLA ASHLEY BENAVIDES PONCE",
+   "s": "karla-ashley-benavides-ponce",
+   "d": "Karla Benavides",
    "sede": "MIR"
   },
   {
@@ -106,6 +124,12 @@
    "s": "maria-alejandra-pino-contreras",
    "d": "Maria",
    "sede": "MIR"
+  },
+  {
+   "n": "MARUZZELLA KRUSKAYA ALVARO CARHUANCHO",
+   "s": "maruzzella-kruskaya-alvaro-carhuancho",
+   "d": "Maruzzella Alvaro",
+   "sede": "HYO"
   },
   {
    "n": "MELISSA LESLIE FERNANDEZ AVALOS",

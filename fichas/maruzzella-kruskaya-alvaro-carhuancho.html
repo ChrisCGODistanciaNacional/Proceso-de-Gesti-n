@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Ficha de Maruzzella Alvaro · CGO Distancia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ficha.css?v=37fc471645">
+</head>
+<body class="shared ficha-solo">
+<div class="fx-bar"><b>📋 Ficha de evaluación · Maruzzella Alvaro · HYO</b><span class="mut">Corte 27/10 10:42</span><span class="sp"></span><button type="button" id="fxTema" data-fx-accion="tema">☀️ Modo claro</button><button type="button" id="fxCopiar" data-fx-accion="copiar">📷 Copiar como imagen</button><a href="../#ficha">← Volver al Mapa de Procesos</a></div>
+<main><div class="view on" id="v-ase2"><div id="ase2"><div class="ase-card2" data-ase="MARUZZELLA KRUSKAYA ALVARO CARHUANCHO"><div class="aest activo"><span class="dot"></span><b>Estado interno</b><select data-aest="MARUZZELLA KRUSKAYA ALVARO CARHUANCHO" aria-label="Estado del asesor"><option value="activo" selected="">🟢 Activo</option><option value="riesgo">🟡 En riesgo</option><option value="salida">🔴 Salida</option></select><span class="mut small">solo lo ves tú</span></div><div class="aext"><h3>Maruzzella Kruskaya Alvaro Carhuancho</h3><dl><dt>Equipo</dt><dd>HYO</dd><dt>División</dt><dd>Postulantes</dd><dt>Supervisor</dt><dd>Christopher Jordy Huaman Luna</dd></dl><p class="mut small" style="margin:8px 0 0">Agregado a la lista de asesores para su seguimiento interno; no entra en cuadros ni rankings de preinscripción.</p></div></div></div></div></main>
+<script>window.__FICHA={"slug": "maruzzella-kruskaya-alvaro-carhuancho", "corto": "Maruzzella Alvaro", "nombre": "MARUZZELLA KRUSKAYA ALVARO CARHUANCHO", "sede": "HYO", "corte": "Corte 27/10 10:42", "fecha": "27/10", "version": "2026-10-27T15:58:43.234Z"};</script>
+<script>
+(function(){
+  'use strict';
+  var $=function(s,r){return (r||document).querySelector(s);};
+  var enMarco=false; try{ enMarco=window.self!==window.top; }catch(e){ enMarco=true; }
+  if(enMarco) document.body.classList.add('en-marco');
+  var INFO=window.__FICHA||{};
+  function temaGuardado(){ try{ return localStorage.getItem('cgo_ficha_tema'); }catch(e){ return null; } }
+  function aplicarTema(t,guardar){ t=(t==='light'||t==='claro')?'light':'dark'; document.documentElement.setAttribute('data-theme',t);
+    if(guardar){ try{ localStorage.setItem('cgo_ficha_tema',t); }catch(e){} }
+    var b=$('#fxTema'); if(b) b.textContent=t==='dark'?'☀️ Modo claro':'🌙 Modo oscuro';
+    avisarAlto(); }
+  var q=new URLSearchParams(location.search); aplicarTema(q.get('tema')||temaGuardado()||'dark',false);
+  // Las 3 cajas del plan (bien / foco / siguiente nivel) con la misma altura, igual que en el tablero
+  function fitPlan(pl){ if(!pl||!pl.offsetHeight) return; var bx=[].slice.call(pl.children); if(bx.length<3) return;
+    pl.querySelectorAll('.fxh').forEach(function(e){e.classList.remove('fxh');});
+    if(window.innerWidth<900||bx[0].getBoundingClientRect().top!==bx[2].getBoundingClientRect().top) return;   // en celular/tablet se ve todo el texto
+    bx.forEach(function(b){b.style.alignSelf='start';}); var H=bx[2].offsetHeight;
+    [bx[0],bx[1]].forEach(function(b){ var L=[].slice.call(b.querySelectorAll('[data-fx]')).sort(function(x,y){return (+y.dataset.fx)-(+x.dataset.fx);}); var i=0; while(b.offsetHeight>H&&i<L.length) L[i++].classList.add('fxh'); });
+    bx.forEach(function(b){b.style.alignSelf='';}); }
+  function ajustar(){ requestAnimationFrame(function(){ document.querySelectorAll('.v2plan').forEach(fitPlan); avisarAlto(); }); }
+  var altoT; function avisarAlto(){ if(!enMarco) return; clearTimeout(altoT); altoT=setTimeout(function(){ var h=Math.ceil(document.documentElement.scrollHeight); try{ window.parent.postMessage({type:'cgo-ficha-alto',alto:h,slug:INFO.slug||''},'*'); }catch(e){} },30); }
+  window.addEventListener('resize',function(){ clearTimeout(window.__fpT); window.__fpT=setTimeout(ajustar,150); });
+  if(window.ResizeObserver){ try{ new ResizeObserver(function(){ avisarAlto(); }).observe(document.body); }catch(e){} }
+  window.addEventListener('message',function(ev){ var d=ev&&ev.data||{}; if(d.type==='cgo-ficha-tema') aplicarTema(d.tema,true); if(d.type==='cgo-ficha-copiar') copiar(); if(d.type==='cgo-ficha-alto?') avisarAlto(); });
+  // ---- Copiar como imagen (mismo cuadro que manda el tablero por WhatsApp)
+  function loadH2C(){ return new Promise(function(res,rej){ if(window.html2canvas) return res(); var s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload=res; s.onerror=function(){rej(new Error('html2canvas'));}; document.head.appendChild(s); }); }
+  var esMovil=function(){ return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&window.matchMedia&&matchMedia('(pointer:coarse)').matches); };
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  async function renderSnap(sec){
+    await loadH2C(); var oscuro=document.documentElement.getAttribute('data-theme')!=='light';
+    var card=document.createElement('div'); card.className='snapcard';
+    var title=sec.querySelector('.bh h2')?sec.querySelector('.bh h2').innerHTML:''; var q=sec.querySelector('.bh .desc > p')?sec.querySelector('.bh .desc > p').textContent:'';
+    card.innerHTML='<div class="snaphead"><div><div class="snapbrand">Dashboard CGO Distancia Nacional · By: Christopher Huaman</div><div class="snaptitle">'+title+'</div>'+(q?'<div class="snapq">'+esc(q)+'</div>':'')+'</div><div class="snapdate">'+esc(INFO.fecha||'')+'</div></div>';
+    var body=sec.querySelector('.bb').cloneNode(true); body.querySelectorAll('details.more,details.mini,details.alerta').forEach(function(d){d.remove();}); body.querySelectorAll('details').forEach(function(d){ d.setAttribute('open',''); });
+    body.querySelectorAll('.ctrl,select,input,button,.expbar').forEach(function(el){el.remove();}); card.appendChild(body);
+    var host=document.createElement('div'); host.className='snaphost'+(oscuro?'':' light'); host.setAttribute('data-theme',oscuro?'dark':'light'); host.appendChild(card); document.body.appendChild(host);
+    var need=Math.max(1180,...[].slice.call(card.querySelectorAll('table')).map(function(t){return t.scrollWidth+80;})); host.style.width=need+'px';   // la ficha está pensada para ~1180 px: así la imagen sale igual que en pantalla
+    try{ card.querySelectorAll('.v2plan').forEach(fitPlan); }catch(e){}
+    var over=Math.max(card.scrollWidth,...[].slice.call(card.querySelectorAll('.fifa,.fgrid,.fbody,.cal,.tw,.grid2')).map(function(e){return e.scrollWidth+60;})); if(over>need){ need=Math.min(1600,over+20); host.style.width=need+'px'; }
+    try{
+      var W0=card.offsetWidth||1100,H0=card.offsetHeight||800,wantS=Math.min(3,Math.max(2,(window.devicePixelRatio||1)*2));
+      var maxS=Math.min(4,Math.max(wantS,3),Math.sqrt((esMovil()?14e6:60e6)/(W0*H0)),16000/H0,16000/W0);
+      var shot=function(sc){ return window.html2canvas(card,{backgroundColor:oscuro?'#0f1626':'#ffffff',scale:Math.max(1,sc),useCORS:true,logging:false,windowWidth:need}); };
+      var canvas; try{ canvas=await shot(maxS); }catch(e1){ canvas=await shot(Math.min(1.5,maxS)); }
+      var blob=await new Promise(function(r){canvas.toBlob(r,'image/png');}); if(!blob){ canvas=await shot(1.5); blob=await new Promise(function(r){canvas.toBlob(r,'image/png');}); }
+      return {blob:blob,url:canvas.toDataURL('image/png')};
+    } finally { host.remove(); }
+  }
+  function showShare(r,nombre){
+    var m=$('#imgModal'); if(!m){ m=document.createElement('div'); m.id='imgModal'; m.className='modal'; document.body.appendChild(m); m.addEventListener('click',function(ev){ if(ev.target===m||ev.target.dataset.close) m.remove(); }); }
+    var file=function(){ return new File([r.blob],nombre,{type:'image/png'}); }; var puedeShare=false; try{ puedeShare=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file()]})); }catch(e){}
+    m.innerHTML='<div class="mbox shbox"><div class="mhead"><b>📷 Imagen lista</b><button class="btn" data-close="1">Cerrar</button></div>'
+      +'<div class="expbar shbar">'+(puedeShare?'<button class="btn pri" id="shShare">📲 Enviar por WhatsApp…</button>':'')+'<button class="btn '+(puedeShare?'':'pri')+'" id="shSave">⬇ Guardar</button><button class="btn" id="shCopy">📋 Copiar</button></div>'
+      +'<p class="note" id="shMsg">'+(puedeShare?'«Enviar» abre el menú de compartir: elige WhatsApp y el chat.':'Guárdala y adjúntala desde WhatsApp.')+' También puedes mantener presionada la imagen → Compartir o Guardar.</p>'
+      +'<img src="'+r.url+'" alt="Imagen de la ficha" style="width:100%;height:auto;border-radius:8px"></div>';
+    var msg=function(t){ var el=$('#shMsg'); if(el) el.textContent=t; };
+    var sh=$('#shShare'); if(sh) sh.onclick=async function(){ try{ await navigator.share({files:[file()],title:nombre.replace(/_/g,' ').replace(/\.png$/,'')}); msg('Enviada ✅'); }catch(e){ if(e&&e.name==='AbortError') return; msg('Aquí no se puede abrir el menú de compartir: usa «Guardar» o mantén presionada la imagen → Compartir.'); } };
+    $('#shSave').onclick=function(){ try{ var a=document.createElement('a'); a.href=r.url; a.download=nombre; document.body.appendChild(a); a.click(); a.remove(); msg('Descargada: búscala en Descargas y adjúntala desde WhatsApp.'); }catch(e){ msg('No se pudo guardar: mantén presionada la imagen → Guardar imagen.'); } };
+    $('#shCopy').onclick=async function(){ try{ if(!navigator.clipboard||!window.ClipboardItem) throw new Error('sin portapapeles'); await navigator.clipboard.write([new ClipboardItem({'image/png':r.blob})]); msg('Copiada ✅ Pégala en el chat. Si tu WhatsApp no deja pegar imágenes, usa «Enviar» o «Guardar».'); }catch(e){ msg('Este dispositivo no permite copiar imágenes desde el navegador: usa «Enviar» o «Guardar».'); } };
+    avisarAlto();
+  }
+  var copiando=false;
+  async function copiar(){ if(copiando) return; copiando=true; var b=$('#fxCopiar'); var old=b?b.textContent:''; if(b){ b.textContent='Generando…'; b.disabled=true; }
+    try{ var sec=$('.ase-card2 section.blk'); var r=await renderSnap(sec); var nombre='Ficha_'+(INFO.corto||'asesor')+'.png';
+      // Dentro del Mapa de Procesos la vista previa la muestra la página de afuera (en su propia ventana)
+      var enviado=false; if(enMarco){ try{ window.parent.postMessage({type:'cgo-ficha-imagen',url:r.url,nombre:nombre},'*'); enviado=true; }catch(e){} }
+      if(!enviado) showShare(r,nombre); }
+    catch(e){ console.error('Captura',e); var avisado=false; if(enMarco){ try{ window.parent.postMessage({type:'cgo-ficha-error',msg:'No se pudo generar la imagen'},'*'); avisado=true; }catch(e2){} } if(!avisado) alert('No se pudo generar la imagen'); }
+    if(b){ b.disabled=false; b.textContent=old; } copiando=false; }
+  // ---- «Lo que haces bien»: si la etapa más fuerte llega sin detalle, se completa con lo que observó
+  // calidad en esa etapa (data.json de Propuesta de Valor, publicado en el mismo sitio).
+  var ETAPAS={'ganar confianza':'paso1','identificar necesidades':'paso2','solucionar problemas':'paso3','cerrar':'paso4'};
+  var GENERICO={paso1:'Calidad te califica bien al generar confianza: saludo, trato cercano y buena disposición desde el inicio.',
+    paso2:'Calidad te califica bien al identificar necesidades: preguntas y escuchas para entender qué busca el prospecto.',
+    paso3:'Calidad te califica bien al solucionar problemas: explicas la propuesta de valor y resuelves sus dudas.',
+    paso4:'Calidad te califica bien al cerrar: dejas un siguiente paso y te despides con tu nombre y el de la UC.'};
+  function plano(t){ return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim(); }
+  function frasesBien(t){
+    return String(t||'').replace(/[🟢🟠🔴🟡✅]/gu,'\n').split(/\n+|(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿])/).map(function(x){
+      x=x.trim().replace(/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+,\s+/,'').replace(/^(bien|tú|tu)\s*:\s*/i,'');   // «María, realizas…» → «Realizas…»
+      if(x.length>170){ var c=x.lastIndexOf(', ',165); x=(c>60?x.slice(0,c):x.slice(0,165).replace(/\s+\S*$/,''))+'.'; }
+      if(!x) return ''; x=x.charAt(0).toUpperCase()+x.slice(1); return /[.!?]$/.test(x)?x:x+'.';
+    }).filter(function(x){ return x.length>18 && !/^(te falta|falta|evita|no |recuerda|procura|refuerza|trata|aseg|sin )/i.test(x) && !/\b(te falta|faltó|falto|debes|deberías)\b/i.test(x); });
+  }
+  function buscarAsesor(an,nombre){ var A=plano(nombre).split(' ').filter(function(w){return w.length>2;}); var mejor=null,pts=0;
+    Object.keys(an||{}).forEach(function(k){ var B=plano(k).split(' '); var c=A.filter(function(w){ return B.indexOf(w)>=0; }).length; if(c>pts){ pts=c; mejor=k; } });
+    return pts>=2?mejor:null; }
+  function completarBien(){
+    var lis=[].slice.call(document.querySelectorAll('.v2plan li')).filter(function(li){ var sm=li.querySelector('small'); return sm&&/sigue haciendo/i.test(sm.textContent); });
+    if(!lis.length) return;
+    fetch('../../Propuesta-de-Valor/data.json',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; }).then(function(d){
+      lis.forEach(function(li){
+        var fl=li.querySelector('.v2fl'); if(!fl){ fl=document.createElement('div'); fl.className='v2fl'; li.appendChild(fl); }
+        // fuera lo que en realidad es «por mejorar» (a veces llega mezclado en la conclusión)
+        [].slice.call(fl.children).forEach(function(e){ var t=e.textContent.replace(/^\s*[✓•★✕]\s*/,''); if(/^(te falta|falta|evita|no |recuerda|procura|refuerza|sin )/i.test(t)||/\b(te falta|faltó|debes|deberías)\b/i.test(t)) e.remove(); });
+        var ya=[].slice.call(fl.children).map(function(e){ return plano(e.textContent); });
+        if(ya.length>=2) return;
+        var nm=li.querySelector('b')?li.querySelector('b').textContent.replace(/^[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/,''):'';
+        var k=ETAPAS[plano(nm)]; if(!k) return;
+        var L=[], fuente='';
+        var key=d&&buscarAsesor(d.analisis,INFO.nombre||INFO.corto);
+        if(key){
+          var st=((d.analisis[key]||{}).stages||{})[k]||{};
+          L=frasesBien(st.fortaleza).concat(st.oportunidad?[]:frasesBien(st.conclusion));   // la conclusión solo si esa etapa no trae algo por mejorar
+          if(L.length) fuente='Lo que destacó calidad en tu última evaluación.';
+          if(!L.length){ var ev=(d.evaluacion||[]).filter(function(r){ return r.ASESOR===key&&r._etapas&&r._etapas[k]&&r._etapas[k].fortaleza; });
+            if(ev.length){ var u=ev[ev.length-1]; L=frasesBien(u._etapas[k].fortaleza); fuente='Lo que destacó calidad en tu evaluación del '+(u.Fecha||'')+'.'; } }
+        }
+        if(!L.length){ L=[GENERICO[k]]; fuente='Basado en tu promedio: calidad aún no detalló qué haces bien en esta etapa.'; }
+        var n=0;
+        L.forEach(function(t){ if(n>=3-ya.length) return; var pt=plano(t); if(ya.some(function(y){ return y&&(y.indexOf(pt.slice(0,40))>=0||pt.indexOf(y.slice(0,40))>=0); })) return;
+          var sp=document.createElement('span'); sp.className='ok fx-add'; sp.innerHTML='<i>✓</i>'+esc(t); fl.appendChild(sp); ya.push(pt); n++; });
+        if(n&&fuente){ var f=document.createElement('small'); f.className='fx-fuente'; f.textContent=fuente; fl.appendChild(f); }
+      });
+      ajustar();
+    });
+  }
+  completarBien();
+  window.cgoFicha={copiar:copiar,tema:function(t){aplicarTema(t,true);},alto:avisarAlto};
+  document.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest('[data-fx-accion]'); if(!t) return; var a=t.dataset.fxAccion; if(a==='copiar') copiar(); if(a==='tema') aplicarTema(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark',true); });
+  document.addEventListener('toggle',function(){ avisarAlto(); },true);
+  window.addEventListener('load',function(){ ajustar(); setTimeout(avisarAlto,400); setTimeout(avisarAlto,1500); });
+  ajustar();
+})();
+</script>
+</body>
+</html>
