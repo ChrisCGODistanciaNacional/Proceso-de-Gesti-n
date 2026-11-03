@@ -519,6 +519,7 @@ table.heat th{font-size:.68rem;color:var(--muted);font-weight:700;padding:3px 6p
 table.heat tbody th{text-align:left;color:var(--ink);font-size:.78rem}
 table.heat td{text-align:center;padding:4px 2px;border-radius:4px;background:var(--surface);min-width:34px}
 table.heat td.ht{font-weight:800;color:var(--ink);background:var(--surface2)}
+.heat td.hc{display:table-cell;padding:6px 2px;border-bottom:0}.heat th small{font-weight:500}
 table.heat tr.hf td,table.heat tr.hf th{font-weight:800;color:var(--ink);background:var(--surface2)}
 .dpt{display:grid;gap:3px}.dph,.dpr{display:grid;grid-template-columns:120px 50px 1fr 64px 70px 70px;gap:8px;align-items:center;font-size:.8rem}.dph{font-size:.66rem;color:var(--muted);font-weight:700;text-transform:uppercase}.dpr{padding:3px 0;border-bottom:1px solid var(--line)}.dpr>span:first-child{font-weight:700;color:var(--ink)}.dpr>b{text-align:right}.warn-t{color:var(--warn)}
 .dpd,.dpw{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin-top:8px}.dpd>div,.dpw>div{background:var(--surface);border-radius:8px;padding:5px 8px;display:grid;font-size:.74rem}.dpd b,.dpw b{color:var(--ink)}
