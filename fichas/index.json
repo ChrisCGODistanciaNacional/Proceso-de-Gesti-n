@@ -1,9 +1,9 @@
 {
- "version": "2026-11-03T22:30:00.732Z",
- "corte": "Corte 03/11 16:40",
- "fecha": "03/11",
- "css": "d61e387ada",
- "generado": "2026-11-03T18:47:40-0500",
+ "version": "2026-11-04T15:53:28.001Z",
+ "corte": "Corte 04/11 10:41",
+ "fecha": "04/11",
+ "css": "7bb2757846",
+ "generado": "2026-11-04T10:54:41-0500",
  "asesores": [
   {
    "n": "ANA MARIA PADILLA PARRA",
@@ -16,12 +16,6 @@
    "s": "angelo-franco-sarmiento",
    "d": "Angelo",
    "sede": "MIR"
-  },
-  {
-   "n": "ANYHELA KELLY ORDONEZ CHAVEZ",
-   "s": "anyhela-kelly-ordonez-chavez",
-   "d": "Anyhela",
-   "sede": "HYO"
   },
   {
    "n": "BETSABETH ALEXANDRA ROJAS PALACIOS",
@@ -51,12 +45,6 @@
    "n": "EDGARD CHAVEZ VIZCARRA",
    "s": "edgard-chavez-vizcarra",
    "d": "Edgard",
-   "sede": "MIR"
-  },
-  {
-   "n": "EDUARDO ALFREDO COAQUIRA ELGUERA",
-   "s": "eduardo-alfredo-coaquira-elguera",
-   "d": "Eduardo",
    "sede": "MIR"
   },
   {
@@ -105,12 +93,6 @@
    "n": "LISETTE VALERIANA BLANCO CHUCO",
    "s": "lisette-valeriana-blanco-chuco",
    "d": "Lisette",
-   "sede": "HYO"
-  },
-  {
-   "n": "LUCERO XIMENA HUAYNATIS JACAY",
-   "s": "lucero-ximena-huaynatis-jacay",
-   "d": "Lucero",
    "sede": "HYO"
   },
   {
