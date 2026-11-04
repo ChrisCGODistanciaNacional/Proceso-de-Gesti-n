@@ -48,3 +48,12 @@ collection `ajustes`, doc_id `journey`, out_dir `sync/inputs`) y, solo si cambi�
 `<script id="cjData">` de `index.html` y sube `DATA_VERSION`. Es la única modificación de `index.html`
 permitida desde la tarea programada; se hace commit de `index.html` con mensaje
 "Customer Journey: sincronizado desde el Tablero".
+
+## Entradas sin `out_dir` (desde el 04/11/2026)
+ArtifactData ya no guarda en archivo los documentos que escribieron otras personas (calidad, ajustes,
+historial, snap/snapparts), así que la tarea los lee **sin `out_dir`** (quedan en el registro de la
+sesión) y `python3 -I sync/db_extract.py <dir> <colecciones…>` los pasa a `<dir>/<colección>/<id>.json`
+(mismo formato que consumen `kit/dbprep.py.txt`, `build_fichas.py` y `sync_journey.py`).
+`sync/grid2csv.py` convierte lecturas de Google Sheets (CGO_EXPORT_CRM por tramos con `get_values` y
+los exports pequeños con `get_spreadsheet`) al JSON de Drive que espera `kit/prep.py.txt`.
+Ambos scripts fueron autorizados por Christopher el 04/11/2026.
