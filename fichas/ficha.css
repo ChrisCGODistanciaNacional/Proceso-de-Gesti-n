@@ -1793,6 +1793,43 @@ body.gu-ver [data-gu-x]{display:none!important}
 .gu-reinc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.gu-reinc span{font-size:.76rem;padding:3px 9px;border-radius:99px;background:var(--gu-soft);color:var(--ink)}
 @media (max-width:420px){ .gu-inc{grid-template-columns:22px 1fr} .gu-bbtn{grid-column:2;flex-direction:row} .gu-bbtn .gu-incx{flex:1} }
 
+/* v376: selector de revisión Otros campus */
+select.ocsel{font:inherit;font-size:.78rem;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:150px}
+select.ocsel.oc-bien{border-color:var(--ok);background:var(--ok-soft)} select.ocsel.oc-auditar{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)} select.ocsel.oc-inbound{border-color:var(--info);background:color-mix(in srgb,var(--info) 12%,transparent)} select.ocsel.oc-err{border-color:var(--bad)}
+/* ===== v375 (10/11, Christopher): limpieza visual del Tablero y la Guía ===== */
+/* Tablero: «logrado/meta» junto a las barras (antes lo tapaba .cbar) */
+.cbar:has(> .cb){display:flex;height:auto;overflow:visible;background:none;align-items:center;gap:8px;min-width:130px}
+.cbar:has(> .cb) > .cb{flex:1;display:block;height:8px;border-radius:4px;background:#e6ebf3;overflow:hidden}
+.cbar:has(> .cb) > .cb > span{display:block;height:100%}
+.cbar:has(> .cb) > b{display:inline;font-size:.85rem;font-weight:700}
+/* Tablero: sin la etiqueta de categoría repetida (el título ya lo dice); queda solo el semáforo */
+.nmeta .chip.c-mute{display:none}
+.nmeta{margin-bottom:2px}
+/* Tablero: textos de lectura más cómodos y bloques con aire uniforme */
+section.blk>.bh{padding:14px 18px}
+.bb{padding:16px 18px}
+.bb p{line-height:1.5}
+.bh h2{letter-spacing:-.01em}
+.view>p.lead,.view>.vintro{max-width:80ch}
+/* Leyendas largas plegadas */
+details.notex{margin:10px 0 0}
+details.notex>summary{cursor:pointer;list-style:none;font-size:.76rem;font-weight:600;color:var(--info)}
+details.notex>summary::-webkit-details-marker{display:none}
+details.notex[open]>summary{margin-bottom:4px}
+details.notex>p.note{margin:0;line-height:1.5;max-width:110ch}
+.snapcard details.notex{display:none!important}
+.gu-gr section.blk .bb>details.notex{display:none}.gu-gr section.blk.gu-info .bb>details.notex{display:block}
+/* Guía: título arriba y detalle abajo (no apretado en dos columnas) */
+details.gu-det:not(.kqx):not(.prop):not(.gu-prop):not(.cobd)>summary{display:block;position:relative;padding:12px 40px 12px 14px;line-height:1.3}
+details.gu-det:not(.kqx):not(.prop):not(.gu-prop):not(.cobd)>summary::after{position:absolute;right:14px;top:50%;margin:0;transform:translateY(-50%) rotate(90deg)}
+details.gu-det:not(.kqx):not(.prop):not(.gu-prop):not(.cobd)[open]>summary::after{transform:translateY(-50%) rotate(-90deg)}
+details.gu-det:not(.kqx):not(.prop):not(.gu-prop):not(.cobd)>summary small{display:block;margin-top:2px;font-size:.76rem;font-weight:600;line-height:1.35}
+.gu-kitb{display:grid;grid-template-columns:1fr auto;column-gap:8px;row-gap:2px}
+.gu-kitb .k1{grid-column:1}.gu-kitb small{grid-column:1;font-weight:600}.gu-kitb .gu-ar{grid-column:2;grid-row:1 / span 2;align-self:center}
+.gu-h{flex-wrap:wrap;row-gap:2px}
+.gu-h small{font-weight:600}
+
+
 
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
