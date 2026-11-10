@@ -1267,14 +1267,22 @@ details.fbm>summary{border-style:solid;font-weight:800;letter-spacing:1px}
 .sv{display:grid;gap:8px}
 .svs{margin:-4px 0 0;font-size:.72rem;color:var(--muted)}
 .svk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.svt{background:var(--bg);border-radius:10px;padding:7px 8px;display:grid;gap:1px;border-top:3px solid var(--line);min-width:0}
+.svt{background:var(--bg);border-radius:9px;padding:5px 8px;display:grid;gap:0;border-top:3px solid var(--line);min-width:0}
 .svt.up{border-top-color:var(--ok)}.svt.dn{border-top-color:var(--bad)}
 .svt>span{font-size:.68rem;color:var(--muted);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.svt>b{font-size:1.45rem;line-height:1.1;color:var(--ink)}
+.svt>b,.svtn>b{font-size:1.15rem;line-height:1.1;color:var(--ink)}.svtn{display:flex;align-items:center;justify-content:space-between;gap:4px;flex-wrap:wrap}.svtn .svd{font-size:.62rem;padding:1px 5px}
+.svwb{display:flex;height:6px;border-radius:99px;overflow:hidden;background:var(--surface2);margin:4px 0 3px;max-width:240px}.svwb i{display:block;height:100%}
+.svwl{display:flex;flex-wrap:wrap;gap:2px 9px;font-size:.64rem;color:var(--muted)}.svwl em{font-style:normal;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}.svwl em i{width:7px;height:7px;border-radius:2px;display:inline-block}.svwl b{color:var(--ink)}
 .svt>small{font-size:.66rem;color:var(--muted)}
 .svt .svd{justify-self:start;margin-top:2px}
 .svd{font-size:.68rem;font-weight:800;border-radius:99px;padding:1px 7px;white-space:nowrap;background:var(--surface2);color:var(--muted)}
 .svd.up{background:var(--ok-soft);color:var(--ok)}.svd.dn{background:var(--bad-soft);color:var(--bad)}
+
+/* v374 (10/11, Christopher): «Tu semana vs la semana pasada» más compacto para que entre la fila de wapis sin agrandar el panel */
+.svt{padding:4px 8px;gap:1px}.svt>span{font-size:.68rem;line-height:1.2}
+.svtn{flex-wrap:nowrap;justify-content:flex-start;gap:5px}.svtn>b{font-size:1.05rem}.svtn small{font-size:.62rem;color:var(--muted);white-space:nowrap}.svtn .svd{margin-left:auto}
+.svr{padding:4px 0}.svh{margin-top:0}
+.svwx{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;margin-top:2px}.svwx .svwb{flex:0 0 110px;margin:0}
 .svh{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 .svl{display:grid;background:var(--bg);border-radius:10px;padding:2px 10px}
 .svr{display:grid;grid-template-columns:minmax(0,1fr) auto 74px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
