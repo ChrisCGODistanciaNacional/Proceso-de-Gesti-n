@@ -1,9 +1,9 @@
 {
- "version": "2026-11-15T14:47:30.947Z",
- "corte": "Corte 15/11 09:04",
+ "version": "2026-11-15T15:48:00.173Z",
+ "corte": "Corte 15/11 10:42",
  "fecha": "15/11",
  "css": "b4f4dbae5a",
- "generado": "2026-11-15T09:48:39-0500",
+ "generado": "2026-11-15T10:49:15-0500",
  "asesores": [
   {
    "n": "ANA MARIA PADILLA PARRA",
@@ -154,12 +154,6 @@
    "s": "judith-rocio-vila-ingaroca",
    "d": "Rocio",
    "sede": "HYO"
-  },
-  {
-   "n": "ROSA VICTORIA GUZMAN BONILLA",
-   "s": "rosa-victoria-guzman-bonilla",
-   "d": "Rosa",
-   "sede": "MIR"
   },
   {
    "n": "RUTH ALEXANDRA MAURICIO VERDE",
