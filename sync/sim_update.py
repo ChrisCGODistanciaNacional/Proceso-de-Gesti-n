@@ -5,6 +5,7 @@ Uso (en cada corte de ACTUALIZAR MANUAL):
   python3 sync/sim_update.py --corte "19/11/2026 12:08" --llamadas llamadas.json [--pre pre.json]
     llamadas.json = {"<nombre CRM o Genesys>": total_llamadas_de_hoy, ...}   (Genesys «Rendimiento del agente»: Manejo)
     pre.json      = {"<usuario de preinscripción CRM>": {"DD": n, ...}, ...} (vista A00, fecha APEC del mes; reemplaza el mes)
+Con --llamadas-ayer (1.er corte del día) también cierra el día anterior con su total final.
 Solo escribe el día del corte para las llamadas; los preinscritos se reemplazan por el conteo del mes que trae pre.json.
 Meta del mes y días a trabajar: campos "meta" y "dias" del archivo (por defecto 26 y 26).
 """
@@ -21,7 +22,7 @@ def slug_de(nombre, S):
         k = len(w & ws)
         if k > best[0]: best = (k, s)
     return best[1]
-ap = argparse.ArgumentParser(); ap.add_argument('--corte', required=True); ap.add_argument('--llamadas'); ap.add_argument('--pre')
+ap = argparse.ArgumentParser(); ap.add_argument('--corte', required=True); ap.add_argument('--llamadas'); ap.add_argument('--pre'); ap.add_argument('--llamadas-ayer', dest='ayer')
 a = ap.parse_args()
 d, m, y = re.match(r'(\d\d)/(\d\d)/(\d{4})', a.corte).groups(); mes = f'{y}-{m}'
 D = json.load(open(F, encoding='utf-8')) if os.path.exists(F) else {}
@@ -31,6 +32,13 @@ if a.llamadas:
     for n, v in json.load(open(a.llamadas, encoding='utf-8')).items():
         s = slug_de(n, S)
         if s and int(v) > 0: A.setdefault(s, {}).setdefault('ll', {})[d] = int(v)
+if a.ayer:   # 1.er corte del día: cierra ayer con su total final de Genesys
+    import datetime as _dt
+    dy = (_dt.date(int(y), int(m), int(d)) - _dt.timedelta(days=1))
+    if f'{dy.year}-{dy.month:02d}' == mes:
+        for n, v in json.load(open(a.ayer, encoding='utf-8')).items():
+            s = slug_de(n, S)
+            if s and int(v) > 0: A.setdefault(s, {}).setdefault('ll', {})[f'{dy.day:02d}'] = int(v)
 if a.pre:
     P = json.load(open(a.pre, encoding='utf-8'))
     for s in A: A[s]['pre'] = {}
