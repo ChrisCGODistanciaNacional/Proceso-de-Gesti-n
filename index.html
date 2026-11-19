@@ -674,19 +674,37 @@
         .sim-d .n em { font-style: normal; font-size: 10px; font-weight: 700; border-radius: 8px; padding: 1px 7px; }
         .sim-d .r { display: flex; justify-content: space-between; color: var(--ink-2); } .sim-d .r b { color: var(--ink); }
         .sim-d .mini { height: 5px; background: #e6ebf3; border-radius: 3px; overflow: hidden; } .sim-d .mini span { display: block; height: 100%; border-radius: 3px; }
-        .sim-funnel { display: grid; grid-template-columns: 150px repeat(5, 1fr) 90px; gap: 6px; padding: 0 20px; }
-        .sim-funnel div { background: #f3f6fb; border-radius: 9px; padding: 8px 10px; text-align: center; font-size: 12px; }
-        .sim-funnel .h { background: #0f5c4d; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-        .sim-funnel .rr { text-align: left; font-weight: 700; background: #eef1f6; display: flex; align-items: center; }
-        .sim-funnel b { font-family: var(--font-display); font-size: 18px; display: block; }
-        .sim-funnel .meta { background: #fff4d6; }
-        .sim-msg { margin: 10px 20px 0; padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 13.5px; background: #eef4ff; color: #1d2b53; }
+        .sim-proy { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 12px; padding: 0 20px; }
+        .sim-hero { border-radius: 14px; padding: 16px 18px; color: #fff; display: flex; flex-direction: column; gap: 8px; }
+        .sim-hero small { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+        .sim-hero .big { font-family: var(--font-display); font-size: 44px; font-weight: 700; line-height: 1; }
+        .sim-hero .big span { font-size: 18px; font-weight: 600; opacity: .85; margin-left: 6px; }
+        .sim-hero .chip { align-self: flex-start; background: rgba(255,255,255,.18); border-radius: 20px; padding: 4px 12px; font-weight: 700; font-size: 13px; }
+        .sim-hero .need { background: rgba(255,255,255,.12); border-radius: 10px; padding: 8px 10px; font-size: 12.5px; line-height: 1.45; }
+        .sim-hero .need b { font-size: 14px; }
+        .sim-gauge { position: relative; height: 14px; background: rgba(255,255,255,.22); border-radius: 8px; margin: 18px 0 18px; }
+        .sim-gauge i { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 8px; }
+        .sim-gauge .g1 { background: #fff; } .sim-gauge .g2 { background: repeating-linear-gradient(45deg, rgba(255,255,255,.75) 0 6px, rgba(255,255,255,.45) 6px 12px); }
+        .sim-gauge .mk { position: absolute; top: -6px; bottom: -6px; width: 3px; background: #f0b93e; border-radius: 2px; }
+        .sim-gauge .mk em { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-style: normal; font-size: 11px; font-weight: 800; color: #f0b93e; white-space: nowrap; }
+        .sim-gauge .lb { position: absolute; top: 18px; font-size: 10.5px; white-space: nowrap; opacity: .9; transform: translateX(-50%); }
+        .sim-etapas { border: 1.5px solid var(--line); border-radius: 14px; padding: 10px 14px; background: #fff; display: flex; flex-direction: column; gap: 7px; }
+        .sim-et { display: grid; grid-template-columns: 128px minmax(0, 1fr) 160px; gap: 10px; align-items: center; }
+        .sim-et .nm { font-weight: 700; font-size: 13px; } .sim-et .nm small { display: block; font-weight: 500; font-size: 10.5px; color: var(--ink-3, #6b7489); }
+        .sim-et .tr { position: relative; height: 12px; background: #eef1f6; border-radius: 7px; }
+        .sim-et .tr i { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 7px; }
+        .sim-et .tr .mk { position: absolute; top: -4px; bottom: -4px; width: 2px; background: #1d2b53; opacity: .55; }
+        .sim-et .vv { white-space: nowrap; text-align: right; font-size: 12px; color: var(--ink-2); } .sim-et .vv b { font-family: var(--font-display); font-size: 15px; color: var(--ink); }
+        .sim-et .pc { display: inline-block; min-width: 42px; text-align: center; border-radius: 9px; padding: 1px 6px; font-size: 11px; font-weight: 800; margin-left: 4px; }
+        .sim-etleg { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--ink-3, #6b7489); padding-top: 4px; border-top: 1px dashed var(--line); }
+        .sim-etleg i { display: inline-block; width: 18px; height: 8px; border-radius: 4px; margin-right: 5px; vertical-align: 0; }
+        @media (max-width: 980px) { .sim-proy { grid-template-columns: 1fr; } .sim-et { grid-template-columns: 100px minmax(0, 1fr) 118px; } }
         .sim-how { margin: 14px 20px 0; font-size: 13px; color: var(--ink-2); } .sim-how summary { cursor: pointer; font-weight: 700; }
         .sim-how ul { margin: 8px 0 0 18px; } .sim-how li { margin: 4px 0; }
         .sim-leg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-2); margin-top: 8px; padding: 0 20px; }
         .sim-leg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
-        @media (max-width: 980px) { .sim-top { grid-template-columns: 1fr 1fr; } .sim-sel { grid-column: 1 / -1; } .sim-kpis { grid-template-columns: 1fr 1fr; } .sim-funnel { grid-template-columns: 110px repeat(6, 1fr); font-size: 11px; } }
-        @media (max-width: 640px) { .sim-cal { grid-template-columns: repeat(2, 1fr); } .sim-dh, .sim-d.vacio { display: none; } .sim-funnel { grid-template-columns: 1fr 1fr; } .sim-kpis { grid-template-columns: 1fr; } }
+        @media (max-width: 980px) { .sim-top { grid-template-columns: 1fr 1fr; } .sim-sel { grid-column: 1 / -1; } .sim-kpis { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 640px) { .sim-cal { grid-template-columns: repeat(2, 1fr); } .sim-dh, .sim-d.vacio { display: none; } .sim-kpis { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -798,9 +816,8 @@
                     <div class="sim-sec">📅 TU MES DÍA A DÍA <small>meta del día · llamadas hechas · preinscritos</small></div>
                     <div class="sim-cal" id="simCal"></div>
                     <div class="sim-leg"><span><i style="background:#1e7f65"></i>Cumplió la meta del día</span><span><i style="background:#d9a21b"></i>Debajo: lo que falta se suma a los días siguientes</span><span><i style="background:#2f5aa8"></i>Hoy (en curso)</span></div>
-                    <div class="sim-sec" style="margin-top:18px">🎯 ¿CON CUÁNTO TERMINAS EL MES? <small>tu ritmo real × el embudo histórico del mes</small></div>
-                    <div class="sim-funnel" id="simFunnel"></div>
-                    <div class="sim-msg" id="simMsg"></div>
+                    <div class="sim-sec" style="margin-top:18px">🎯 ¿A CUÁNTO LLEGAS ESTE MES? <small>lo que llevas + tu ritmo real hasta el último día</small></div>
+                    <div class="sim-proy" id="simProy"></div>
                 </div>
                 <details class="sim-how"><summary>¿Cómo se calcula?</summary>
                     <ul>
@@ -1606,12 +1623,26 @@ window.CJ={init,ORIG};
                                           : '<div class="r"><span>Preinsc. esperados</span><b>' + simFmt(d.L / C.lpp, 1) + '</b></div>') + '</div>';
             });
             simEl('simCal').innerHTML = h;
-            // Funnel
-            const cab = ['', 'Llamadas', 'Preinscritos', 'Postulantes', 'Ingresantes', 'Matrículas (pagan este mes)', 'Meta'];
-            const fila = (lb, v) => '<div class="rr">' + lb + '</div>' + v.map((x, i) => '<div><b>' + simFmt(x, i < 2 ? 0 : 1) + '</b></div>').join('') + '<div class="meta"><b>' + C.meta + '</b></div>';
-            simEl('simFunnel').innerHTML = cab.map(x => '<div class="h">' + x + '</div>').join('') + fila('Llevas', C.tot) + fila('Terminarías el mes', C.cierreF);
-            const mat = C.cierreF[4];
-            simEl('simMsg').textContent = !C.B83 ? 'Aún no hay días cerrados: la proyección usa tu plan del mes.' : (mat >= C.meta ? '¡Vas bien! A este ritmo superas tu meta de ' + C.meta + ' matrículas.' : 'A este ritmo te faltarían ' + simFmt(C.meta - mat, 1) + ' matrículas. Sigue la meta diaria del calendario.');
+            // Proyección: lo que lleva + ritmo real hasta fin de mes, frente a la meta de cada etapa
+            const pp = H.pp, pi = H.pi, cv = H.im * H.mm, ETA = [['📞', 'Llamadas', C.llMes, 0], ['📝', 'Preinscritos', C.preNec, 0], ['🧾', 'Postulantes', C.preNec * pp, 1], ['🎓', 'Ingresantes', C.preNec * pp * pi, 1], ['💳', 'Matrículas', C.meta, 1]];
+            const matL = C.tot[4], matP = C.cierreF[4], falta = Math.max(0, C.meta - matP), llega = matP >= C.meta;
+            const preAdd = falta / (pp * pi * cv), llAdd = preAdd * C.lpp, quedan = Math.max(1, C.B86), ritmo = (C.cierreF[0] - C.tot[0]) / quedan, llDia = Math.ceil(ritmo + llAdd / quedan), tope = 200;
+            const con200 = matP + Math.max(0, tope - ritmo) * quedan / C.lpp * pp * pi * cv;
+            const mx = Math.max(C.meta, matP) * 1.12, P = v => Math.min(100, v / mx * 100);
+            const heroCol = !C.B83 ? '#2f5aa8' : llega ? '#1e7f65' : (matP >= C.meta * 0.8 ? '#b7791f' : '#b8352a');
+            const hero = '<div class="sim-hero" style="background:' + heroCol + '"><small>Matrículas a fin de mes</small><div class="big">' + simFmt(matP, 1) + '<span>de ' + C.meta + '</span></div>' +
+                '<div class="sim-gauge"><i class="g2" style="width:' + P(matP) + '%"></i><i class="g1" style="width:' + P(matL) + '%"></i><span class="mk" style="left:' + P(C.meta) + '%"><em>Meta ' + C.meta + '</em></span>' +
+                '<span class="lb" style="left:' + Math.max(8, P(matL)) + '%">Llevas ' + simFmt(matL, 1) + '</span></div>' +
+                (C.B83 ? '<div style="font-size:12px;opacity:.9">Tu ritmo: <b>' + simFmt(Math.round(ritmo)) + ' llamadas/día</b> en los días que quedan</div>' : '') + '<span class="chip">' + (!C.B83 ? '🗓️ Según tu plan del mes' : llega ? '✅ A este ritmo llegas a tu meta' : '⚠️ A este ritmo te faltarían ' + simFmt(falta, 1)) + '</span>' +
+                (llega || !C.B83 ? '<div class="need">Mantén tu meta diaria del calendario: <b>' + (hr ? hr.L : C.metaIni) + ' llamadas</b>.</div>'
+                    : llDia <= tope ? '<div class="need">Para llegar necesitas <b>+' + Math.ceil(preAdd) + ' preinscritos</b>: sube a <b>' + simFmt(llDia) + ' llamadas por día</b> en tus ' + quedan + ' días restantes.</div>'
+                    : '<div class="need">Solo con llamadas no llegas: aun con el <b>tope de ' + tope + ' al día</b> terminarías en <b>' + simFmt(con200, 1) + '</b>. Te faltan <b>+' + Math.ceil(preAdd) + ' preinscritos</b>: la clave es convertir más llamadas en preinscritos (el plan pide 1 cada ' + simFmt(Math.round(C.lpp)) + ' llamadas).</div>') + '</div>';
+            const filas = ETA.map((e, i) => { const lv = C.tot[i], pr = C.cierreF[i], m = e[2], mxx = Math.max(m, pr) * 1.08, q = v => Math.min(100, v / mxx * 100), pc = m ? pr / m : 0;
+                const c = pc >= 1 ? '#1e7f65' : pc >= .8 ? '#d9a21b' : '#c0392b', bg = pc >= 1 ? '#e3f3e8' : pc >= .8 ? '#fff4d6' : '#fbe6e3', d = e[3] ? 1 : 0, dm = Number.isInteger(m) ? 0 : d;
+                return '<div class="sim-et"><div class="nm">' + e[0] + ' ' + e[1] + '<small>meta ' + simFmt(m, dm) + '</small></div>' +
+                    '<div class="tr"><i style="width:' + q(pr) + '%;background:' + c + ';opacity:.32"></i><i style="width:' + q(lv) + '%;background:' + c + '"></i><span class="mk" style="left:' + q(m) + '%"></span></div>' +
+                    '<div class="vv">' + simFmt(lv, d) + ' → <b>' + simFmt(pr, d) + '</b><span class="pc" style="background:' + bg + ';color:' + c + '">' + Math.round(pc * 100) + '%</span></div></div>'; }).join('');
+            simEl('simProy').innerHTML = hero + '<div class="sim-etapas">' + filas + '<div class="sim-etleg"><span><i style="background:#5b6478"></i>Llevas</span><span><i style="background:#5b6478;opacity:.32"></i>Terminarías a este ritmo</span><span><i style="background:#1d2b53;opacity:.55;width:3px"></i>Meta de la etapa</span><span>% = terminarías ÷ meta · 🟢 ≥100 % 🟡 ≥80 % 🔴 menos</span></div></div>';
             simEl('simCampania').textContent = 'Campaña ' + H.tipo + ' · faltan ' + H.ini + ' meses para el inicio · ' + simFmt(C.lpp, 1) + ' llamadas por preinscrito · mínimo ' + C.minD + '/día';
         }
         function simCambiaAsesor(s) { simAsesor = s; try { localStorage.setItem('cgo_sim_asesor', s); } catch (e) {} const a = (fichaIdx && fichaIdx.asesores || []).find(x => x.s === s); simEl('simTitulo').innerHTML = a ? '¿Cuántas llamadas necesito hoy, <span>' + simEsc(a.d || fichaNombrePropio(a.n)) + '</span>?' : '¿Cuántas llamadas necesito hoy?'; simPintar(); }
