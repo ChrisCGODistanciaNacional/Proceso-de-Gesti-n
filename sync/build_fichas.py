@@ -153,7 +153,7 @@ FICHA_JS = r"""
     if(guardar){ try{ localStorage.setItem('cgo_ficha_tema',t); }catch(e){} }
     var b=$('#fxTema'); if(b) b.textContent=t==='dark'?'☀️ Modo claro':'🌙 Modo oscuro';
     avisarAlto(); }
-  var q=new URLSearchParams(location.search); aplicarTema(q.get('tema')||temaGuardado()||'dark',false);
+  var q=new URLSearchParams(location.search); aplicarTema(q.get('tema')||temaGuardado()||'light',false);
   // Las 3 cajas del plan (bien / foco / siguiente nivel) con la misma altura, igual que en el tablero
   function fitPlan(pl){ if(!pl||!pl.offsetHeight) return; var bx=[].slice.call(pl.children); if(bx.length<3) return;
     pl.querySelectorAll('.fxh').forEach(function(e){e.classList.remove('fxh');});
@@ -295,7 +295,7 @@ def ficha_html(card_html, a, meta, css_v):
            '<button type="button" id="fxTema" data-fx-accion="tema">☀️ Modo claro</button>'
            '<button type="button" id="fxCopiar" data-fx-accion="copiar">📷 Copiar como imagen</button>'
            '<a href="../#ficha">← Volver al Mapa de Procesos</a></div>') % (esc(nombre_corto + (' · ' + a['sede'] if a.get('sede') else '')), esc(corte_corto))
-    return ('<!DOCTYPE html>\n<html lang="es" data-theme="dark">\n<head>\n<meta charset="utf-8">\n'
+    return ('<!DOCTYPE html>\n<html lang="es" data-theme="light">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             '<meta name="robots" content="noindex, nofollow">\n'
             '<title>%s</title>\n'
