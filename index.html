@@ -639,7 +639,56 @@
             .swimlane-container { overflow: visible; }
             .swimlane-headers { position: static; }
         }
-    </style>
+            /* ---- Simulador de llamadas (19/11/2026) ---- */
+        body[data-cat="sim"] { --cat: #0f5c4d; --cat-soft: #dff3ec; --cat-tab: #0f5c4d; --cat-tab-text: #fdf7e3; --cat-eyebrow: var(--gold); }
+        .tab[data-view="sim"] { --tc: #0f5c4d; }
+        body[data-cat="sim"] #mainDiagramCanvas { padding-top: 0; }
+        body[data-cat="sim"] .editing-hint { display: none !important; }
+        .sim-form { display: grid; grid-template-columns: 2fr 1fr .7fr 1.2fr 1.2fr; gap: 10px; padding: 14px 20px 0; }
+        .sim-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: var(--ink-2); }
+        .sim-form select, .sim-form input { font: inherit; font-size: 15px; padding: 8px 10px; border: 2px solid var(--line-strong); border-radius: 9px; background: #fff; color: var(--ink); }
+        .sim-form input { background: #eef4ff; }
+        .sim-banner { margin: 12px 20px 0; padding: 10px 14px; border-radius: 10px; background: #dff3ec; color: #0f5c4d; font-weight: 600; font-size: 13.5px; }
+        .sim-warn { margin: 8px 20px 0; padding: 10px 14px; border-radius: 10px; background: #fbecec; color: #a12d2d; font-size: 13px; }
+        .sim-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; padding: 14px 20px 0; }
+        .sim-sec { font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .04em; color: var(--ink); margin-bottom: 8px; padding: 0 20px; }
+        .sim-grid .sim-sec { padding: 0; }
+        .sim-sec small { font-weight: 500; color: var(--ink-3, #6b7489); letter-spacing: 0; margin-left: 6px; }
+        .sim-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+        .sim-dh { text-align: center; font-size: 11px; font-weight: 700; color: var(--ink-2); padding: 4px 0; background: #eef1f6; border-radius: 6px; }
+        .sim-d { border: 2px solid var(--line); border-radius: 10px; padding: 6px 7px; background: #fff; min-height: 128px; display: flex; flex-direction: column; gap: 3px; font-size: 11.5px; }
+        .sim-d.vacio { background: transparent; border-style: dashed; opacity: .35; min-height: 0; }
+        .sim-d.hoy { border-color: #2f5aa8; box-shadow: 0 0 0 2px rgba(47, 90, 168, .18); }
+        .sim-d.ok { border-left: 6px solid #1e7f65; }
+        .sim-d.bajo { border-left: 6px solid #d9a21b; }
+        .sim-d .n { font-family: var(--font-display); font-weight: 700; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .sim-d .n em { font-style: normal; font-size: 10px; font-weight: 700; border-radius: 8px; padding: 1px 6px; }
+        .sim-d .meta { color: var(--ink-2); } .sim-d .meta b { color: var(--ink); font-size: 13px; }
+        .sim-d input { width: 100%; font: inherit; font-size: 13px; padding: 3px 6px; border: 1px solid #c9d6ee; border-radius: 6px; background: #eef4ff; }
+        .sim-d .lb { font-size: 10px; color: var(--ink-3, #6b7489); margin-top: 2px; }
+        .sim-side { display: flex; flex-direction: column; gap: 10px; }
+        .sim-box { border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; }
+        .sim-kv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .sim-kv small { display: block; font-size: 11px; color: var(--ink-3, #6b7489); }
+        .sim-kv b { font-family: var(--font-display); font-size: 21px; }
+        .sim-bar { height: 9px; background: #e6ebf3; border-radius: 5px; overflow: hidden; margin: 8px 0 6px; }
+        .sim-bar span { display: block; height: 100%; background: #1e7f65; border-radius: 5px; width: 0; transition: width .3s; }
+        .sim-note { font-size: 12px; color: var(--ink-2); margin-top: 3px; }
+        .sim-est { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+        .sim-funnel { display: grid; grid-template-columns: 150px repeat(5, 1fr) 90px; gap: 6px; padding: 0 20px; align-items: stretch; }
+        .sim-funnel div { background: #f3f6fb; border-radius: 9px; padding: 8px 10px; text-align: center; font-size: 12px; }
+        .sim-funnel .h { background: #0f5c4d; color: #fff; font-weight: 700; }
+        .sim-funnel .r { text-align: left; font-weight: 700; background: #eef1f6; }
+        .sim-funnel b { font-family: var(--font-display); font-size: 18px; display: block; }
+        .sim-funnel .meta { background: #fff4d6; }
+        .sim-msg { margin: 10px 20px 0; padding: 10px 14px; border-radius: 10px; font-weight: 600; font-size: 13.5px; background: #eef4ff; color: #1d2b53; }
+        .sim-how { margin: 12px 20px 0; font-size: 13px; color: var(--ink-2); } .sim-how summary { cursor: pointer; font-weight: 700; }
+        .sim-how ul { margin: 8px 0 0 18px; } .sim-how li { margin: 4px 0; }
+        .sim-leg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-2); margin-top: 8px; }
+        .sim-leg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+        @media (max-width: 980px) { .sim-grid { grid-template-columns: 1fr; } .sim-form { grid-template-columns: 1fr 1fr; } .sim-funnel { grid-template-columns: 110px repeat(6, 1fr); font-size: 11px; } .sim-d { min-height: 0; } }
+        @media (max-width: 640px) { .sim-cal { grid-template-columns: repeat(2, 1fr); } .sim-dh { display: none; } .sim-d.vacio { display: none; } .sim-funnel { grid-template-columns: 1fr 1fr; } }
+</style>
 </head>
 <body>
 
@@ -659,9 +708,9 @@
             </div>
             <nav class="tabs" role="tablist" aria-label="Secciones">
                 <button class="tab" role="tab" data-view="ficha" aria-selected="true" onclick="showView('ficha')"><span class="tab-full">Ficha de asesor</span><span class="tab-mid">Ficha</span><span class="tab-short">Ficha</span></button>
+                <button class="tab" role="tab" data-view="sim" aria-selected="false" onclick="showView('sim')"><span class="tab-full">Simulador de llamadas</span><span class="tab-mid">Simulador</span><span class="tab-short">Simular</span></button>
                 <button class="tab" role="tab" data-view="valores" aria-selected="false" onclick="showView('valores')"><span class="tab-full">Valores y pilares</span><span class="tab-mid">Valores</span><span class="tab-short">Valores</span></button>
                 <button class="tab" role="tab" data-view="mapa" aria-selected="false" onclick="showView('mapa')"><span class="tab-full">Mapa de procesos</span><span class="tab-mid">Mapa</span><span class="tab-short">Mapa</span></button>
-                <button class="tab" role="tab" data-view="linea" aria-selected="false" onclick="showView('linea')"><span class="tab-full">Línea de atención</span><span class="tab-mid">Línea</span><span class="tab-short">Línea</span></button>
                 <button class="tab" role="tab" data-view="lineamientos" aria-selected="false" onclick="showView('lineamientos')"><span class="tab-full">Lineamientos</span><span class="tab-mid">Lineamientos</span><span class="tab-short">Reglas</span></button>
             </nav>
             <div class="actions">
@@ -714,6 +763,70 @@
                     <span>🔄 Se actualiza sola con cada corte del tablero del supervisor. Si hay uno nuevo, te avisamos con una ventana.</span>
                     <span id="fichaGen"></span>
                 </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ VISTA: SIMULADOR DE LLAMADAS (19/11/2026) ============
+         Misma lógica que DISTANCIA_SIMULADOR_VENTAS_ASESOR.xlsx (pestaña «Base Simulador»): meta de matrículas →
+         preinscritos necesarios → llamadas del mes → meta diaria. Lo que no se cumple hoy se reparte entre los días que quedan.
+         Los datos del asesor se guardan en este dispositivo (localStorage «cgo_sim_v1»). -->
+    <div class="page page-ficha page-sim" id="simPage" hidden>
+        <section class="view" data-view="sim" hidden>
+            <div class="card panel sim-panel">
+                <div class="panel-head ficha-head">
+                    <div>
+                        <div class="panel-eyebrow">SIMULADOR DE LLAMADAS</div>
+                        <h3 id="simTitulo">¿Cuántas llamadas necesito hoy?</h3>
+                        <p>Pon tu meta de matrículas y tus días de trabajo. Cada día registra tus llamadas y preinscritos: el simulador recalcula tu meta diaria y, si un día quedas debajo, reparte lo que falta entre los días que quedan.</p>
+                    </div>
+                    <div class="ficha-corte"><span class="ficha-corte-k">Hoy te toca</span><b id="simHoy">—</b><small id="simHoyS">llamadas</small></div>
+                </div>
+                <div class="sim-form">
+                    <label><span>¿Quién eres?</span><select id="simSel" onchange="simCambiaAsesor(this.value)"><option value="">Elige tu nombre…</option></select></label>
+                    <label><span>Mes</span><select id="simMes" onchange="simCambiaMes()"></select></label>
+                    <label><span>Año</span><input id="simAnio" type="number" min="2025" max="2030" onchange="simCambiaMes()"></label>
+                    <label><span>Meta del mes (matrículas)</span><input id="simMeta" type="number" min="0" step="1" oninput="simGuardaCfg()"></label>
+                    <label><span>Días que vas a trabajar</span><input id="simDias" type="number" min="1" max="31" step="1" oninput="simGuardaCfg()"></label>
+                </div>
+                <div class="sim-banner" id="simBanner"></div>
+                <div class="sim-warn" id="simWarn" hidden></div>
+                <div class="sim-grid">
+                    <div>
+                        <div class="sim-sec">📅 CALENDARIO DEL MES <small>✎ escribe tus llamadas y preinscritos de cada día</small></div>
+                        <div class="sim-cal" id="simCal"></div>
+                        <div class="sim-leg"><span><i style="background:#1e7f65"></i>Cumpliste la meta del día</span><span><i style="background:#d9a21b"></i>Debajo de la meta (se reparte en los días que quedan)</span><span><i style="background:#2f5aa8"></i>Hoy</span></div>
+                    </div>
+                    <div class="sim-side">
+                        <div class="sim-box" id="simEstado"></div>
+                        <div class="sim-box">
+                            <div class="sim-sec">📞 ACUMULADO DE LLAMADAS AL CORTE</div>
+                            <div class="sim-kv"><div><small>Llevas</small><b id="simLl">0</b></div><div><small>Meta al corte</small><b id="simLlM">0</b></div><div><small>Avance</small><b id="simLlP">0%</b></div></div>
+                            <div class="sim-bar"><span id="simLlBar"></span></div>
+                            <div class="sim-note" id="simLlN"></div>
+                        </div>
+                        <div class="sim-box">
+                            <div class="sim-sec">📝 ACUMULADO DE PREINSCRITOS AL CORTE</div>
+                            <div class="sim-kv"><div><small>Llevas</small><b id="simPr">0</b></div><div><small>Meta al corte</small><b id="simPrM">0</b></div><div><small>Avance</small><b id="simPrP">0%</b></div></div>
+                            <div class="sim-bar"><span id="simPrBar"></span></div>
+                            <div class="sim-note" id="simPrN"></div>
+                            <div class="sim-note" id="simDiasN"></div>
+                        </div>
+                        <button class="btn" type="button" onclick="simBorrar()">🗑 Borrar datos del mes</button>
+                    </div>
+                </div>
+                <div class="sim-sec" style="margin-top:18px">🎯 TU FUNNEL: ¿CON CUÁNTO TERMINAS EL MES? <small>según tu avance y los históricos</small></div>
+                <div class="sim-funnel" id="simFunnel"></div>
+                <div class="sim-msg" id="simMsg"></div>
+                <details class="sim-how"><summary>¿Cómo calcula?</summary>
+                    <ul>
+                        <li><b>Preinscritos necesarios</b> = meta de matrículas ÷ (% preinscrito → matrícula × % que paga el mismo mes) del mes según el histórico.</li>
+                        <li><b>Llamadas del mes</b> = preinscritos necesarios × llamadas por preinscrito (benchmark × % que necesita un top: 50 % lejos del inicio de clases, 60 % cerca), nunca menos que el mínimo diario × días ni más que el tope de 200 por día.</li>
+                        <li><b>Meta del día</b> = llamadas que faltan ÷ días que quedan (mínimo diario según tu meta; tope 200). Si hoy haces menos, mañana la meta sube.</li>
+                        <li><b>Proyección</b>: con tu ritmo real (lo que llevas ÷ días trabajados) × días que quedan, y el embudo histórico del mes.</li>
+                    </ul>
+                </details>
+                <div class="ficha-foot"><span>💾 Tus datos se guardan en este dispositivo. Usa siempre el mismo navegador para no perderlos.</span><span id="simCampania"></span></div>
             </div>
         </section>
     </div>
@@ -1054,97 +1167,6 @@
             </div>
         </section>
 
-        <!-- ============ VISTA: LÍNEA DE ATENCIÓN ============ -->
-        <section class="view" data-view="linea" hidden>
-            <div class="card panel" id="lineaPanel">
-                <div class="panel-head">
-                    <div>
-                        <div class="panel-eyebrow linea-eyebrow" contenteditable="true">ORDEN DE ABORDAJE DEL EQUIPO</div>
-                        <h3 contenteditable="true">Línea de Atención</h3>
-                        <p contenteditable="true">Así se reparte la atención en el día: qué dispara el contacto, en qué orden se revisa, y qué nunca debe soltarse.</p>
-                    </div>
-                    <button class="btn-group-copy" onclick="copyLineaAtencionAsImage(this)" title="Copiar toda la Línea de Atención como imagen">📋</button>
-                </div>
-                <div class="panel-section">
-                    <div class="trigger-row"><div class="trigger-card">
-<div class="trigger-card-title" contenteditable="true">🔰 Wapis Impulso (En Pausa)</div>
-<div class="trigger-card-body" contenteditable="true">8AM envío de WAPIs al primer bloque de NEW LEADS.</div>
-<div class="trigger-card-note" contenteditable="true">Solo enviemos a ese primer grupo de 8am; si lo hacemos cada hora vamos a saturar al alumno de mensajes y se quemará.</div>
-</div>
-<div class="trigger-card">
-<div class="trigger-card-title" contenteditable="true">🔰 Wapis PROG e INC (En Pausa)</div>
-<div class="trigger-card-body" contenteditable="true">Supervisor les avisará.</div>
-<div class="trigger-card-note" contenteditable="true">Cada vez que nos acumulemos de PROG e INC sin atención (tipificación) armaremos bolsa de Wapis para que envíen.</div>
-</div></div>
-                </div>
-                <div class="panel-section">
-                    <div class="loop-section">
-                        <div class="step-card">
-<div class="step-card-head">
-<span class="step-num">1️⃣</span>
-<span class="step-card-title" contenteditable="true">Vean lo más FRESCO</span>
-</div>
-<div class="abordaje-list">
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔰</span><span class="abordaje-item-title" contenteditable="true">Llamadas de GENESIS</span></div>
-<div class="abordaje-item-body" contenteditable="true">Si es UC_DISTANCIA y corta: (1) Vuelve a llamar (2) Déjale WSP.<br/>Es la Campaña más convertible.</div>
-</div>
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅰️</span><span class="abordaje-item-title" contenteditable="true">NEW LEAD y 🔥 SOS</span></div>
-<div class="abordaje-item-body" contenteditable="true">Lo puede revisar SOLO el asesor ASIGNADO.<br/>Cortes 8am, 11am, 3pm, 5pm y 7pm.<br/>Si hay base será cada hora.</div>
-</div>
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🅱️</span><span class="abordaje-item-title" contenteditable="true">PARTNER</span></div>
-<div class="abordaje-item-body" contenteditable="true">Un asesor puede revisar su BASE ASIGNADA y la de su PARTNER ASIGNADO.<br/>BIDI, PROG, INC, y ST.</div>
-</div>
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🟢</span><span class="abordaje-item-title" contenteditable="true">FUNNEL</span></div>
-<div class="abordaje-item-body" contenteditable="true">Date 30 minutos y no dejes clientes con 2 días sin atención.</div>
-</div>
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔰</span><span class="abordaje-item-title" contenteditable="true">PARTNER EXTRA</span></div>
-<div class="abordaje-item-body" contenteditable="true">A partir de las 5PM. Registren en el Drive validando <br/><b>¿La base de que asesor esta disponible?</b><br/>Colocan su nombre al lado para saber<br/>y no aborden lo mismo</div>
-</div></div>
-<button class="btn-add-abordaje" onclick="addAbordajeItem(this)">+ Agregar punto</button>
-</div>
-                        <div class="loop-step-arrow"></div>
-                        <div class="step-card">
-<div class="step-card-head">
-<span class="step-num">2️⃣</span>
-<span class="step-card-title" contenteditable="true">Sin perder sus CHATS</span>
-</div>
-<div class="step-note" contenteditable="true">La mayoría de INS son CHAT y WAPI: tipifiquen y conviertan.</div>
-<div class="abordaje-list">
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">🔥</span><span class="abordaje-item-title" contenteditable="true">Busquen cerrarlo en el chat</span></div>
-<div class="abordaje-item-body" contenteditable="true"></div>
-</div>
-<div class="abordaje-item">
-<button class="btn-node-remove" onclick="this.parentElement.remove(); persistDiagram();">✕</button>
-<div class="abordaje-item-head"><span class="abordaje-marker" contenteditable="true">📞</span><span class="abordaje-item-title" contenteditable="true">O jálenlos para llamada</span></div>
-<div class="abordaje-item-body" contenteditable="true"></div>
-</div>
-</div>
-<button class="btn-add-abordaje" onclick="addAbordajeItem(this)">+ Agregar punto</button>
-</div>
-                        <div class="loop-back-badge" contenteditable="true">🔁 Acaban y vuelven a 1️⃣</div>
-                    </div>
-                </div>
-                <div class="panel-section">
-                    <div class="linea-alert-card">
-                        <div class="linea-alert-title" contenteditable="true">⚠️ COBREN EXAMEN en el momento con SENTIDO DE URGENCIA</div>
-                        <div class="linea-alert-body" contenteditable="true">Usen DTOS y GANCHOS.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- ============ VISTA: VALORES Y PILARES ============ -->
         <section class="view" data-view="valores" hidden>
             <div class="card panel" id="valoresPanel">
@@ -1420,7 +1442,7 @@ window.CJ={init,ORIG};
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-10-25T14:47:51.000Z";
+        const DATA_VERSION = "2026-11-19T19:30:00.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
@@ -1428,7 +1450,7 @@ window.CJ={init,ORIG};
         const STORAGE_KEY = 'cgo_mapa_procesos_v2';
         const STORAGE_VERSION_KEY = 'cgo_mapa_procesos_v2_version';
         // Orden de las pestañas. "ficha" vive fuera del lienzo editable (no se guarda ni se exporta).
-        const VIEWS = ['ficha', 'valores', 'mapa', 'linea', 'lineamientos'];
+        const VIEWS = ['ficha', 'sim', 'valores', 'mapa', 'lineamientos'];
         // El archivo descargado (abierto desde el disco) no tiene fichas: arranca en el mapa.
         const VIEW_INICIAL = /^https?:$/.test(location.protocol) ? 'ficha' : 'mapa';
 
@@ -1518,6 +1540,117 @@ window.CJ={init,ORIG};
         }
 
         // ---------------------------------------------------------------- Pestañas
+        /* ================= SIMULADOR DE LLAMADAS (19/11/2026) =================
+           Réplica de DISTANCIA_SIMULADOR_VENTAS_ASESOR.xlsx («Base Simulador»). Históricos del benchmark por mes de campaña
+           (filas 29–40), tabla de mínimo diario (G62:I66) y parámetros E63:E66. */
+        const SIM_MES = {"1":{"tipo":"Impar","nombre":"Enero","lp":46.8614,"pp":0.9901,"pi":0.65,"im":0.9385,"pm":0.604,"mm":0.9672,"ini":2},"2":{"tipo":"Impar","nombre":"Febrero","lp":44.5955,"pp":0.9551,"pi":0.7176,"im":0.918,"pm":0.6292,"mm":0.9464,"ini":1},"3":{"tipo":"Impar","nombre":"Marzo","lp":39.2842,"pp":0.9895,"pi":0.5532,"im":0.8846,"pm":0.4842,"mm":0.9348,"ini":0},"4":{"tipo":"Par","nombre":"Abril","lp":71.5634,"pp":0.7857,"pi":0.5636,"im":0.7903,"pm":0.35,"mm":0.6735,"ini":4},"5":{"tipo":"Par","nombre":"Mayo","lp":87.2727,"pp":0.8182,"pi":0.6574,"im":0.8873,"pm":0.4773,"mm":0.8571,"ini":3},"6":{"tipo":"Par","nombre":"Junio","lp":86.6984,"pp":0.8902,"pi":0.5959,"im":0.8736,"pm":0.4634,"mm":0.7632,"ini":2},"7":{"tipo":"Par","nombre":"Julio","lp":73.3553,"pp":0.8364,"pi":0.6739,"im":0.9247,"pm":0.5212,"mm":0.7791,"ini":1},"8":{"tipo":"Par","nombre":"Agosto","lp":103.6038,"pp":0.9078,"pi":0.6328,"im":0.8889,"pm":0.5106,"mm":0.9861,"ini":0},"9":{"tipo":"Impar","nombre":"Setiembre","lp":103.9697,"pp":0.8925,"pi":0.506,"im":0.6905,"pm":0.3118,"mm":0.7241,"ini":6},"10":{"tipo":"Impar","nombre":"Octubre","lp":209.2903,"pp":0.8056,"pi":0.569,"im":0.8485,"pm":0.3889,"mm":0.8214,"ini":5},"11":{"tipo":"Impar","nombre":"Noviembre","lp":154.9844,"pp":0.987,"pi":0.8421,"im":0.875,"pm":0.7273,"mm":0.7857,"ini":4},"12":{"tipo":"Impar","nombre":"Diciembre","lp":154.9844,"pp":0.987,"pi":0.5789,"im":0.9318,"pm":0.5325,"mm":0.8537,"ini":3}};
+        const SIM_MIN = [[0, 120, 110], [10, 140, 120], [20, 150, 130], [30, 170, 140], [40, 190, 150]];
+        const SIM_CERCA = 2, SIM_TOPE = 200, SIM_TOP_LEJOS = 0.5, SIM_TOP_CERCA = 0.6, SIM_KEY = 'cgo_sim_v1';
+        let simData = {}, simAsesor = '';
+        const simEl = id => document.getElementById(id);
+        const simN = v => { const x = Number(v); return isFinite(x) ? x : 0; };
+        const simFmt = (v, d) => (Number(v) || 0).toLocaleString('es-PE', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
+        const simEsc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        function simLoad() { try { simData = JSON.parse(localStorage.getItem(SIM_KEY) || '{}') || {}; } catch (e) { simData = {}; } }
+        function simSave() { try { localStorage.setItem(SIM_KEY, JSON.stringify(simData)); } catch (e) {} }
+        function simMesKey() { return simN(simEl('simAnio').value) + '-' + String(simN(simEl('simMes').value)).padStart(2, '0'); }
+        function simReg() { const a = simAsesor || '_'; simData[a] = simData[a] || {}; const k = simMesKey(); simData[a][k] = simData[a][k] || { meta: 25, dias: 26, d: {} }; return simData[a][k]; }
+        function simCalc() {
+            const R = simReg(), mes = simN(simEl('simMes').value), anio = simN(simEl('simAnio').value), H = SIM_MES[mes];
+            const meta = Math.max(0, simN(R.meta)), dias = Math.max(1, simN(R.dias) || 1);
+            const primer = new Date(anio, mes - 1, 1), diasMes = new Date(anio, mes, 0).getDate();
+            const lunes = new Date(primer); lunes.setDate(1 - ((primer.getDay() + 6) % 7));
+            const cerca = H.ini <= SIM_CERCA;
+            let fila = SIM_MIN[0]; SIM_MIN.forEach(f => { if (meta >= f[0]) fila = f; });
+            const minD = Math.min(SIM_TOPE, cerca ? fila[2] : fila[1]);
+            const lpp = H.lp * (cerca ? SIM_TOP_CERCA : SIM_TOP_LEJOS);
+            const preNec = (H.pm * H.mm) ? Math.ceil(meta / (H.pm * H.mm) - 1e-9) : 0;
+            const llMes = Math.min(SIM_TOPE * dias, Math.max(Math.ceil(preNec * lpp - 1e-9), minD * dias));
+            const metaIni = Math.ceil(llMes / dias - 1e-9), prePorDia = preNec / dias;
+            const D = []; let accE = 0, accG = 0, accF = 0;
+            for (let i = 1; i <= diasMes; i++) {
+                const f = new Date(anio, mes - 1, i), k = simMesKey() + '-' + String(i).padStart(2, '0');
+                const v = R.d[k] || [];
+                const E = simN(v[0]), F = simN(v[1]), G = E > 0 ? 1 : 0;
+                const J = Math.max(1, dias - accG), K = Math.max(0, llMes - accE);
+                const L = Math.min(SIM_TOPE, Math.max(minD, Math.ceil(K / J - 1e-9)));
+                const M = (G ? E : L) / lpp;
+                D.push({ i, f, k, E, F, G, L, M, raw: v });
+                accE += E; accG += G; accF += F;
+            }
+            const B81 = accE, B82 = accF, B83 = accG, B84 = Math.min(llMes, metaIni * B83), B85 = prePorDia * B83, B86 = Math.max(0, dias - B83);
+            const B87 = B83 === 0 ? llMes : B81 + B81 / B83 * B86, B88 = B83 === 0 ? llMes / lpp : B82 + B82 / B83 * B86;
+            const fun = (ll, pre) => { const po = pre * H.pp, ing = po * H.pi, mat = ing * H.im * H.mm; return [ll, pre, po, ing, mat]; };
+            return { H, mes, anio, meta, dias, lunes, diasMes, cerca, minD, lpp, preNec, llMes, metaIni, prePorDia, D, B81, B82, B83, B84, B85, B86, B87, B88, hoyF: fun(B81, B82), cierreF: fun(B87, B88) };
+        }
+        function simPintar() {
+            const C = simCalc(), H = C.H, hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+            simEl('simBanner').textContent = 'Campaña ' + H.tipo + '  ·  Faltan ' + H.ini + ' meses para el inicio  ·  Meta del mes: ' + simFmt(C.llMes) + ' llamadas y ' + C.preNec + ' preinscritos  ·  Mínimo diario: ' + C.minD + ' llamadas';
+            const w = simEl('simWarn'), pide = Math.ceil(C.preNec * C.lpp - 1e-9) > SIM_TOPE * C.dias;
+            w.hidden = !pide; if (pide) w.textContent = '⚠ Tu meta pide más de ' + SIM_TOPE + ' llamadas/día. Con el tope alcanzarías ~' + Math.round(C.llMes / C.lpp * H.pm * H.mm) + ' matrículas: apóyate en tu cartera y seguimiento.';
+            const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            let h = DIAS.map(d => '<div class="sim-dh">' + d + '</div>').join('');
+            const off = (C.D[0].f.getDay() + 6) % 7; for (let i = 0; i < off; i++) h += '<div class="sim-d vacio"></div>';
+            let hoyMeta = null;
+            C.D.forEach(d => {
+                const esHoy = d.f.getTime() === hoy.getTime(); if (esHoy) hoyMeta = d;
+                const st = d.G ? (d.E >= d.L ? 'ok' : 'bajo') : '';
+                const chip = d.G ? (d.E >= d.L ? '<em style="background:#e3f3e8;color:#1e7f65">✓ +' + (d.E - d.L) + '</em>' : '<em style="background:#fff4d6;color:#9a6b00">debe ' + (d.L - d.E) + '</em>') : (esHoy ? '<em style="background:#e6eefb;color:#2f5aa8">HOY</em>' : '');
+                h += '<div class="sim-d ' + st + (esHoy ? ' hoy' : '') + '"><div class="n">' + d.i + chip + '</div>' +
+                    '<div class="meta">Meta llamadas <b>' + d.L + '</b></div>' +
+                    '<div class="lb">✎ Llamadas hechas</div><input type="number" min="0" inputmode="numeric" value="' + (d.raw[0] != null && d.raw[0] !== '' ? simEsc(d.raw[0]) : '') + '" data-k="' + d.k + '" data-p="0" oninput="simDato(this)">' +
+                    '<div class="meta">Preinsc. proyectados <b>' + simFmt(d.M, 1) + '</b></div>' +
+                    '<div class="lb">✎ Preinsc. logrados</div><input type="number" min="0" inputmode="numeric" value="' + (d.raw[1] != null && d.raw[1] !== '' ? simEsc(d.raw[1]) : '') + '" data-k="' + d.k + '" data-p="1" oninput="simDato(this)"></div>';
+            });
+            simEl('simCal').innerHTML = h;
+            // Hoy te toca
+            const prox = hoyMeta || C.D.find(d => d.f >= hoy && !d.G) || null;
+            simEl('simHoy').textContent = prox ? simFmt(prox.G ? prox.L : prox.L) : '—';
+            simEl('simHoyS').textContent = hoyMeta ? (hoyMeta.G ? 'llamadas · hoy llevas ' + hoyMeta.E : 'llamadas para hoy') : 'llamadas · meta diaria';
+            // Estado
+            const dif = C.B81 - C.B84, est = simEl('simEstado');
+            let t, c, s;
+            if (!C.B83) { t = '🟦 Aún sin registros'; c = '#2f5aa8'; s = 'Tu meta inicial es ' + C.metaIni + ' llamadas por día.'; }
+            else if (dif >= 0) { t = '✅ Estás en línea'; c = '#1e7f65'; s = 'Vas ' + simFmt(dif) + ' llamadas por encima de tu meta al corte.'; }
+            else if (-dif <= C.B84 * 0.1) { t = '🟡 Casi en línea'; c = '#9a6b00'; s = 'Te faltan ' + simFmt(-dif) + ' llamadas: se reparten en tus ' + C.B86 + ' días restantes.'; }
+            else { t = '🔴 En debe'; c = '#b8352a'; s = 'Debes ' + simFmt(-dif) + ' llamadas. Tu meta diaria subió a ' + (prox ? prox.L : '—') + ' para recuperar.'; }
+            est.innerHTML = '<div class="sim-est" style="color:' + c + '">' + t + '</div><div class="sim-note">' + s + '</div>';
+            const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+            simEl('simLl').textContent = simFmt(C.B81); simEl('simLlM').textContent = simFmt(C.B84); simEl('simLlP').textContent = pct(C.B81, C.B84) + '%';
+            simEl('simLlBar').style.width = Math.min(100, pct(C.B81, C.B84)) + '%'; simEl('simLlBar').style.background = C.B81 >= C.B84 ? '#1e7f65' : '#d9a21b';
+            simEl('simLlN').textContent = 'Meta del mes: ' + simFmt(C.llMes) + '  ·  Te faltan: ' + simFmt(Math.max(0, C.llMes - C.B81));
+            simEl('simPr').textContent = simFmt(C.B82); simEl('simPrM').textContent = simFmt(C.B85, 1); simEl('simPrP').textContent = pct(C.B82, C.B85) + '%';
+            simEl('simPrBar').style.width = Math.min(100, pct(C.B82, C.B85)) + '%'; simEl('simPrBar').style.background = C.B82 >= C.B85 ? '#1e7f65' : '#d9a21b';
+            simEl('simPrN').textContent = 'Meta del mes: ' + simFmt(C.preNec, 1) + '  ·  Te faltan: ' + simFmt(Math.max(0, C.preNec - C.B82), 1);
+            simEl('simDiasN').textContent = 'Días trabajados: ' + C.B83 + ' de ' + C.dias + '  ·  Te quedan ' + C.B86;
+            // Funnel
+            const cab = ['', 'Llamadas', 'Preinscritos', 'Postulantes', 'Ingresantes', 'Matriculados (pagan este mes)', 'Meta'];
+            const fila = (lb, v) => '<div class="r">' + lb + '</div>' + v.map((x, i) => '<div><b>' + simFmt(x, i === 0 ? 0 : 1) + '</b></div>').join('') + '<div class="meta"><b>' + C.meta + '</b></div>';
+            simEl('simFunnel').innerHTML = cab.map(x => '<div class="h">' + x + '</div>').join('') + fila('Llevas hoy', C.hoyF) + fila('Terminarías el mes', C.cierreF);
+            const mat = C.cierreF[4];
+            simEl('simMsg').textContent = !C.B83 ? 'Aún no registras días: la proyección usa tu plan del mes.' : (mat >= C.meta ? '¡Vas bien! A este ritmo superas tu meta de ' + C.meta + ' matrículas.' : 'A este ritmo te faltarían ' + simFmt(C.meta - mat, 1) + ' matrículas. Sigue la meta diaria del calendario.');
+            simEl('simCampania').textContent = H.nombre + ' ' + C.anio + ' · ' + simFmt(C.lpp, 1) + ' llamadas por preinscrito · ' + Math.round(H.pm * 100) + '% pre → mat';
+        }
+        function simDato(inp) { const R = simReg(), k = inp.dataset.k, p = +inp.dataset.p; const v = R.d[k] || ['', '']; v[p] = inp.value === '' ? '' : Math.max(0, Math.round(simN(inp.value))); R.d[k] = v; simSave(); clearTimeout(simDato._t); simDato._t = setTimeout(() => { const a = document.activeElement, ak = a && a.dataset ? a.dataset.k : null, ap = a && a.dataset ? a.dataset.p : null; simPintar(); if (ak) { const n = document.querySelector('.sim-cal input[data-k="' + ak + '"][data-p="' + ap + '"]'); if (n) { n.focus(); const L = n.value.length; try { n.setSelectionRange(L, L); } catch (e) {} } } }, 500); }
+        function simGuardaCfg() { const R = simReg(); R.meta = simN(simEl('simMeta').value); R.dias = Math.min(31, Math.max(1, simN(simEl('simDias').value) || 1)); simSave(); simPintar(); }
+        function simCambiaMes() { const R = simReg(); simEl('simMeta').value = R.meta; simEl('simDias').value = R.dias; simPintar(); }
+        function simCambiaAsesor(s) { simAsesor = s; try { localStorage.setItem('cgo_sim_asesor', s); } catch (e) {} const a = (fichaIdx && fichaIdx.asesores || []).find(x => x.s === s); simEl('simTitulo').innerHTML = a ? '¿Cuántas llamadas necesito hoy, <span>' + simEsc(a.d || a.n) + '</span>?' : '¿Cuántas llamadas necesito hoy?'; simCambiaMes(); }
+        function simBorrar() { if (!confirm('¿Borrar las llamadas y preinscritos de este mes?')) return; simReg().d = {}; simSave(); simPintar(); }
+        async function simInit() {
+            if (simInit.ok) { simPintar(); return; } simInit.ok = true; simLoad();
+            const ms = simEl('simMes'); ms.innerHTML = Object.keys(SIM_MES).map(Number).sort((a, b) => a - b).map(m => '<option value="' + m + '">' + SIM_MES[m].nombre + '</option>').join('');
+            const hoy = new Date(); ms.value = hoy.getMonth() + 1; simEl('simAnio').value = hoy.getFullYear();
+            let idx = null; try { idx = fichaIdx || await fichaLeerIndice(); } catch (e) {}
+            const sel = simEl('simSel');
+            if (idx && idx.asesores) {
+                const g = {}; idx.asesores.forEach(a => { const k = a.sede === 'HYO' ? 'Huancayo' : a.sede === 'MIR' ? 'Miraflores' : (a.sede || 'Equipo'); (g[k] = g[k] || []).push(a); });
+                sel.innerHTML = '<option value="">Elige tu nombre…</option>' + Object.keys(g).sort().map(k => '<optgroup label="' + simEsc(k) + '">' + g[k].map(a => '<option value="' + simEsc(a.s) + '">' + simEsc(typeof fichaNombrePropio === 'function' ? fichaNombrePropio(a.n) : a.n) + '</option>').join('') + '</optgroup>').join('');
+            }
+            let s = ''; try { s = localStorage.getItem('cgo_sim_asesor') || localStorage.getItem(FICHA_KEY) || ''; } catch (e) {}
+            if (s && sel.querySelector('option[value="' + s + '"]')) sel.value = s; else s = '';
+            simCambiaAsesor(s);
+        }
+
         function showView(name, opts) {
             setTimeout(cjMount, 0);
             opts = opts || {};
@@ -1525,6 +1658,9 @@ window.CJ={init,ORIG};
             document.querySelectorAll('.view').forEach(function (s) { s.hidden = s.dataset.view !== name; });
             const fp = document.getElementById('fichaPage');
             if (fp) fp.hidden = name !== 'ficha';
+            const sp = document.getElementById('simPage');
+            if (sp) sp.hidden = name !== 'sim';
+            if (name === 'sim') setTimeout(simInit, 0);
             document.body.setAttribute('data-cat', name);
             document.querySelectorAll('.tab').forEach(function (t) {
                 const on = t.dataset.view === name;
