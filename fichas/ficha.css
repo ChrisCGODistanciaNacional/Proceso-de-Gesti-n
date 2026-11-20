@@ -703,7 +703,7 @@ table.fitab td,table.fitab th{padding:3px 8px;font-size:.8rem}
 .cpfv button{font:inherit;font-size:.76rem;border:0;background:none;color:var(--ink);padding:3px 10px;cursor:pointer}
 .cpfv button.x{color:var(--muted);padding:3px 8px;border-left:1px solid var(--line)}
 #cpFavN{font:inherit;font-size:.78rem;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);min-width:0;width:230px;max-width:100%}
-.cpck.cpsub{margin-left:26px;font-size:.78rem}
+.cpck.cpbtl{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}.cpbtlg select{font-size:.8rem;padding:2px 4px}.cpck.cpsub{margin-left:26px;font-size:.78rem}
 .cpmd{display:grid;gap:3px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line);font-size:.78rem}
 .cpmd label{display:flex;gap:6px;align-items:center;cursor:pointer}
 .cpm-dias small{display:block;margin:-2px 0 6px}
