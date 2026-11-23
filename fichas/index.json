@@ -1,10 +1,22 @@
 {
- "version": "2026-11-23T14:33:06.726Z",
+ "version": "2026-11-23T15:44:34.942Z",
  "corte": "Corte 23/11 09:03",
  "fecha": "23/11",
  "css": "6b7ecfb269",
- "generado": "2026-11-23T09:47:02-0500",
+ "generado": "2026-11-23T10:46:42-0500",
  "asesores": [
+  {
+   "n": "RAUL AARON MANUEL IPANAQUE ESCOBAR",
+   "s": "raul-aaron-manuel-ipanaque-escobar",
+   "d": "Aaron",
+   "sede": "MIR"
+  },
+  {
+   "n": "NICOL ALISSON ROMERO ESPINOZA",
+   "s": "nicol-alisson-romero-espinoza",
+   "d": "Alisson",
+   "sede": "HYO"
+  },
   {
    "n": "ANA MARIA PADILLA PARRA",
    "s": "ana-maria-padilla-parra",
@@ -20,7 +32,7 @@
   {
    "n": "BETSABETH ALEXANDRA ROJAS PALACIOS",
    "s": "betsabeth-alexandra-rojas-palacios",
-   "d": "Bethsabeth",
+   "d": "Betsabeth",
    "sede": "MIR"
   },
   {
@@ -102,16 +114,16 @@
    "sede": "HYO"
   },
   {
-   "n": "MARIA ALEJANDRA PINO CONTRERAS",
-   "s": "maria-alejandra-pino-contreras",
-   "d": "Maria",
-   "sede": "MIR"
-  },
-  {
    "n": "MARUZZELLA KRUSKAYA ALVARO CARHUANCHO",
    "s": "maruzzella-kruskaya-alvaro-carhuancho",
    "d": "Maruzzella Alvaro",
    "sede": "HYO"
+  },
+  {
+   "n": "MARIA ALEJANDRA PINO CONTRERAS",
+   "s": "maria-alejandra-pino-contreras",
+   "d": "María",
+   "sede": "MIR"
   },
   {
    "n": "MELISSA LESLIE FERNANDEZ AVALOS",
@@ -123,12 +135,6 @@
    "n": "MILAGROS TORRES SANTOS",
    "s": "milagros-torres-santos",
    "d": "Milagros",
-   "sede": "HYO"
-  },
-  {
-   "n": "NICOL ALISSON ROMERO ESPINOZA",
-   "s": "nicol-alisson-romero-espinoza",
-   "d": "Nicol",
    "sede": "HYO"
   },
   {
@@ -144,15 +150,9 @@
    "sede": "HYO"
   },
   {
-   "n": "RAUL AARON MANUEL IPANAQUE ESCOBAR",
-   "s": "raul-aaron-manuel-ipanaque-escobar",
-   "d": "Raul",
-   "sede": "MIR"
-  },
-  {
    "n": "JUDITH ROCIO VILA INGAROCA",
    "s": "judith-rocio-vila-ingaroca",
-   "d": "Rocio",
+   "d": "Rocío",
    "sede": "HYO"
   },
   {
