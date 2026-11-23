@@ -2020,6 +2020,8 @@ details.chxg>summary::-webkit-details-marker{display:none}details.chxg[open]>sum
 .chxd{width:10px;height:10px;border-radius:50%;display:inline-block}
 .chxg .num{font-weight:800;text-align:right}.chxp{color:var(--muted);font-weight:700;text-align:right}.chxs{font-size:.74rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chxm{font-size:.74rem;white-space:nowrap}
 .chxtw{max-height:440px;margin:0;overflow:auto;max-width:100%}.chxt{width:100%;table-layout:fixed}.chxt td,.chxt th{font-size:.76rem;vertical-align:top;white-space:normal;overflow-wrap:anywhere;padding:6px 7px}.chxb,.chxg{min-width:0;max-width:100%}details.chx{min-width:0;max-width:100%}.chxt td small{font-size:.7rem}.chxt td.c{text-align:center;white-space:nowrap}
+.chxpdfb{border:1px solid #c0392b33;background:#fff5f3;color:#b3261e;border-radius:8px;padding:2px 6px;margin-left:4px;font-weight:800;font-size:.74rem;cursor:pointer}.chxpdfb:hover{background:#fde4df}
+.chvtop .chvpdf+.x{margin-left:0!important}.chvpdf{margin-left:auto;margin-right:8px;border:1px solid #b3261e;background:#fff5f3;color:#b3261e;border-radius:8px;padding:5px 12px;font-weight:800;cursor:pointer}
 .chxeye{border:1px solid #3B7DDD;background:var(--info-soft);color:#1d4fa0;border-radius:8px;padding:2px 8px;font-weight:800;font-size:.74rem;cursor:pointer}
 .chxmu{font-size:.74rem;white-space:nowrap}
 .chmk{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;background:var(--surface);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:.86rem}.chmk .btn{margin-left:auto}
