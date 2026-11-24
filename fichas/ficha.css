@@ -632,7 +632,7 @@ details.pz-a.pz-dd{display:block}.pz-dd>summary{display:flex;align-items:baselin
 .wsflow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:6px 0 8px}.wsbox{background:var(--surface);border-radius:10px;padding:8px 12px;display:grid;min-width:130px;flex:1}.wsbox b{font-size:1.5rem;color:var(--ink)}.wsbox span{font-size:.74rem;color:var(--muted)}.wsbox.bad{border-left:3px solid var(--bad)}.wsbox.bad b{color:var(--bad)}
 .wsar{align-self:center;color:var(--muted);font-size:1.2rem}
 .wsbar{display:flex;height:16px;border-radius:6px;overflow:hidden;margin:4px 0}.wsbar i{display:block;height:100%}
-.wsr{display:grid;grid-template-columns:minmax(110px,1fr) 1.4fr 46px;grid-template-rows:auto auto;gap:0 8px;align-items:center;padding:3px 0;border-bottom:1px solid var(--line);font-size:.8rem}.wsr small{grid-column:1/-1;font-size:.68rem;color:var(--muted)}.wsl{font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wsr>b{text-align:right;color:var(--ink)}
+.wsr{display:grid;grid-template-columns:minmax(110px,1fr) 1.4fr 62px;grid-template-rows:auto auto;gap:0 8px;align-items:center;padding:3px 0;border-bottom:1px solid var(--line);font-size:.8rem}.wsr small{grid-column:1/-1;font-size:.68rem;color:var(--muted)}.wsl{font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wsr>b{text-align:right;color:var(--ink)}
 .wsb{display:flex;height:11px;border-radius:4px;overflow:hidden;background:var(--bg)}.wsb i{display:block;height:100%}
 
 /* ---- proyección 2.0 / funnel invertido / leads necesarios ---- */
