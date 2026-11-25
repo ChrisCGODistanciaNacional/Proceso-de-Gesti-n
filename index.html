@@ -639,6 +639,25 @@
             .swimlane-container { overflow: visible; }
             .swimlane-headers { position: static; }
         }
+            /* ---- Proyectos y entregables (25/11/2026) ---- */
+        body[data-cat="proy"] { --cat: #4a3b8f; --cat-soft: #ece8fb; --cat-tab: #4a3b8f; --cat-tab-text: #fdf7e3; --cat-eyebrow: var(--gold); }
+        .tab[data-view="proy"] { --tc: #4a3b8f; }
+        body[data-cat="proy"] #mainDiagramCanvas { padding-top: 0; }
+        body[data-cat="proy"] .editing-hint { display: none !important; }
+        .pj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; padding: 16px 20px 20px; }
+        .pj { background: var(--panel-2); border: 1px solid var(--line); border-left: 4px solid #4a3b8f; border-radius: 12px; padding: 14px 16px; }
+        .pj-wide { grid-column: 1 / -1; border-left-color: var(--gold); }
+        .pj-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+        .pj-h b { font-size: 15px; color: var(--ink); }
+        .pj-st { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+        .pj-st.ok { background: #dff3ec; color: #0f5c4d; } .pj-st.pe { background: var(--gold-soft); color: #8a5a00; }
+        .pj p { margin: 6px 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+        .pj-k { display: inline-block; min-width: 92px; font-weight: 700; color: var(--ink); margin-right: 6px; }
+        .pj-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px !important; }
+        .pj-links a { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; font-weight: 700; font-size: 12.5px; color: #4a3b8f; text-decoration: none; }
+        .pj-links a:hover { background: #ece8fb; }
+        .pj-links small { width: 100%; color: var(--muted); font-size: 12px; }
+        .pj-req { margin: 4px 0 0 18px; padding: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
             /* ---- Simulador de llamadas (19/11/2026) ---- */
         body[data-cat="sim"] { --cat: #0f5c4d; --cat-soft: #dff3ec; --cat-tab: #0f5c4d; --cat-tab-text: #fdf7e3; --cat-eyebrow: var(--gold); }
         .tab[data-view="sim"] { --tc: #0f5c4d; }
@@ -726,6 +745,7 @@
             <nav class="tabs" role="tablist" aria-label="Secciones">
                 <button class="tab" role="tab" data-view="ficha" aria-selected="true" onclick="showView('ficha')"><span class="tab-full">Ficha de asesor</span><span class="tab-mid">Ficha</span><span class="tab-short">Ficha</span></button>
                 <button class="tab" role="tab" data-view="sim" aria-selected="false" onclick="showView('sim')"><span class="tab-full">Simulador de llamadas</span><span class="tab-mid">Simulador</span><span class="tab-short">Simular</span></button>
+                <button class="tab" role="tab" data-view="proy" aria-selected="false" onclick="showView('proy')"><span class="tab-full">Proyectos y entregables</span><span class="tab-mid">Proyectos</span><span class="tab-short">Proy.</span></button>
                 <button class="tab" role="tab" data-view="valores" aria-selected="false" onclick="showView('valores')"><span class="tab-full">Valores y pilares</span><span class="tab-mid">Valores</span><span class="tab-short">Valores</span></button>
                 <button class="tab" role="tab" data-view="mapa" aria-selected="false" onclick="showView('mapa')"><span class="tab-full">Mapa de procesos</span><span class="tab-mid">Mapa</span><span class="tab-short">Mapa</span></button>
                 <button class="tab" role="tab" data-view="lineamientos" aria-selected="false" onclick="showView('lineamientos')"><span class="tab-full">Lineamientos</span><span class="tab-mid">Lineamientos</span><span class="tab-short">Reglas</span></button>
@@ -828,6 +848,62 @@
                     </ul>
                 </details>
                 <div class="ficha-foot"><span>🔄 Llamadas y preinscritos se cargan solos en cada corte del supervisor.</span><span id="simCampania"></span></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============ VISTA: PROYECTOS Y ENTREGABLES (25/11/2026) ============
+         Registro abierto de los proyectos de CGO Distancia: qué resolvió cada uno, su resultado y dónde está su entregable. -->
+    <div class="page page-ficha page-proy" id="proyPage" hidden>
+        <section class="view" data-view="proy" hidden>
+            <div class="card panel">
+                <div class="panel-head">
+                    <div>
+                        <div class="panel-eyebrow">PROYECTOS CGO DISTANCIA</div>
+                        <h3>Proyectos implementados y sus entregables</h3>
+                        <p>Qué construimos, qué oportunidad resolvió, el resultado y dónde encontrar cada herramienta. Actualizado al 25/11/2026.</p>
+                    </div>
+                </div>
+                <div class="pj-grid">
+                    <article class="pj"><div class="pj-h"><b>1. Actualizar Base · reparto automático de bases</b><span class="pj-st ok">En uso</span></div>
+                        <p><span class="pj-k">Oportunidad</span>La base se armaba a mano desde Genesys, el CRM y Chattigo (20–30 min por corte) y llegaban leads atendidos hace poco.</p>
+                        <p><span class="pj-k">Solución</span>Reparto parejo según quién está conectado, por prioridad (del más caliente al más frío), con rotación y control de las llamadas manuales en Genesys. Incluye los envíos masivos de WhatsApp listos para usar.</p>
+                        <p><span class="pj-k">Resultado</span>Unos 5 min por corte, 5–6 cortes al día: cerca de 2–3 horas diarias liberadas (estimado).</p>
+                        <p class="pj-links"><a href="https://bit.ly/BaseAdicionalDis" target="_blank" rel="noopener">📂 Drive Base Manual</a></p></article>
+                    <article class="pj"><div class="pj-h"><b>2. Actualizar Avance · datos al día en las 3 divisiones</b><span class="pj-st ok">En uso</span></div>
+                        <p><span class="pj-k">Oportunidad</span>Los datos se actualizaban a mano 3–4 veces por semana (unos 25 min cada vez) y quedaban desfasados.</p>
+                        <p><span class="pj-k">Solución</span>Carga automática de Dynamics, Genesys y Chattigo a los drives de cada división y al Tablero, con alertas cuando un dato no coincide con el CRM.</p>
+                        <p><span class="pj-k">Resultado</span>5 actualizaciones al día (unas 35 por semana), con revisión automática 3 veces al día.</p>
+                        <p class="pj-links"><a href="https://bit.ly/SupervisionDis" target="_blank" rel="noopener">📂 Div. Preinscrito</a><a href="https://bit.ly/DivPostulanteDis" target="_blank" rel="noopener">📂 Div. Postulante</a><a href="https://bit.ly/DivIngresanteDis" target="_blank" rel="noopener">📂 Div. Ingresante</a></p></article>
+                    <article class="pj"><div class="pj-h"><b>3. Tablero y Guía diaria</b><span class="pj-st ok">En uso</span></div>
+                        <p><span class="pj-k">Oportunidad</span>Indicadores dispersos en muchos cuadros y difíciles de leer.</p>
+                        <p><span class="pj-k">Solución</span>Una sola vista que cruza indicadores, chats y llamadas, y una Guía con las tareas del día por hora.</p>
+                        <p><span class="pj-k">Resultado</span>Ubicamos el quiebre del día sin descargar datos (antes 15–20 min). Ejemplo: caída de conversión en WhatsApp Empresarial de Digital → 5–6 patrones para corregir en unos 350 chats.</p>
+                        <p class="pj-links"><a href="https://claude.ai/artifact/A6ZRmsZQJsjgBsE6wKNSXk" target="_blank" rel="noopener">📊 Tablero de gestión</a><small>Acceso restringido: si lo necesitas, pídelo a Christopher Huamán.</small></p></article>
+                    <article class="pj"><div class="pj-h"><b>4. Calidad y ficha del asesor</b><span class="pj-st ok">En uso</span></div>
+                        <p><span class="pj-k">Oportunidad</span>Las auditorías estaban en Looker y en Genesys, una por una, sin el panorama del asesor.</p>
+                        <p><span class="pj-k">Solución</span>Ficha por asesor con calidad, preinscritos, conversión y simulador de llamadas; fortalezas para replicar y pasos a reforzar.</p>
+                        <p><span class="pj-k">Resultado</span>Feedback con datos a mitad y a fin de semana.</p>
+                        <p class="pj-links"><a href="https://chriscgodistancianacional.github.io/Proceso-de-Gesti-n/#ficha" target="_blank" rel="noopener">🪪 Ficha de asesor</a><a href="https://chriscgodistancianacional.github.io/Propuesta-de-Valor/" target="_blank" rel="noopener">🎯 Propuesta de Valor</a><a href="https://docs.google.com/spreadsheets/d/1SJAgbcxpVXpRZ6_Vb4_VW1Pl9BJZMyR8cTH-hmvgdEE/edit" target="_blank" rel="noopener">📂 Div. Preinscrito · 🔰GEN</a></p></article>
+                    <article class="pj"><div class="pj-h"><b>5. Revisión de chats y llamadas</b><span class="pj-st ok">En uso</span></div>
+                        <p><span class="pj-k">Oportunidad</span>Había que buscar cada chat o llamada a mano y se auditaba lo que se encontraba.</p>
+                        <p><span class="pj-k">Solución</span>Clasificación por comportamiento, patrones por asesor y una muestra pareja; Calidad marca «Corregir» o «Replicar».</p>
+                        <p><span class="pj-k">Resultado</span>Auditorías enfocadas donde hay más impacto. Ej.: 56 de 304 positivos duraron menos de 2 min y se revisan primero.</p>
+                        <p class="pj-links"><a href="https://docs.google.com/spreadsheets/d/1SJAgbcxpVXpRZ6_Vb4_VW1Pl9BJZMyR8cTH-hmvgdEE/edit#gid=826725031" target="_blank" rel="noopener">💬 Chats Obs</a><a href="https://docs.google.com/spreadsheets/d/1SJAgbcxpVXpRZ6_Vb4_VW1Pl9BJZMyR8cTH-hmvgdEE/edit#gid=633748100" target="_blank" rel="noopener">📞 Llamadas Obs</a></p></article>
+                    <article class="pj"><div class="pj-h"><b>6. Biblioteca de Mensajes</b><span class="pj-st ok">En uso</span></div>
+                        <p><span class="pj-k">Oportunidad</span>Una pauta de mensajes en un bloc de notas, sin formato.</p>
+                        <p><span class="pj-k">Solución</span>Plantillas por categoría, personalizables, con flyers y gráficas listos para enviar.</p>
+                        <p><span class="pj-k">Resultado</span>Uso diario del equipo, con mensajes uniformes.</p>
+                        <p class="pj-links"><a href="https://chriscgodistancianacional.github.io/Biblioteca-de-Mensajes/" target="_blank" rel="noopener">💬 Biblioteca de Mensajes</a></p></article>
+                    <article class="pj pj-wide"><div class="pj-h"><b>7. Reconocimientos en LinkedIn</b><span class="pj-st pe">Propuesta · pendiente</span></div>
+                        <p><span class="pj-k">Idea</span>Dar a cada asesor un historial formal de logros en LinkedIn, respaldado por la institución, como ventana al mundo profesional y para crecer hacia puestos superiores. Se acompaña de un pin o medalla de logro.</p>
+                        <p><span class="pj-k">Para avanzar</span></p>
+                        <ol class="pj-req">
+                            <li><b>Perfiles de LinkedIn de los asesores</b> · Christopher Huamán · hasta el viernes 27/11.</li>
+                            <li><b>Dinámica del reconocimiento:</b> cómo se registra (premio, reconocimiento o medalla) y desde quién se otorga (Calidad, gerencia o jefatura) · Gabriela Carbajal · hasta el jueves 26/11.</li>
+                            <li><b>Incentivo:</b> propuesta a jefatura (Alejandro Montes) de un bono de S/ 100 al cierre de cada mes para quien logre el reconocimiento · por validar.</li>
+                        </ol></article>
+                </div>
             </div>
         </section>
     </div>
@@ -1451,7 +1527,7 @@ window.CJ={init,ORIG};
         const STORAGE_KEY = 'cgo_mapa_procesos_v2';
         const STORAGE_VERSION_KEY = 'cgo_mapa_procesos_v2_version';
         // Orden de las pestañas. "ficha" vive fuera del lienzo editable (no se guarda ni se exporta).
-        const VIEWS = ['ficha', 'sim', 'valores', 'mapa', 'lineamientos'];
+        const VIEWS = ['ficha', 'sim', 'proy', 'valores', 'mapa', 'lineamientos'];
         // El archivo descargado (abierto desde el disco) no tiene fichas: arranca en el mapa.
         const VIEW_INICIAL = /^https?:$/.test(location.protocol) ? 'ficha' : 'mapa';
 
@@ -1670,6 +1746,8 @@ window.CJ={init,ORIG};
             const sp = document.getElementById('simPage');
             if (sp) sp.hidden = name !== 'sim';
             if (name === 'sim') setTimeout(simInit, 0);
+            const pp = document.getElementById('proyPage');
+            if (pp) pp.hidden = name !== 'proy';
             document.body.setAttribute('data-cat', name);
             document.querySelectorAll('.tab').forEach(function (t) {
                 const on = t.dataset.view === name;
