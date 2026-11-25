@@ -1874,19 +1874,19 @@ window.CJ={init,ORIG};
         function chPintar() {
             const ok = !!chAsesor; simEl('chVacio').hidden = ok; simEl('chCuerpo').hidden = !ok;
             if (!ok) return;
-            const A = ACT[chAsesor];
-            if (A && A.mes) {
-                const [an, me] = A.mes.split('-').map(Number), dm = new Date(an, me, 0).getDate(), hoy = new Date(), off = (new Date(an, me - 1, 1).getDay() + 6) % 7;
+            const A = ACT[chAsesor] || null, hoy0 = new Date(), mes0 = (A && A.mes) || (hoy0.getFullYear() + '-' + String(hoy0.getMonth() + 1).padStart(2, '0'));
+            {   /* el calendario se dibuja siempre; los días se llenan cuando llega la actividad del asesor */
+                const [an, me] = mes0.split('-').map(Number), dm = new Date(an, me, 0).getDate(), hoy = new Date(), off = (new Date(an, me - 1, 1).getDay() + 6) % 7;
                 let h = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => '<div class="sim-dh">' + d + '</div>').join('');
                 for (let i = 0; i < off; i++) h += '<div class="sim-d vacio"></div>';
                 for (let i = 1; i <= dm; i++) {
-                    const dd = String(i).padStart(2, '0'), x = A.d[dd] && A.d[dd].k, f = new Date(an, me - 1, i), fut = f > hoy, esHoy = f.toDateString() === hoy.toDateString();
-                    if (!x) { h += '<div class="sim-d ' + (fut ? 'futuro' : 'nada') + '"><div class="n">' + i + '<em>' + (fut ? '' : f.getDay() === 0 ? 'descanso' : 'sin chats') + '</em></div></div>'; continue; }
+                    const dd = String(i).padStart(2, '0'), x = A && A.d && A.d[dd] && A.d[dd].k, f = new Date(an, me - 1, i), fut = f > hoy, esHoy = f.toDateString() === hoy.toDateString();
+                    if (!x) { h += '<div class="sim-d ' + (fut ? 'futuro' : esHoy ? 'hoy' : 'nada') + '"><div class="n">' + i + '<em>' + (esHoy ? 'HOY' : fut ? '' : f.getDay() === 0 ? 'descanso' : A ? 'sin chats' : '…') + '</em></div>' + (!A && !fut && f.getDay() !== 0 ? '<div class="v" style="color:#9aa3b5">por cargar</div>' : '') + '</div>'; continue; }
                     h += '<div class="sim-d clic ' + (esHoy ? 'hoy' : x.p ? 'ok' : 'bajo') + '" data-dd="' + dd + '"><div class="n">' + i + (esHoy ? '<em style="background:#e6eefb;color:#2f5aa8">HOY</em>' : '') + '</div><div class="v"><b>' + x.n + '</b> chats</div>' + actChips('k', dd) + '</div>';
                 }
                 simEl('chCal').innerHTML = h;
-                simEl('chCorte').textContent = A.corte || '—';
-            } else simEl('chCal').innerHTML = '';
+                simEl('chCorte').textContent = (A && A.corte) || '—';
+            }
             actRend('k', 'chRend', 'chCal');
         }
         function chCambiaAsesor(s) {
