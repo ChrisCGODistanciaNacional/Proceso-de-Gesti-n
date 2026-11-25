@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de Procesos Comercial · CGO Distancia</title>
+    <title>Proceso de Gestión · CGO Distancia</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E2240'/%3E%3Crect x='5' y='6' width='9' height='6' rx='1.5' fill='%23E8B84A'/%3E%3Crect x='18' y='13' width='9' height='6' rx='1.5' fill='%23E8B84A'/%3E%3Crect x='5' y='20' width='9' height='6' rx='1.5' fill='%23E8B84A'/%3E%3Cpath d='M14 9h2.5a1.5 1.5 0 0 1 1.5 1.5V13M18 16h-2.5a1.5 1.5 0 0 0-1.5 1.5V20' fill='none' stroke='%23E8B84A' stroke-width='1.6'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* ============================================================
-           SISTEMA DE DISEÑO — Mapa de Procesos Comercial CGO Distancia
+           SISTEMA DE DISEÑO — Proceso de Gestión CGO Distancia
            Regla de color: el color dice QUIÉN (rol) y LA VENTA (dorado).
            El tipo de paso se distingue por el trazo, no por el color:
            sólido = acción · punteado = decisión · rojo = alerta.
@@ -751,14 +751,14 @@
     <!-- ============ BARRA SUPERIOR ============ -->
     <header class="topbar" id="topbar">
         <div id="updateBanner">
-            <span>Hay una versión más reciente de este Mapa de Procesos. Lo que ves puede estar desactualizado.</span>
+            <span>Hay una versión más reciente de Proceso de Gestión. Lo que ves puede estar desactualizado.</span>
             <button onclick="actualizarAhora()">Actualizar ahora</button>
         </div>
         <div class="topbar-inner">
             <div class="brand">
                 <div class="brand-mark">CGO</div>
                 <div>
-                    <h1>Mapa de Procesos Comercial</h1>
+                    <h1>Proceso de Gestión</h1>
                     <p>Creado por Christopher Huamán para el equipo CGO Distancia</p>
                 </div>
             </div>
@@ -1531,13 +1531,13 @@ window.CJ={init,ORIG};
     </script>
     <script id="appScript">
         // ======================================================================
-        // Mapa de Procesos Comercial · CGO Distancia
+        // Proceso de Gestión · CGO Distancia
         // Un solo archivo: se abre en cualquier navegador, se edita en "Modo
         // edición", se guarda solo en este navegador y se comparte descargándolo.
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-11-25T14:55:00.000Z";
+        const DATA_VERSION = "2026-11-25T15:00:00.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
@@ -2230,7 +2230,7 @@ window.CJ={init,ORIG};
             const bannerMsg = banner ? banner.querySelector('span') : null;
             const bannerTxt = bannerMsg ? bannerMsg.textContent : '';
             if (banner) banner.style.display = 'none';
-            if (bannerMsg) bannerMsg.textContent = 'Hay una versión más reciente de este Mapa de Procesos. Lo que ves puede estar desactualizado.';
+            if (bannerMsg) bannerMsg.textContent = 'Hay una versión más reciente de Proceso de Gestión. Lo que ves puede estar desactualizado.';
 
             // El archivo exportado abre siempre en el mapa y en modo consulta.
             const viewBefore = currentView();
@@ -2291,7 +2291,7 @@ window.CJ={init,ORIG};
           ov.innerHTML = '<div class="vm-card">'
             + '<div class="vm-icon" aria-hidden="true">✨</div>'
             + '<h2 id="vmTitle">¡Hay una versión nueva!</h2>'
-            + '<p>Se publicaron cambios en el Mapa de Procesos. Actualiza para trabajar con la información más reciente.</p>'
+            + '<p>Se publicaron cambios en Proceso de Gestión. Actualiza para trabajar con la información más reciente.</p>'
             + '<button type="button" class="vm-btn" onclick="actualizarAhora()">Actualizar versión <span class="vm-arrow">→</span></button>'
             + '<span class="vm-note">Toma un segundo y verás el mapa al día.</span>'
             + (enEdicion ? '<button type="button" class="vm-skip" onclick="cerrarAvisoVersion()">Ahora no: estoy en modo edición y aún no exporto mis cambios</button>' : '')

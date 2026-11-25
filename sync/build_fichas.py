@@ -294,7 +294,7 @@ def ficha_html(card_html, a, meta, css_v):
     bar = ('<div class="fx-bar"><b>📋 Ficha de evaluación · %s</b><span class="mut">%s</span><span class="sp"></span>'
            '<button type="button" id="fxTema" data-fx-accion="tema">☀️ Modo claro</button>'
            '<button type="button" id="fxCopiar" data-fx-accion="copiar">📷 Copiar como imagen</button>'
-           '<a href="../#ficha">← Volver al Mapa de Procesos</a></div>') % (esc(nombre_corto + (' · ' + a['sede'] if a.get('sede') else '')), esc(corte_corto))
+           '<a href="../#ficha">← Volver a Proceso de Gestión</a></div>') % (esc(nombre_corto + (' · ' + a['sede'] if a.get('sede') else '')), esc(corte_corto))
     return ('<!DOCTYPE html>\n<html lang="es" data-theme="light">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             '<meta name="robots" content="noindex, nofollow">\n'
