@@ -723,6 +723,23 @@
         .sim-leg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-2); margin-top: 8px; padding: 0 20px; }
         .sim-leg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
         @media (max-width: 980px) { .sim-top { grid-template-columns: 1fr 1fr; } .sim-sel { grid-column: 1 / -1; } .sim-kpis { grid-template-columns: 1fr 1fr; } }
+        /* v3 (25/11/2026): Llamadas y Chats · actividad diaria con tipificaciones */
+        body[data-cat="chats"] { --cat: #23498f; --cat-soft: #e3edfb; --cat-tab: #23498f; --cat-tab-text: #fdf7e3; --cat-eyebrow: var(--gold); }
+        .tab[data-view="chats"] { --tc: #23498f; }
+        body[data-cat="chats"] #mainDiagramCanvas { padding-top: 0; } body[data-cat="chats"] .editing-hint { display: none !important; }
+        .page-chats .panel-head { background: #23498f; }
+        .ac { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; } .ac i { font-style: normal; font-size: 10.5px; font-weight: 700; border-radius: 7px; padding: 0 5px; }
+        .ac .p { background: #e3f3e8; color: #1e7f65; } .ac .q { background: #fff4d6; color: #9a6b00; } .ac .x { background: #eef1f6; color: #6b7489; }
+        .sim-d.clic { cursor: pointer; } .sim-d.sel { box-shadow: 0 0 0 3px rgba(240,185,62,.55); }
+        .rd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 20px; }
+        .rd .sim-kpi b { font-size: 24px; } .rd .sim-kpi em { font-style: normal; font-size: 12px; color: var(--ink-3, #6b7489); }
+        .tpw { margin: 12px 20px 0; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; }
+        .tpw h5 { margin: 0 0 8px; font-size: 13px; } .tpbar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: #eef1f6; }
+        .tpbar span { display: block; height: 100%; } .tpleg { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2); margin-top: 8px; }
+        .tpleg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+        .tpdet { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); } .tpdet b { color: var(--ink); } .tpdet ol { margin: 6px 0 0 18px; padding: 0; } .tpdet li { margin: 2px 0; }
+        .acnota { margin: 8px 20px 0; font-size: 12px; color: var(--ink-3, #6b7489); }
+        @media (max-width: 980px) { .rd { grid-template-columns: 1fr 1fr; } }
         /* v2 (25/11/2026, Christopher): simulador más ligero */
         .sim-top { grid-template-columns: minmax(260px, 1fr) 2fr; align-items: end; }
         .sim-resumen { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; background: #f3f6fb; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink-2); }
@@ -764,7 +781,8 @@
             </div>
             <nav class="tabs" role="tablist" aria-label="Secciones">
                 <button class="tab" role="tab" data-view="ficha" aria-selected="true" onclick="showView('ficha')"><span class="tab-full">Ficha de asesor</span><span class="tab-mid">Ficha</span><span class="tab-short">Ficha</span></button>
-                <button class="tab" role="tab" data-view="sim" aria-selected="false" onclick="showView('sim')"><span class="tab-full">Simulador de llamadas</span><span class="tab-mid">Simulador</span><span class="tab-short">Simular</span></button>
+                <button class="tab" role="tab" data-view="sim" aria-selected="false" onclick="showView('sim')"><span class="tab-full">📞 Llamadas</span><span class="tab-mid">Llamadas</span><span class="tab-short">Llam.</span></button>
+                <button class="tab" role="tab" data-view="chats" aria-selected="false" onclick="showView('chats')"><span class="tab-full">💬 Chats</span><span class="tab-mid">Chats</span><span class="tab-short">Chats</span></button>
                 <button class="tab" role="tab" data-view="proy" aria-selected="false" onclick="showView('proy')"><span class="tab-full">Proyectos y entregables</span><span class="tab-mid">Proyectos</span><span class="tab-short">Proy.</span></button>
                 <button class="tab" role="tab" data-view="valores" aria-selected="false" onclick="showView('valores')"><span class="tab-full">Valores y pilares</span><span class="tab-mid">Valores</span><span class="tab-short">Valores</span></button>
                 <button class="tab" role="tab" data-view="mapa" aria-selected="false" onclick="showView('mapa')"><span class="tab-full">Mapa de procesos</span><span class="tab-mid">Mapa</span><span class="tab-short">Mapa</span></button>
@@ -832,7 +850,7 @@
             <div class="card panel sim-panel">
                 <div class="panel-head ficha-head">
                     <div>
-                        <div class="panel-eyebrow">SIMULADOR DE LLAMADAS</div>
+                        <div class="panel-eyebrow">LLAMADAS · SIMULADOR Y RENDIMIENTO</div>
                         <h3 id="simTitulo">¿Cuántas llamadas necesito hoy?</h3>
                         <p>Tu meta del mes convertida en llamadas por día. Si un día quedas debajo, lo que falta se reparte entre los días que quedan.</p>
                     </div>
@@ -853,7 +871,9 @@
                     </div>
                     <div class="sim-sec">📅 Tu mes día a día <small>llamadas hechas / meta del día · 📝 preinscritos</small></div>
                     <div class="sim-cal" id="simCal"></div>
-                    <div class="sim-leg"><span><i style="background:#1e7f65"></i>Llegaste a la meta</span><span><i style="background:#d9a21b"></i>Quedaste debajo (se suma a los días siguientes)</span><span><i style="background:#2f5aa8"></i>Hoy</span></div>
+                    <div class="sim-leg"><span><i style="background:#e3f3e8;border:1px solid #1e7f65"></i>✅ positivos</span><span><i style="background:#fff4d6;border:1px solid #9a6b00"></i>⏸ postergados</span><span><i style="background:#1e7f65"></i>Llegaste a la meta</span><span><i style="background:#d9a21b"></i>Quedaste debajo (se suma a los días siguientes)</span><span><i style="background:#2f5aa8"></i>Hoy</span></div>
+                    <div class="sim-sec" style="margin-top:18px">📊 Tu rendimiento en llamadas <small>del mes · toca un día del calendario para ver sus tipificaciones</small></div>
+                    <div id="llRend"><div class="acnota">Cargando tus tipificaciones…</div></div>
                     <div class="sim-sec" style="margin-top:18px">🎯 ¿A cuánto llegas este mes? <small>si sigues a tu ritmo de hoy</small></div>
                     <div class="sim-proy" id="simProy"></div>
                 </div>
@@ -872,6 +892,35 @@
 
     <!-- ============ VISTA: PROYECTOS Y ENTREGABLES (25/11/2026) ============
          Registro abierto de los proyectos de CGO Distancia: qué resolvió cada uno, su resultado y dónde está su entregable. -->
+    <!-- ============ VISTA: CHATS (25/11/2026) ============ datos: div.fx-act de fichas/<asesor>.html (Tablero, cada corte) -->
+    <div class="page page-ficha page-sim page-chats" id="chPage" hidden>
+        <section class="view" data-view="chats" hidden>
+            <div class="card panel sim-panel">
+                <div class="panel-head ficha-head">
+                    <div>
+                        <div class="panel-eyebrow">CHATS · RENDIMIENTO DEL MES</div>
+                        <h3 id="chTitulo">¿Cómo voy con mis chats?</h3>
+                        <p>Los chats que te llegaron cada día y cómo los tipificaste: cuántos terminaron con cita (positivos), cuántos quedaron para después y cuántos sin respuesta.</p>
+                    </div>
+                    <div class="ficha-corte"><span class="ficha-corte-k">Actualizado</span><b id="chCorte">—</b><small>se actualiza en cada corte</small></div>
+                </div>
+                <div class="sim-top">
+                    <label class="sim-sel"><span>Asesor</span><select id="chSel" onchange="chCambiaAsesor(this.value)"><option value="">Elige tu nombre…</option></select></label>
+                    <div class="sim-resumen" id="chRes"><span>💬 Bidireccional y nutrición</span><span>✅ positivo = programado o útil</span><span>⏸ postergado = persona ocupada, tiempo de inscripción o mensaje con tercero</span></div>
+                </div>
+                <div class="sim-empty" id="chVacio">👆 Elige tu nombre para ver tus chats.</div>
+                <div id="chCuerpo" hidden>
+                    <div class="sim-sec">📊 Tu mes en chats <small>positivos y postergados frente al equipo</small></div>
+                    <div id="chRend"></div>
+                    <div class="sim-sec" style="margin-top:18px">📅 Tu mes día a día <small>chats que te llegaron · toca un día para ver sus tipificaciones</small></div>
+                    <div class="sim-cal" id="chCal"></div>
+                    <div class="sim-leg"><span><i style="background:#e3f3e8;border:1px solid #1e7f65"></i>✅ positivos</span><span><i style="background:#fff4d6;border:1px solid #9a6b00"></i>⏸ postergados</span><span><i style="background:#eef1f6;border:1px solid #9aa3b5"></i>📵 sin respuesta (IT)</span></div>
+                </div>
+                <div class="ficha-foot"><span>🔄 Chats y tipificaciones se cargan solos en cada corte del supervisor.</span><span></span></div>
+            </div>
+        </section>
+    </div>
+
     <div class="page page-ficha page-proy" id="proyPage" hidden>
         <section class="view" data-view="proy" hidden>
             <div class="card panel">
@@ -1537,7 +1586,7 @@ window.CJ={init,ORIG};
         // ======================================================================
 
         /*==DATA_VERSION_START==*/
-        const DATA_VERSION = "2026-11-25T15:00:00.000Z";
+        const DATA_VERSION = "2026-11-25T15:30:00.000Z";
         /*==DATA_VERSION_END==*/
 
         // Clave nueva (v2): el rediseño cambia la estructura, así que no se mezcla
@@ -1545,7 +1594,7 @@ window.CJ={init,ORIG};
         const STORAGE_KEY = 'cgo_mapa_procesos_v2';
         const STORAGE_VERSION_KEY = 'cgo_mapa_procesos_v2_version';
         // Orden de las pestañas. "ficha" vive fuera del lienzo editable (no se guarda ni se exporta).
-        const VIEWS = ['ficha', 'sim', 'proy', 'valores', 'mapa', 'lineamientos'];
+        const VIEWS = ['ficha', 'sim', 'chats', 'proy', 'valores', 'mapa', 'lineamientos'];
         // El archivo descargado (abierto desde el disco) no tiene fichas: arranca en el mapa.
         const VIEW_INICIAL = /^https?:$/.test(location.protocol) ? 'ficha' : 'mapa';
 
@@ -1711,11 +1760,12 @@ window.CJ={init,ORIG};
                 let cls = 'futuro', chip = '', col = '#9aa3b5';
                 if (d.esHoy) { cls = 'hoy'; chip = '<em style="background:#e6eefb;color:#2f5aa8">HOY</em>'; col = '#2f5aa8'; }
                 else if (d.G) { const okd = d.E >= d.L; cls = okd ? 'ok' : 'bajo'; col = okd ? '#1e7f65' : '#d9a21b'; chip = okd ? '<em style="background:#e3f3e8;color:#1e7f65">✓</em>' : '<em style="background:#fff4d6;color:#9a6b00">−' + (d.L - d.E) + '</em>'; }
-                h += '<div class="sim-d ' + cls + '"><div class="n">' + d.i + chip + '</div>' +
-                     (d.pasado || d.esHoy ? '<div class="v"><b>' + simFmt(E) + '</b> / ' + d.L + '</div><div class="mini"><span style="width:' + Math.min(100, pct(E, d.L)) + '%;background:' + col + '"></span></div>' + (F ? '<div class="pz">📝 ' + F + '</div>' : '')
+                h += '<div class="sim-d clic ' + cls + '" data-dd="' + String(d.i).padStart(2, '0') + '"><div class="n">' + d.i + chip + '</div>' +
+                     (d.pasado || d.esHoy ? '<div class="v"><b>' + simFmt(E) + '</b> / ' + d.L + '</div><div class="mini"><span style="width:' + Math.min(100, pct(E, d.L)) + '%;background:' + col + '"></span></div>' + (F ? '<div class="pz">📝 ' + F + '</div>' : '') + actChips('l', String(d.i).padStart(2, '0'))
                                           : '<div class="v">meta <b>' + d.L + '</b></div>') + '</div>';
             });
             simEl('simCal').innerHTML = h;
+            actRend('l', 'llRend', 'simCal');
             // Proyección: lo que lleva + ritmo real hasta fin de mes, frente a la meta de cada etapa
             const pp = H.pp, pi = H.pi, cv = H.im * H.mm, ETA = [['📞', 'Llamadas', C.llMes, 0], ['📝', 'Preinscritos', C.preNec, 0], ['🧾', 'Postulantes', C.preNec * pp, 1], ['🎓', 'Ingresantes', C.preNec * pp * pi, 1], ['💳', 'Matrículas', C.meta, 1]];
             const matL = C.tot[4], matP = C.cierreF[4], falta = Math.max(0, C.meta - matP), llega = matP >= C.meta;
@@ -1738,7 +1788,7 @@ window.CJ={init,ORIG};
             simEl('simProy').innerHTML = hero + '<div class="sim-etapas">' + filas + '<div class="sim-etleg"><span><i style="background:#5b6478"></i>Llevas</span><span><i style="background:#5b6478;opacity:.32"></i>Terminarías a tu ritmo</span><span><i style="background:#1d2b53;opacity:.55;width:3px"></i>Meta</span></div></div>';
             simEl('simCampania').textContent = 'Campaña ' + H.tipo + ' · faltan ' + H.ini + ' meses para el inicio · ' + simFmt(C.lpp, 1) + ' llamadas por preinscrito · mínimo ' + C.minD + '/día';
         }
-        function simCambiaAsesor(s) { simAsesor = s; try { localStorage.setItem('cgo_sim_asesor', s); } catch (e) {} const a = (fichaIdx && fichaIdx.asesores || []).find(x => x.s === s); simEl('simTitulo').innerHTML = a ? '¿Cuántas llamadas necesito hoy, <span>' + simEsc(a.d || fichaNombrePropio(a.n)) + '</span>?' : '¿Cuántas llamadas necesito hoy?'; simPintar(); }
+        function simCambiaAsesor(s) { simAsesor = s; actGet(s).then(() => { if (simAsesor === s && simDatos) simPintar(); }); try { localStorage.setItem('cgo_sim_asesor', s); } catch (e) {} const a = (fichaIdx && fichaIdx.asesores || []).find(x => x.s === s); simEl('simTitulo').innerHTML = a ? '¿Cuántas llamadas necesito hoy, <span>' + simEsc(a.d || fichaNombrePropio(a.n)) + '</span>?' : '¿Cuántas llamadas necesito hoy?'; simPintar(); }
         async function simInit() {
             try { const r = await fetch('sim/datos.json?v=' + Date.now(), { cache: 'no-store' }); if (r.ok) simDatos = await r.json(); } catch (e) {}
             if (simInit.ok) { simPintar(); return; } simInit.ok = true;
@@ -1753,6 +1803,111 @@ window.CJ={init,ORIG};
             simCambiaAsesor(s);
         }
 
+
+        /* ================= ACTIVIDAD: LLAMADAS Y CHATS (25/11/2026) =================
+           Lee la actividad diaria del asesor que el Tablero deja escondida en su ficha (div.fx-act[data-act]). */
+        const ACT = {}, ACT_TIPO_L = { 'Programado': '#1e7f65', 'Útil': '#3B7DDD', 'Postergado': '#e0a31b', 'Útil negativo': '#8e5bd0', 'No Útil': '#d9534f', 'Incidencia Telefónica': '#f2c14e', 'Sin tipificar': '#c9ced8', 'Otro': '#e6e9ef' };
+        const ACT_TIPO_K = { 'Prog': '#1e7f65', 'Útil': '#3B7DDD', 'Util Pos': '#5aa3e6', 'Posterga': '#e0a31b', 'IT': '#c9ced8', 'Util Neg': '#8e5bd0', 'Sin tipificar': '#e6e9ef', 'Otro': '#eef1f6' };
+        const ACT_NOM_K = { 'Prog': 'Programado', 'Útil': 'Útil', 'Util Pos': 'Útil positivo', 'Posterga': 'Postergado', 'IT': 'Sin respuesta (IT)', 'Util Neg': 'Útil negativo', 'Sin tipificar': 'Sin tipificar', 'Otro': 'Otro' };
+        let actDia = { l: null, k: null };
+        async function actGet(s) {
+            if (!s || ACT[s] !== undefined) return ACT[s];
+            if (actGet.p && actGet.p[s]) return actGet.p[s];
+            actGet.p = actGet.p || {};
+            return (actGet.p[s] = (async () => {
+            try {
+                const v = (typeof fichaIdx !== 'undefined' && fichaIdx && fichaIdx.version) || Date.now();
+                const t = await (await fetch('fichas/' + s + '.html?v=' + encodeURIComponent(v), { cache: 'no-store' })).text();
+                const el = new DOMParser().parseFromString(t, 'text/html').querySelector('.fx-act');
+                ACT[s] = el ? JSON.parse(el.getAttribute('data-act') || 'null') : null;
+            } catch (e) { ACT[s] = null; }
+            delete actGet.p[s]; return ACT[s];
+            })());
+        }
+        function actChips(kind, dd) {
+            const A = ACT[kind === 'l' ? simAsesor : chAsesor], x = A && A.d && A.d[dd] && A.d[dd][kind];
+            if (!x) return '';
+            return '<div class="ac"><i class="p">✅ ' + (x.p || 0) + '</i>' + (x.q != null ? '<i class="q">⏸ ' + x.q + '</i>' : '') + (kind === 'k' && x.i ? '<i class="x">📵 ' + x.i + '</i>' : '') + '</div>';
+        }
+        function actSuma(A, kind) {
+            const o = { n: 0, m: 0, r: 0, b: 0, u: 0, p: 0, q: 0, i: 0, t: {}, c: {}, dias: 0, sinQ: false };
+            Object.values((A && A.d) || {}).forEach(r => { const x = r[kind]; if (!x) return; o.dias++; ['n', 'm', 'r', 'b', 'u', 'p', 'i'].forEach(k => o[k] += x[k] || 0); if (x.q == null) o.sinQ = true; else o.q += x.q; Object.entries(x.t || {}).forEach(([k, v]) => o.t[k] = (o.t[k] || 0) + v); Object.entries(x.c || {}).forEach(([k, v]) => o.c[k] = (o.c[k] || 0) + v); });
+            return o;
+        }
+        function actTipos(t, kind, titulo, top) {
+            const COL = kind === 'l' ? ACT_TIPO_L : ACT_TIPO_K, NOM = k => kind === 'l' ? k : (ACT_NOM_K[k] || k);
+            const L = Object.entries(t || {}).filter(z => z[1] > 0).sort((a, b) => b[1] - a[1]), tot = L.reduce((s2, z) => s2 + z[1], 0);
+            if (!tot) return '<div class="tpw"><h5>' + titulo + '</h5><div class="acnota" style="margin:0">Sin tipificaciones registradas.</div></div>';
+            const tp = Object.entries(top || {}).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            return '<div class="tpw"><h5>' + titulo + ' · ' + simFmt(tot) + '</h5><div class="tpbar">' + L.map(([k, v]) => '<span title="' + simEsc(NOM(k)) + ': ' + v + '" style="width:' + (v / tot * 100) + '%;background:' + (COL[k] || '#e6e9ef') + '"></span>').join('') + '</div>' +
+                '<div class="tpleg">' + L.map(([k, v]) => '<span><i style="background:' + (COL[k] || '#e6e9ef') + '"></i>' + simEsc(NOM(k)) + ' <b>' + v + '</b> · ' + Math.round(v / tot * 100) + '%</span>').join('') + '</div>' +
+                (tp.length ? '<div class="tpdet">Las que más usaste:<ol>' + tp.map(([k, v]) => '<li>' + simEsc(k) + ' · <b>' + v + '</b></li>').join('') + '</ol></div>' : '') + '</div>';
+        }
+        function actRend(kind, boxId, calId) {
+            const s = kind === 'l' ? simAsesor : chAsesor, A = ACT[s], box = simEl(boxId);
+            if (!box) return;
+            if (A === undefined) { box.innerHTML = '<div class="acnota">Cargando tus tipificaciones…</div>'; return; }
+            if (!A) { box.innerHTML = '<div class="acnota">Aún no hay tipificaciones de este asesor: llegan con el próximo corte del supervisor.</div>'; return; }
+            const S = actSuma(A, kind), eq = A.eq || {}, pct = (a, b) => b ? Math.round(a / b * 1000) / 10 : 0;
+            let kp;
+            if (kind === 'l') {
+                const pp = pct(S.p, S.n), e = eq.lp, c = e == null ? '' : pp >= e ? 'color:#1e7f65' : 'color:#b8352a';
+                kp = '<div class="sim-kpi"><small>Llamadas del mes</small><b>' + simFmt(S.n) + '</b><em>📞 ' + simFmt(S.m) + ' propias · 🤖 ' + simFmt(S.r) + ' del robot</em></div>' +
+                    '<div class="sim-kpi"><small>✅ Positivos</small><b style="' + c + '">' + simFmt(S.p) + '</b><em>' + String(pp).replace('.', ',') + ' % de tus llamadas' + (e != null ? ' · equipo ' + String(e).replace('.', ',') + ' %' : '') + '</em></div>' +
+                    '<div class="sim-kpi"><small>⏸ Postergados</small><b>' + simFmt(S.q) + '</b><em>' + (S.sinQ ? 'de los días con detalle de Genesys' : 'para volver a llamar con su recordatorio') + '</em></div>' +
+                    '<div class="sim-kpi"><small>Promedio por día</small><b>' + simFmt(S.dias ? S.n / S.dias : 0) + '</b><em>' + S.dias + ' días con llamadas · ' + (S.n ? Math.round(S.n / Math.max(1, S.p)) : 0) + ' llamadas por positivo</em></div>';
+            } else {
+                const tip = Object.values(S.t).reduce((a, b) => a + b, 0), pp = pct(S.p, tip), e = eq.cp, c = e == null ? '' : pp >= e ? 'color:#1e7f65' : 'color:#b8352a';
+                kp = '<div class="sim-kpi"><small>Chats del mes</small><b>' + simFmt(S.n) + '</b><em>🔵 ' + simFmt(S.b) + ' bidireccional · 🟢 ' + simFmt(S.u) + ' nutrición</em></div>' +
+                    '<div class="sim-kpi"><small>✅ Positivos</small><b style="' + c + '">' + simFmt(S.p) + '</b><em>' + String(pp).replace('.', ',') + ' % de tus tipificados' + (e != null ? ' · equipo ' + String(e).replace('.', ',') + ' %' : '') + '</em></div>' +
+                    '<div class="sim-kpi"><small>⏸ Postergados</small><b>' + simFmt(S.q) + '</b><em>quedaron para retomar</em></div>' +
+                    '<div class="sim-kpi"><small>📵 Sin respuesta (IT)</small><b>' + simFmt(S.i) + '</b><em>' + Math.round(pct(S.i, tip)) + ' % de tus tipificados · llámalos</em></div>';
+            }
+            const dd = actDia[kind], dx = dd && A.d[dd] && A.d[dd][kind];
+            box.innerHTML = '<div class="rd">' + kp + '</div>' + (dx ? actTipos(dx.t, kind, '📅 Tipificaciones del ' + Number(dd) + '/' + A.mes.slice(5), dx.c) : actTipos(S.t, kind, '🏷 Tipificaciones del mes', S.c)) +
+                '<div class="acnota">' + (dx ? 'Toca otra vez el día para volver al mes.' : 'Toca un día del calendario para ver solo ese día.') + (A.corte ? ' · Datos al ' + simEsc(A.corte) : '') + '</div>';
+            const cal = simEl(calId);
+            if (cal && !cal.dataset.actClic) { cal.dataset.actClic = '1'; cal.addEventListener('click', ev => { const c = ev.target.closest('[data-dd]'); if (!c) return; actDia[kind] = actDia[kind] === c.dataset.dd ? null : c.dataset.dd; cal.querySelectorAll('[data-dd]').forEach(z => z.classList.toggle('sel', z.dataset.dd === actDia[kind])); actRend(kind, boxId, calId); }); }
+            if (cal) cal.querySelectorAll('[data-dd]').forEach(z => z.classList.toggle('sel', z.dataset.dd === actDia[kind]));
+        }
+        let chAsesor = '';
+        function chPintar() {
+            const ok = !!chAsesor; simEl('chVacio').hidden = ok; simEl('chCuerpo').hidden = !ok;
+            if (!ok) return;
+            const A = ACT[chAsesor];
+            if (A && A.mes) {
+                const [an, me] = A.mes.split('-').map(Number), dm = new Date(an, me, 0).getDate(), hoy = new Date(), off = (new Date(an, me - 1, 1).getDay() + 6) % 7;
+                let h = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => '<div class="sim-dh">' + d + '</div>').join('');
+                for (let i = 0; i < off; i++) h += '<div class="sim-d vacio"></div>';
+                for (let i = 1; i <= dm; i++) {
+                    const dd = String(i).padStart(2, '0'), x = A.d[dd] && A.d[dd].k, f = new Date(an, me - 1, i), fut = f > hoy, esHoy = f.toDateString() === hoy.toDateString();
+                    if (!x) { h += '<div class="sim-d ' + (fut ? 'futuro' : 'nada') + '"><div class="n">' + i + '<em>' + (fut ? '' : f.getDay() === 0 ? 'descanso' : 'sin chats') + '</em></div></div>'; continue; }
+                    h += '<div class="sim-d clic ' + (esHoy ? 'hoy' : x.p ? 'ok' : 'bajo') + '" data-dd="' + dd + '"><div class="n">' + i + (esHoy ? '<em style="background:#e6eefb;color:#2f5aa8">HOY</em>' : '') + '</div><div class="v"><b>' + x.n + '</b> chats</div>' + actChips('k', dd) + '</div>';
+                }
+                simEl('chCal').innerHTML = h;
+                simEl('chCorte').textContent = A.corte || '—';
+            } else simEl('chCal').innerHTML = '';
+            actRend('k', 'chRend', 'chCal');
+        }
+        function chCambiaAsesor(s) {
+            chAsesor = s; actDia.k = null; try { localStorage.setItem('cgo_sim_asesor', s); } catch (e) {}
+            const a = (fichaIdx && fichaIdx.asesores || []).find(x => x.s === s);
+            simEl('chTitulo').innerHTML = a ? '¿Cómo voy con mis chats, <span>' + simEsc(a.d || fichaNombrePropio(a.n)) + '</span>?' : '¿Cómo voy con mis chats?';
+            chPintar(); actGet(s).then(() => { if (chAsesor === s) chPintar(); });
+        }
+        async function chInit() {
+            try { if (!fichaIdx) fichaIdx = await fichaLeerIndice(); } catch (e) {}
+            const sel = simEl('chSel');
+            if (!chInit.ok && fichaIdx && fichaIdx.asesores) {
+                chInit.ok = true; const g = {};
+                fichaIdx.asesores.forEach(a => { const k = a.sede === 'HYO' ? 'Huancayo' : a.sede === 'MIR' ? 'Miraflores' : (a.sede || 'Equipo'); (g[k] = g[k] || []).push(a); });
+                sel.innerHTML = '<option value="">Elige tu nombre…</option>' + Object.keys(g).sort().map(k => '<optgroup label="' + simEsc(k) + '">' + g[k].map(a => '<option value="' + simEsc(a.s) + '">' + simEsc(fichaNombrePropio(a.n)) + '</option>').join('') + '</optgroup>').join('');
+            }
+            let s = ''; try { s = localStorage.getItem('cgo_sim_asesor') || localStorage.getItem(FICHA_KEY) || ''; } catch (e) {}
+            if (s && sel.querySelector('option[value="' + s + '"]')) sel.value = s; else s = sel.value || '';
+            chCambiaAsesor(s);
+        }
+
         function showView(name, opts) {
             setTimeout(cjMount, 0);
             opts = opts || {};
@@ -1763,6 +1918,9 @@ window.CJ={init,ORIG};
             const sp = document.getElementById('simPage');
             if (sp) sp.hidden = name !== 'sim';
             if (name === 'sim') setTimeout(simInit, 0);
+            const cp = document.getElementById('chPage');
+            if (cp) cp.hidden = name !== 'chats';
+            if (name === 'chats') setTimeout(chInit, 0);
             const pp = document.getElementById('proyPage');
             if (pp) pp.hidden = name !== 'proy';
             document.body.setAttribute('data-cat', name);
