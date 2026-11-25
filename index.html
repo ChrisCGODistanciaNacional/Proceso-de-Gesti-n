@@ -1807,8 +1807,8 @@ window.CJ={init,ORIG};
         /* ================= ACTIVIDAD: LLAMADAS Y CHATS (25/11/2026) =================
            Lee la actividad diaria del asesor que el Tablero deja escondida en su ficha (div.fx-act[data-act]). */
         const ACT = {}, ACT_TIPO_L = { 'Programado': '#1e7f65', 'Útil': '#3B7DDD', 'Postergado': '#e0a31b', 'Útil negativo': '#8e5bd0', 'No Útil': '#d9534f', 'Incidencia Telefónica': '#f2c14e', 'Sin tipificar': '#c9ced8', 'Otro': '#e6e9ef' };
-        const ACT_TIPO_K = { 'Prog': '#1e7f65', 'Útil': '#3B7DDD', 'Util Pos': '#5aa3e6', 'Posterga': '#e0a31b', 'IT': '#c9ced8', 'Util Neg': '#8e5bd0', 'Sin tipificar': '#e6e9ef', 'Otro': '#eef1f6' };
-        const ACT_NOM_K = { 'Prog': 'Programado', 'Útil': 'Útil', 'Util Pos': 'Útil positivo', 'Posterga': 'Postergado', 'IT': 'Sin respuesta (IT)', 'Util Neg': 'Útil negativo', 'Sin tipificar': 'Sin tipificar', 'Otro': 'Otro' };
+        const ACT_TIPO_K = { 'Prog': '#1e7f65', 'Útil': '#3B7DDD', 'Util Pos': '#5aa3e6', 'Posterga': '#e0a31b', 'IT': '#c9ced8', 'Util Neg': '#8e5bd0', 'No útil': '#d9534f', 'Sin tipificar': '#e6e9ef', 'Otro': '#eef1f6' };
+        const ACT_NOM_K = { 'Prog': 'Programado', 'Útil': 'Útil', 'Util Pos': 'Útil positivo', 'Posterga': 'Postergado', 'IT': 'Sin respuesta (IT)', 'Util Neg': 'Útil negativo', 'No útil': 'No útil (cambio de modalidad)', 'Sin tipificar': 'Sin tipificar', 'Otro': 'Otro' };
         let actDia = { l: null, k: null };
         async function actGet(s) {
             if (!s || ACT[s] !== undefined) return ACT[s];
