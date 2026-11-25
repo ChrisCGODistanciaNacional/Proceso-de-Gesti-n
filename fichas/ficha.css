@@ -2189,6 +2189,8 @@ details.scc.alta{box-shadow:inset 0 0 0 1px rgba(214,69,69,.35)}
 @media(max-width:760px){.scrks{grid-template-columns:1fr 1fr}.scrroles,.scgr2,.scagw,.scsgk{grid-template-columns:1fr}.scrwk{grid-template-columns:1fr 1fr}.scrreg{columns:1}
   .sckb{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}.sccol{flex:0 0 82%;scroll-snap-align:start}.scsel{min-width:44%}}
 
+
+
 /* ===== Ajustes para la ficha sola (fuera del tablero) ===== */
 html,body{min-height:0}
 body.ficha-solo{padding:0;margin:0;display:block}
