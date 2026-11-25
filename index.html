@@ -723,6 +723,26 @@
         .sim-leg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--ink-2); margin-top: 8px; padding: 0 20px; }
         .sim-leg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
         @media (max-width: 980px) { .sim-top { grid-template-columns: 1fr 1fr; } .sim-sel { grid-column: 1 / -1; } .sim-kpis { grid-template-columns: 1fr 1fr; } }
+        /* v2 (25/11/2026, Christopher): simulador más ligero */
+        .sim-top { grid-template-columns: minmax(260px, 1fr) 2fr; align-items: end; }
+        .sim-resumen { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; background: #f3f6fb; border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink-2); }
+        .sim-resumen b { color: var(--ink); font-weight: 700; }
+        .sim-kpis { grid-template-columns: 1fr 1fr 1.2fr; }
+        .sim-kpi { border-width: 1px; box-shadow: 0 1px 2px rgba(20,30,60,.04); }
+        .sim-kpi-mes { gap: 4px; } .sim-mrow { display: flex; align-items: baseline; gap: 8px; font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+        .sim-mrow b { font-family: var(--font-display); font-size: 20px; color: var(--ink); margin-left: auto; } .sim-mrow em { font-style: normal; font-size: 12px; color: var(--ink-3, #6b7489); }
+        .sim-kpi-mes .sim-bar { margin-top: 2px; height: 6px; }
+        .sim-sec { font-size: 15px; letter-spacing: 0; text-transform: none; }
+        .sim-cal { gap: 5px; }
+        .sim-dh { background: none; font-size: 10.5px; color: var(--ink-3, #6b7489); padding: 0 0 2px; }
+        .sim-d { min-height: 0; padding: 6px 8px; gap: 3px; border-width: 1px; border-radius: 8px; }
+        .sim-d .n { font-size: 13px; } .sim-d .n em { font-size: 9.5px; padding: 0 6px; }
+        .sim-d .v { font-size: 12px; color: var(--ink-3, #6b7489); } .sim-d .v b { font-family: var(--font-display); font-size: 15px; color: var(--ink); }
+        .sim-d .pz { font-size: 11px; color: #2f5aa8; font-weight: 700; }
+        .sim-d.dom, .sim-d.nada { background: #f7f8fb; border-style: dashed; } .sim-d.dom .n, .sim-d.nada .n { color: #9aa3b5; }
+        .sim-d.ok { border-left-width: 4px; } .sim-d.bajo { border-left-width: 4px; }
+        .sim-hero { gap: 6px; } .sim-hero .big { font-size: 40px; }
+        .sim-etapas { justify-content: center; gap: 12px; padding: 14px 16px; }
         @media (max-width: 640px) { .sim-cal { grid-template-columns: repeat(2, 1fr); } .sim-dh, .sim-d.vacio { display: none; } .sim-kpis { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -820,23 +840,21 @@
                 </div>
                 <div class="sim-top">
                     <label class="sim-sel"><span>Asesor</span><select id="simSel" onchange="simCambiaAsesor(this.value)"><option value="">Elige tu nombre…</option></select></label>
-                    <div class="sim-fijo"><small>Mes</small><b id="simMesT">—</b></div>
-                    <div class="sim-fijo"><small>Meta del mes</small><b id="simMetaT">—</b></div>
-                    <div class="sim-fijo"><small>Días de trabajo</small><b id="simDiasT">—</b></div>
-                    <div class="sim-fijo"><small>Plan del mes</small><b id="simPlanT">—</b></div>
+                    <div class="sim-resumen"><span>📅 <b id="simMesT">—</b></span><span>🎯 Meta <b id="simMetaT">—</b></span><span>🗓️ <b id="simDiasT">—</b> de trabajo</span><span>📞 Plan <b id="simPlanT">—</b></span></div>
                 </div>
                 <div class="sim-empty" id="simVacio">👆 Elige tu nombre para ver tu plan de llamadas.</div>
                 <div id="simCuerpo" hidden>
                     <div class="sim-kpis">
                         <div class="sim-kpi sim-kpi-hoy"><small>Hoy te toca</small><b id="simHoy">—</b><span id="simHoyS">llamadas</span><div class="sim-bar"><span id="simHoyBar"></span></div></div>
                         <div class="sim-kpi" id="simEstado"></div>
-                        <div class="sim-kpi"><small>Llamadas del mes</small><b id="simLl">0</b><span id="simLlN"></span><div class="sim-bar"><span id="simLlBar"></span></div></div>
-                        <div class="sim-kpi"><small>Preinscritos del mes</small><b id="simPr">0</b><span id="simPrN"></span><div class="sim-bar"><span id="simPrBar"></span></div></div>
+                        <div class="sim-kpi sim-kpi-mes"><small>Tu mes hasta hoy</small>
+                            <div class="sim-mrow"><span>📞 Llamadas</span><b id="simLl">0</b><em id="simLlN"></em></div><div class="sim-bar"><span id="simLlBar"></span></div>
+                            <div class="sim-mrow"><span>📝 Preinscritos</span><b id="simPr">0</b><em id="simPrN"></em></div><div class="sim-bar"><span id="simPrBar"></span></div></div>
                     </div>
-                    <div class="sim-sec">📅 TU MES DÍA A DÍA <small>meta del día · llamadas hechas · preinscritos</small></div>
+                    <div class="sim-sec">📅 Tu mes día a día <small>llamadas hechas / meta del día · 📝 preinscritos</small></div>
                     <div class="sim-cal" id="simCal"></div>
-                    <div class="sim-leg"><span><i style="background:#1e7f65"></i>Cumplió la meta del día</span><span><i style="background:#d9a21b"></i>Debajo: lo que falta se suma a los días siguientes</span><span><i style="background:#2f5aa8"></i>Hoy (en curso)</span></div>
-                    <div class="sim-sec" style="margin-top:18px">🎯 ¿A CUÁNTO LLEGAS ESTE MES? <small>lo que llevas + tu ritmo real hasta el último día</small></div>
+                    <div class="sim-leg"><span><i style="background:#1e7f65"></i>Llegaste a la meta</span><span><i style="background:#d9a21b"></i>Quedaste debajo (se suma a los días siguientes)</span><span><i style="background:#2f5aa8"></i>Hoy</span></div>
+                    <div class="sim-sec" style="margin-top:18px">🎯 ¿A cuánto llegas este mes? <small>si sigues a tu ritmo de hoy</small></div>
                     <div class="sim-proy" id="simProy"></div>
                 </div>
                 <details class="sim-how"><summary>¿Cómo se calcula?</summary>
@@ -1662,7 +1680,7 @@ window.CJ={init,ORIG};
             if (!simDatos) return;
             const [an, me] = simDatos.mes.split('-').map(Number);
             simEl('simMesT').textContent = SIM_MES[me].nombre + ' ' + an;
-            simEl('simMetaT').textContent = simDatos.meta + ' matrículas';
+            simEl('simMetaT').textContent = simDatos.meta + ' matrículas';   /* v2: resumen en una línea */
             simEl('simDiasT').textContent = simDatos.dias + ' días';
             simEl('simCorte').textContent = (simDatos.corte || '—').replace(/^(\d\d\/\d\d)\/\d{4}/, '$1');
             if (!ok) { simEl('simPlanT').textContent = '—'; return; }
@@ -1670,33 +1688,32 @@ window.CJ={init,ORIG};
             simEl('simPlanT').textContent = simFmt(C.llMes) + ' llamadas';
             // Hoy
             const hr = C.hoyR;
-            if (hr) { simEl('simHoy').textContent = simFmt(hr.L); simEl('simHoyS').textContent = 'llamadas · llevas ' + simFmt(hr.E0) + ' (' + pct(hr.E0, hr.L) + '%)' + (hr.F0 ? ' · ' + hr.F0 + ' preinscrito' + (hr.F0 > 1 ? 's' : '') : ''); bar('simHoyBar', hr.E0, hr.L, '#f0b93e'); }
+            if (hr) { simEl('simHoy').textContent = simFmt(hr.L); simEl('simHoyS').textContent = 'llamadas · llevas ' + simFmt(hr.E0) + (hr.F0 ? ' · 📝 ' + hr.F0 : ''); bar('simHoyBar', hr.E0, hr.L, '#f0b93e'); }
             else { simEl('simHoy').textContent = simFmt(C.metaIni); simEl('simHoyS').textContent = 'llamadas por día'; bar('simHoyBar', 0, 1); }
             // Estado (días cerrados)
             const dif = C.B81 - C.B84; let t, c, s;
-            if (!C.B83) { t = 'Sin días cerrados'; c = '#2f5aa8'; s = 'Tu meta es ' + C.metaIni + ' llamadas por día.'; }
-            else if (dif >= 0) { t = '✅ En línea'; c = '#1e7f65'; s = '+' + simFmt(dif) + ' llamadas sobre tu meta a la fecha.'; }
-            else if (-dif <= C.B84 * 0.1) { t = '🟡 Casi en línea'; c = '#9a6b00'; s = 'Te faltan ' + simFmt(-dif) + ' llamadas: se reparten en tus ' + C.B86 + ' días restantes.'; }
-            else { t = '🔴 En debe'; c = '#b8352a'; s = 'Debes ' + simFmt(-dif) + ' llamadas; por eso tu meta diaria sube.'; }
-            simEl('simEstado').innerHTML = '<small>Estado al cierre de ayer</small><b style="color:' + c + ';font-size:22px">' + t + '</b><span>' + s + '</span><span>Días trabajados: ' + C.B83 + ' de ' + C.dias + ' · quedan ' + C.B86 + '</span>';
+            if (!C.B83) { t = 'Recién empiezas'; c = '#2f5aa8'; s = 'Tu meta es ' + C.metaIni + ' llamadas por día.'; }
+            else if (dif >= 0) { t = '✅ Vas al día'; c = '#1e7f65'; s = 'Llevas ' + simFmt(dif) + ' llamadas de ventaja.'; }
+            else if (-dif <= C.B84 * 0.1) { t = '🟡 Casi al día'; c = '#9a6b00'; s = 'Te faltan ' + simFmt(-dif) + ' llamadas; se reparten en los días que quedan.'; }
+            else { t = '🔴 Vas atrasado'; c = '#b8352a'; s = 'Te faltan ' + simFmt(-dif) + ' llamadas; por eso tu meta de hoy es más alta.'; }
+            simEl('simEstado').innerHTML = '<small>¿Cómo vas? (hasta ayer)</small><b style="color:' + c + ';font-size:22px">' + t + '</b><span>' + s + '</span><span style="color:var(--ink-3,#6b7489);font-size:12px">' + C.B83 + ' días trabajados · quedan ' + C.B86 + '</span>';
             const llT = C.tot[0], prT = C.tot[1];
-            simEl('simLl').textContent = simFmt(llT); simEl('simLlN').textContent = 'de ' + simFmt(C.llMes) + ' · faltan ' + simFmt(Math.max(0, C.llMes - llT)); bar('simLlBar', llT, C.llMes, '#1e7f65');
-            simEl('simPr').textContent = simFmt(prT); simEl('simPrN').textContent = 'de ' + C.preNec + ' necesarios · faltan ' + simFmt(Math.max(0, C.preNec - prT)); bar('simPrBar', prT, C.preNec, '#2f5aa8');
+            simEl('simLl').textContent = simFmt(llT); simEl('simLlN').textContent = 'de ' + simFmt(C.llMes); bar('simLlBar', llT, C.llMes, '#1e7f65');
+            simEl('simPr').textContent = simFmt(prT); simEl('simPrN').textContent = 'de ' + C.preNec; bar('simPrBar', prT, C.preNec, '#2f5aa8');
             // Calendario
-            const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
             let h = DIAS.map(d => '<div class="sim-dh">' + d + '</div>').join('');
             const off = (C.D[0].f.getDay() + 6) % 7; for (let i = 0; i < off; i++) h += '<div class="sim-d vacio"></div>';
-            C.D.forEach(d => {
-                let cls = '', chip = '', E = d.esHoy ? d.E0 : d.E, F = d.esHoy ? d.F0 : d.F, col = '#9aa3b5';
+            C.D.forEach(d => {   /* v2: celda compacta · hechas / meta + 📝 preinscritos */
+                const E = d.esHoy ? d.E0 : d.E, F = d.esHoy ? d.F0 : d.F;
+                if (d.dom && !d.G && !d.esHoy) { h += '<div class="sim-d dom"><div class="n">' + d.i + '<em>descanso</em></div></div>'; return; }
+                if (d.pasado && !d.G) { h += '<div class="sim-d nada"><div class="n">' + d.i + '<em>sin llamadas</em></div></div>'; return; }
+                let cls = 'futuro', chip = '', col = '#9aa3b5';
                 if (d.esHoy) { cls = 'hoy'; chip = '<em style="background:#e6eefb;color:#2f5aa8">HOY</em>'; col = '#2f5aa8'; }
-                else if (d.G) { const okd = d.E >= d.L; cls = okd ? 'ok' : 'bajo'; col = okd ? '#1e7f65' : '#d9a21b'; chip = okd ? '<em style="background:#e3f3e8;color:#1e7f65">✓ +' + (d.E - d.L) + '</em>' : '<em style="background:#fff4d6;color:#9a6b00">−' + (d.L - d.E) + '</em>'; }
-                else if (d.dom) { h += '<div class="sim-d dom"><div class="n">' + d.i + '<em style="color:#9aa3b5">descanso</em></div></div>'; return; }
-                else if (d.pasado) { cls = 'dom'; chip = '<em style="color:#9aa3b5">sin llamadas</em>'; }
-                else cls = 'futuro';
+                else if (d.G) { const okd = d.E >= d.L; cls = okd ? 'ok' : 'bajo'; col = okd ? '#1e7f65' : '#d9a21b'; chip = okd ? '<em style="background:#e3f3e8;color:#1e7f65">✓</em>' : '<em style="background:#fff4d6;color:#9a6b00">−' + (d.L - d.E) + '</em>'; }
                 h += '<div class="sim-d ' + cls + '"><div class="n">' + d.i + chip + '</div>' +
-                     '<div class="r"><span>Meta</span><b>' + d.L + '</b></div>' +
-                     (d.pasado || d.esHoy ? '<div class="r"><span>Hechas</span><b>' + simFmt(E) + '</b></div><div class="mini"><span style="width:' + Math.min(100, pct(E, d.L)) + '%;background:' + col + '"></span></div><div class="r"><span>Preinscritos</span><b>' + F + '</b></div>'
-                                          : '<div class="r"><span>Preinsc. esperados</span><b>' + simFmt(d.L / C.lpp, 1) + '</b></div>') + '</div>';
+                     (d.pasado || d.esHoy ? '<div class="v"><b>' + simFmt(E) + '</b> / ' + d.L + '</div><div class="mini"><span style="width:' + Math.min(100, pct(E, d.L)) + '%;background:' + col + '"></span></div>' + (F ? '<div class="pz">📝 ' + F + '</div>' : '')
+                                          : '<div class="v">meta <b>' + d.L + '</b></div>') + '</div>';
             });
             simEl('simCal').innerHTML = h;
             // Proyección: lo que lleva + ritmo real hasta fin de mes, frente a la meta de cada etapa
@@ -1711,14 +1728,14 @@ window.CJ={init,ORIG};
                 '<span class="lb" style="left:' + Math.max(8, P(matL)) + '%">Llevas ' + simFmt(matL, 1) + '</span></div>' +
                 (C.B83 ? '<div style="font-size:12px;opacity:.9">Tu ritmo: <b>' + simFmt(Math.round(ritmo)) + ' llamadas/día</b> en los días que quedan</div>' : '') + '<span class="chip">' + (!C.B83 ? '🗓️ Según tu plan del mes' : llega ? '✅ A este ritmo llegas a tu meta' : '⚠️ A este ritmo te faltarían ' + simFmt(falta, 1)) + '</span>' +
                 (llega || !C.B83 ? '<div class="need">Mantén tu meta diaria del calendario: <b>' + (hr ? hr.L : C.metaIni) + ' llamadas</b>.</div>'
-                    : llDia <= tope ? '<div class="need">Para llegar necesitas <b>+' + Math.ceil(preAdd) + ' preinscritos</b>: sube a <b>' + simFmt(llDia) + ' llamadas por día</b> en tus ' + quedan + ' días restantes.</div>'
-                    : '<div class="need">Solo con llamadas no llegas: aun con el <b>tope de ' + tope + ' al día</b> terminarías en <b>' + simFmt(con200, 1) + '</b>. Te faltan <b>+' + Math.ceil(preAdd) + ' preinscritos</b>: la clave es convertir más llamadas en preinscritos (el plan pide 1 cada ' + simFmt(Math.round(C.lpp)) + ' llamadas).</div>') + '</div>';
-            const filas = ETA.map((e, i) => { const lv = C.tot[i], pr = C.cierreF[i], m = e[2], mxx = Math.max(m, pr) * 1.08, q = v => Math.min(100, v / mxx * 100), pc = m ? pr / m : 0;
+                    : llDia <= tope ? '<div class="need">Para llegar: <b>' + simFmt(llDia) + ' llamadas al día</b> y <b>+' + Math.ceil(preAdd) + ' preinscritos</b> en los ' + quedan + ' días que quedan.</div>'
+                    : '<div class="need">Solo con más llamadas no alcanza (aun con ' + tope + ' al día llegarías a ' + simFmt(con200, 1) + '). La clave: <b>convertir más llamadas en preinscritos</b>, 1 de cada ' + simFmt(Math.round(C.lpp)) + ' llamadas.</div>') + '</div>';
+            const filas = ETA.map((e, i) => [e, i]).filter(z => z[1] !== 2 && z[1] !== 3).map(([e, i]) => { const lv = C.tot[i], pr = C.cierreF[i], m = e[2], mxx = Math.max(m, pr) * 1.08, q = v => Math.min(100, v / mxx * 100), pc = m ? pr / m : 0;
                 const c = pc >= 1 ? '#1e7f65' : pc >= .8 ? '#d9a21b' : '#c0392b', bg = pc >= 1 ? '#e3f3e8' : pc >= .8 ? '#fff4d6' : '#fbe6e3', d = e[3] ? 1 : 0, dm = Number.isInteger(m) ? 0 : d;
                 return '<div class="sim-et"><div class="nm">' + e[0] + ' ' + e[1] + '<small>meta ' + simFmt(m, dm) + '</small></div>' +
                     '<div class="tr"><i style="width:' + q(pr) + '%;background:' + c + ';opacity:.32"></i><i style="width:' + q(lv) + '%;background:' + c + '"></i><span class="mk" style="left:' + q(m) + '%"></span></div>' +
                     '<div class="vv">' + simFmt(lv, d) + ' → <b>' + simFmt(pr, d) + '</b><span class="pc" style="background:' + bg + ';color:' + c + '">' + Math.round(pc * 100) + '%</span></div></div>'; }).join('');
-            simEl('simProy').innerHTML = hero + '<div class="sim-etapas">' + filas + '<div class="sim-etleg"><span><i style="background:#5b6478"></i>Llevas</span><span><i style="background:#5b6478;opacity:.32"></i>Terminarías a este ritmo</span><span><i style="background:#1d2b53;opacity:.55;width:3px"></i>Meta de la etapa</span><span>% = terminarías ÷ meta · 🟢 ≥100 % 🟡 ≥80 % 🔴 menos</span></div></div>';
+            simEl('simProy').innerHTML = hero + '<div class="sim-etapas">' + filas + '<div class="sim-etleg"><span><i style="background:#5b6478"></i>Llevas</span><span><i style="background:#5b6478;opacity:.32"></i>Terminarías a tu ritmo</span><span><i style="background:#1d2b53;opacity:.55;width:3px"></i>Meta</span></div></div>';
             simEl('simCampania').textContent = 'Campaña ' + H.tipo + ' · faltan ' + H.ini + ' meses para el inicio · ' + simFmt(C.lpp, 1) + ' llamadas por preinscrito · mínimo ' + C.minD + '/día';
         }
         function simCambiaAsesor(s) { simAsesor = s; try { localStorage.setItem('cgo_sim_asesor', s); } catch (e) {} const a = (fichaIdx && fichaIdx.asesores || []).find(x => x.s === s); simEl('simTitulo').innerHTML = a ? '¿Cuántas llamadas necesito hoy, <span>' + simEsc(a.d || fichaNombrePropio(a.n)) + '</span>?' : '¿Cuántas llamadas necesito hoy?'; simPintar(); }
