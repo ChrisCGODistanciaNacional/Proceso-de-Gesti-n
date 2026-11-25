@@ -2228,3 +2228,6 @@ body.ficha-solo .fx-fuente{display:block;margin-top:4px;font-size:.7rem;color:va
   body.ficha-solo .v2gl{font-size:.74rem;line-height:1.35}
   body.ficha-solo .v2gl small{font-size:.74rem}
 }
+
+/* v550 */
+.v3g.g12>.v3c:has(>.c3cal){gap:10px}.v3g.g12>.v3c>.c3cal{flex:1;grid-template-rows:auto;grid-auto-rows:minmax(34px,1fr);gap:5px}.v3g.g12>.v3c>.c3cal .c3d{align-content:center;padding:4px 5px;border-radius:8px}.v3g.g12>.v3c>.c3cal .c3d small{font-size:.66rem}.v3g.g12>.v3c>.c3cal .c3d b{font-size:.74rem;padding:1px 6px}.v3g.g12>.v3c>.c3cal .c3free{align-self:center}.v3g.g12>.v3c>.c3cal~.v2pun{margin-top:auto}
