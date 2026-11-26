@@ -658,6 +658,14 @@
         .pj-links a:hover { background: #ece8fb; }
         .pj-links small { width: 100%; color: var(--muted); font-size: 12px; }
         .pj-req { margin: 4px 0 0 18px; padding: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+        .pj-tab { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; background: #fff; border-radius: 10px; overflow: hidden; }
+        .pj-tab th, .pj-tab td { padding: 7px 9px; border-bottom: 1px solid var(--line); text-align: center; vertical-align: middle; }
+        .pj-tab th { background: #ece8fb; color: #4a3b8f; font-size: 12px; }
+        .pj-tab td:first-child, .pj-tab th:first-child { text-align: left; }
+        .pj-tab .h { font-weight: 700; white-space: nowrap; }
+        .pj-tab-wrap { overflow-x: auto; }
+        .pj-via { display: inline-block; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 8px; }
+        .pj-via.nav { background: #fbe3ea; color: #990f3d; } .pj-via.nube { background: #dff3ec; color: #0f5c4d; } .pj-via.rel { background: #ece8fb; color: #4a3b8f; }
             /* ---- Simulador de llamadas (19/11/2026) ---- */
         body[data-cat="sim"] { --cat: #0f5c4d; --cat-soft: #dff3ec; --cat-tab: #0f5c4d; --cat-tab-text: #fdf7e3; --cat-eyebrow: var(--gold); }
         .tab[data-view="sim"] { --tc: #0f5c4d; }
@@ -783,7 +791,7 @@
                 <button class="tab" role="tab" data-view="ficha" aria-selected="true" onclick="showView('ficha')"><span class="tab-full">Ficha de asesor</span><span class="tab-mid">Ficha</span><span class="tab-short">Ficha</span></button>
                 <button class="tab" role="tab" data-view="sim" aria-selected="false" onclick="showView('sim')"><span class="tab-full">📞 Llamadas</span><span class="tab-mid">Llamadas</span><span class="tab-short">Llam.</span></button>
                 <button class="tab" role="tab" data-view="chats" aria-selected="false" onclick="showView('chats')"><span class="tab-full">💬 Chats</span><span class="tab-mid">Chats</span><span class="tab-short">Chats</span></button>
-                <button class="tab" role="tab" data-view="proy" aria-selected="false" onclick="showView('proy')"><span class="tab-full">Proyectos y entregables</span><span class="tab-mid">Proyectos</span><span class="tab-short">Proy.</span></button>
+                <button class="tab" role="tab" data-view="proy" aria-selected="false" onclick="showView('proy')"><span class="tab-full">Proyectos</span><span class="tab-mid">Proyectos</span><span class="tab-short">Proy.</span></button>
                 <button class="tab" role="tab" data-view="valores" aria-selected="false" onclick="showView('valores')"><span class="tab-full">Valores y pilares</span><span class="tab-mid">Valores</span><span class="tab-short">Valores</span></button>
                 <button class="tab" role="tab" data-view="mapa" aria-selected="false" onclick="showView('mapa')"><span class="tab-full">Mapa de procesos</span><span class="tab-mid">Mapa</span><span class="tab-short">Mapa</span></button>
                 <button class="tab" role="tab" data-view="lineamientos" aria-selected="false" onclick="showView('lineamientos')"><span class="tab-full">Lineamientos</span><span class="tab-mid">Lineamientos</span><span class="tab-short">Reglas</span></button>
@@ -928,7 +936,7 @@
                     <div>
                         <div class="panel-eyebrow">PROYECTOS CGO DISTANCIA</div>
                         <h3>Proyectos implementados y sus entregables</h3>
-                        <p>Qué construimos, qué oportunidad resolvió, el resultado y dónde encontrar cada herramienta. Actualizado al 25/11/2026.</p>
+                        <p>Qué construimos, qué oportunidad resolvió, el resultado y dónde encontrar cada herramienta. Al final, las programaciones automáticas del día. Actualizado al 26/11/2026.</p>
                     </div>
                 </div>
                 <div class="pj-grid">
@@ -970,6 +978,10 @@
                             <li><b>Dinámica del reconocimiento:</b> cómo se registra (premio, reconocimiento o medalla) y desde quién se otorga (Calidad, gerencia o jefatura) · Gabriela Carbajal · hasta el jueves 26/11.</li>
                             <li><b>Incentivo:</b> propuesta a jefatura (Alejandro Montes) de un bono de S/ 100 al cierre de cada mes para quien logre el reconocimiento · por validar.</li>
                         </ol></article>
+                    <article class="pj pj-wide"><div class="pj-h"><b>8. Programaciones automáticas · el mapa del día</b><span class="pj-st ok">En uso · 26/11/2026</span></div>
+                        <p><span class="pj-k">Qué es</span>Todo lo que corre solo cada día, a qué hora y por dónde. Las tareas que usan el navegador nunca coinciden con el Avance (:29 a :41); las de la nube no ocupan el navegador.</p>
+                        <div class="pj-tab-wrap"><table class="pj-tab"><thead><tr><th>Hora (Lima)</th><th>Programación</th><th>Días</th><th>Vía</th><th>Para qué</th></tr></thead><tbody><tr><td class="h">06:29 · 10:29 · 13:29 · 16:29 · 19:29</td><td><b>Actualizar Avance (reloj del navegador)</b></td><td>Todos</td><td><span class="pj-via rel">Reloj</span></td><td>Carga Dynamics, Genesys y Chattigo a los drives y al Tablero</td></tr><tr><td class="h">06:47</td><td><b>🛡️ 1 · Guardián Avance</b></td><td>Todos</td><td><span class="pj-via nav">Navegador</span></td><td>Revisa que el reloj del Avance siga activo y la sesión de Chattigo; avisa al inicio del día</td></tr><tr><td class="h">08:08 · 11:08</td><td><b>🗂️ 2 · Base (mañana)</b></td><td>Todos</td><td><span class="pj-via nav">Navegador</span></td><td>Asistencia, reparto de New Lead, Asignación, SOS y BD, Otros campus y llamadas</td></tr><tr><td class="h">15:00 · 17:00 · 19:00</td><td><b>🗂️ 3 · Base (tarde)</b></td><td>Todos</td><td><span class="pj-via nav">Navegador</span></td><td>Igual que el de la mañana; desde las 17:00 solo recibe el turno tarde</td></tr><tr><td class="h">08:20 · 11:20 · 15:20 · 17:20 · 19:20</td><td><b>🛡️ 4 · Guardián Base</b></td><td>Todos</td><td><span class="pj-via nav">Navegador</span></td><td>Si un corte no se hizo, lo hace él y avisa</td></tr><tr><td class="h">:52 de 08 a 19</td><td><b>💬 5 · Chattigo monitoreo</b></td><td>Lun–sáb</td><td><span class="pj-via nav">Navegador</span></td><td>Clientes esperando +5 min, chats sin activador y sin pregunta de cierre por asesor</td></tr><tr><td class="h">06:45 · 10:45 · 13:45 · 16:45 · 19:45</td><td><b>☁️ 6 · Vista + Fichas → nube</b></td><td>Todos</td><td><span class="pj-via nube">Nube</span></td><td>Vista compartida del Tablero, fichas de asesor y Customer Journey</td></tr><tr><td class="h">12:03 · 16:03</td><td><b>📲 7 · Wapis reporte</b></td><td>Lun–vie</td><td><span class="pj-via nube">Nube</span></td><td>Wapis enviados por asesor y por base</td></tr><tr><td class="h">18:08</td><td><b>⭐ 8 · Calidad → Propuesta de Valor</b></td><td>Todos</td><td><span class="pj-via nube">Nube</span></td><td>Feedback de calidad, casos por etapa y hallazgos de la semana</td></tr><tr><td class="h">20:17</td><td><b>🔎 9 · Muestra de chats</b></td><td>Lun, mié, vie</td><td><span class="pj-via nav">Navegador</span></td><td>Auditoría pareja de chats (2–3 días por corrida) y pedidos de auditoría</td></tr><tr><td class="h">20:34</td><td><b>📞 10 · Chats × Genesys</b></td><td>Todos</td><td><span class="pj-via nav">Navegador</span></td><td>Qué clientes de chat del mes recibieron llamada</td></tr></tbody></table></div>
+                        <p class="pj-links"><a href="https://claude.ai/artifact/M5xYds1f8RYuZYEaNdSFfU" target="_blank" rel="noopener">🗺️ Mapa de tareas (gráfica)</a><small>Acceso restringido: si lo necesitas, pídelo a Christopher Huamán.</small></p></article>
                 </div>
             </div>
         </section>
