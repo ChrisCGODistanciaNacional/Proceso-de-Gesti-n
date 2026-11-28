@@ -1568,7 +1568,7 @@ body.gu-on{overflow:hidden}
 .gu-data{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--gu-card);border:1px solid var(--line);border-radius:12px;min-height:40px;padding:4px 10px;text-align:left;color:inherit}
 .gu-data .gu-dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:none}
 .gu-data.ok .gu-dot{background:var(--ok)}.gu-data.old .gu-dot{background:var(--warn)}.gu-data.err .gu-dot{background:var(--bad)}
-.gu-data.load .gu-dot{background:var(--info);animation:gupl 1s ease-in-out infinite}
+.gu-data.ayer .gu-dot{background:#9aa3b2}.gu-data.load .gu-dot{background:var(--info);animation:gupl 1s ease-in-out infinite}
 @keyframes gupl{50%{opacity:.25}}
 .gu-data .tx{flex:1;min-width:0;font-size:.72rem;line-height:1.2;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gu-data .tx b{display:block;color:var(--ink);font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
